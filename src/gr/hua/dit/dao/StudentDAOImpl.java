@@ -1,4 +1,4 @@
-package gr.hua.dit.springmvc1.dao;
+package gr.hua.dit.dao;
 
 import java.util.List;
 
@@ -10,29 +10,29 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import gr.hua.dit.springmvc1.entity.Customer;
+import gr.hua.dit.entity.Student;
 
 @Repository
-public class CustomerDAOImpl implements CustomerDAO {
+public class StudentDAOImpl implements StudentDAO {
 
-	// inject the session factory
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Override
 	@Transactional
-	public List<Customer> getCustomers() {
+	public List<Student> getStudents() {
+
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 
 		// create a query
-		Query<Customer> query = currentSession.createQuery("from Customer", Customer.class);
+		Query<Student> query = currentSession.createQuery("from Student", Student.class);
 
 		// execute the query and get the results list
-		List<Customer> customers = query.getResultList();
-
+		List<Student> students = query.getResultList();
+		
 		// return the results
-		return customers;
+		return students;
 	}
 
 }
