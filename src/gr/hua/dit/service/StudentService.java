@@ -1,5 +1,10 @@
 package gr.hua.dit.service;
 
-public class StudentService {
+import java.util.List;
 
+import gr.hua.dit.entity.Student;
+
+public interface StudentService {
+	public List<Student> getStudents();
+	
 }

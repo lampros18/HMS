@@ -6,7 +6,6 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -49,7 +48,6 @@ public class Student extends User{
 //		this.employeeId = employeeId;
 		this.id = id;
 	}
-
 	
 	
 	
@@ -59,8 +57,6 @@ public class Student extends User{
 	public int getId() {
 		return id;
 	}
-
-
 
 	
 	public int getYearOfEnrollment() {
@@ -79,7 +75,6 @@ public class Student extends User{
 				+ getPhone() + ", getAddress()=" + getAddress() + ", getCreatedAt()=" + getCreatedAt()
 				+ ", getUpdatedAt()=" + getUpdatedAt() + "]";
 	}
-
 	
 
 //	public int getEmployeeId() {
@@ -87,7 +82,4 @@ public class Student extends User{
 //	}
 
 
-	
-
-	
 }

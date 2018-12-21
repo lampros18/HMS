@@ -6,32 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import gr.hua.dit.dao.StudentDAO;
-import gr.hua.dit.dao.StudentDAOImpl;
 import gr.hua.dit.entity.Student;
-
-
+import gr.hua.dit.service.StudentService;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
-	private StudentDAO studentsService;
-	
-	
-	@RequestMapping("/")
-	public String listStudents(Model model) { 
-		
-		List<Student> students = studentsService.getStudents();
-		
+	private StudentService studentService;
+
+	@GetMapping("/")
+	public String listStudents(Model model) {
+
+		List<Student> students = studentService.getStudents();
+
 		// add the customers to the model
 		model.addAttribute("students", students);
-		
+
 		// add page title
 		model.addAttribute("pageTitle", "List Students");
-		
+
 		return "students";
 	}
 
