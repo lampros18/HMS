@@ -2,10 +2,14 @@ package gr.hua.dit.entity;
 
 import javax.persistence.MappedSuperclass;
 
+import com.sun.istack.internal.NotNull;
+
 @MappedSuperclass
 public class User{
 //	private int id;
+
 	private String email;
+
 	private String name;
 	private String surname;
 	//password

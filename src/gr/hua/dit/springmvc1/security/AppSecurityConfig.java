@@ -38,7 +38,9 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	    .authorizeRequests()
 	    .antMatchers("/about").permitAll()
 	    .antMatchers("/admin/**").hasRole("ADMIN")
-	    .anyRequest().authenticated();
+	    .anyRequest().authenticated()
+	    .and()
+	    .logout().permitAll();
 
 	}
 
@@ -51,5 +53,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	
 
 }

@@ -18,15 +18,15 @@ public class HomeController {
 	@GetMapping("/")
 	public String listStudents(Model model) {
 
-		List<Student> students = studentService.getStudents();
+	//	List<Student> students = studentService.getStudents();
 
 		// add the customers to the model
-		model.addAttribute("students", students);
+	//	model.addAttribute("students", students);
 
 		// add page title
-		model.addAttribute("pageTitle", "List Students");
+	//	model.addAttribute("pageTitle", "List Students");
 
-		return "students";
+		return "simpleStudentForm";
 	}
 
 }
