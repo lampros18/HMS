@@ -7,7 +7,7 @@
 	<h3>Login</h3>
 
 
-	<form:form action="${pageContext.request.contextPath}/authUser"
+	<form:form action="${pageContext.request.contextPath}/student/login"
 		method="POST">
 		<!-- Λάθος στοιχεία -->
 		<c:if test="${param.error != null}">

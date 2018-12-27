@@ -34,5 +34,11 @@ public class StudentDAOImpl implements StudentDAO {
 		// return the results
 		return students;
 	}
+	
+	@Override
+	public int addStudent(Student student) {
+		
+		return 0;
+	}
 
 }

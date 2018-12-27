@@ -7,16 +7,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Home Page</title>
 </head>
 <body>
-
-<sec:authorize access="isAuthenticated()">
-        <div class="ui segment">
-        <% %>
-        </div>
-</sec:authorize>
-
-<a href="<c:url value="/showForm"></c:url>">Show Form</a>
+<h4> Home Page</h4>
+<a href="${pageContext.request.contextPath}/admin/home">Admin Login</a>
+<br/>
+<a href="${pageContext.request.contextPath}/student/home">Student Login</a>
+<br/>
+<a href="${pageContext.request.contextPath}/employee/home">Employee Login</a>
 </body>
 </html>

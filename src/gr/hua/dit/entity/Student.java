@@ -5,62 +5,55 @@ import gr.hua.dit.entity.User;
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.stereotype.Component;
-
 @Entity
-@Table(name = "Student")
-//@AttributeOverride(name = "id", column = @Column(name = "id"))
-@AttributeOverride(name = "email", column = @Column(name = "email"))
+@Table(name = "student")
+@AttributeOverride(name = "id", column = @Column(name = "id"))
 @AttributeOverride(name = "name", column = @Column(name = "name"))
 @AttributeOverride(name = "surname", column = @Column(name = "surname"))
+@AttributeOverride(name = "password", column = @Column(name = "password"))
 @AttributeOverride(name = "birthdate", column = @Column(name = "birthdate"))
 @AttributeOverride(name = "department", column = @Column(name = "department"))
 @AttributeOverride(name = "phone", column = @Column(name = "phone"))
 @AttributeOverride(name = "address", column = @Column(name = "address"))
-@AttributeOverride(name = "createdAt", column = @Column(name = "createdAt"))
-@AttributeOverride(name = "updatedAt", column = @Column(name = "updatedAt"))
+@AttributeOverride(name = "createdAt", column = @Column(name = "created_at"))
+@AttributeOverride(name = "updatedAt", column = @Column(name = "updated_at"))
+@AttributeOverride(name = "enabled", column = @Column(name = "enabled"))
+@AttributeOverride(name = "createdBy", column = @Column(name = "created_by"))
 public class Student extends User{
 	
 	@Id
-	@GeneratedValue
-	@Column(name = "id", unique = true, nullable = false)
-	private int id;
+	@Column(name = "email")
+	private String email;
 	
 	@Column(name = "year_of_enrollment")
 	private int yearOfEnrollment;
 	
-	@Column(name = "isPostgraduate")
+	@Column(name = "is_postgraduate")
 	private boolean isPostgraduate;
-	
-//	@Column(name = "employeeId")
-//	private int employeeId;
-	
+
 	public Student(){super();}
 	
-	public Student(int id, String email, String name, String surname, String birthdate, String department, String phone,
-			String address, String createdAt, String updatedAt, int yearOfEnrollment, boolean isPostgraduate
-			) {
-		super( email, name, surname, birthdate, department, phone, address, createdAt, updatedAt);
-		this.yearOfEnrollment = yearOfEnrollment;
-		this.isPostgraduate = isPostgraduate;
-//		this.employeeId = employeeId;
-		this.id = id;
-	}
-	
-	
-	
-//	@Override
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public int getId() {
-		return id;
-	}
 
 	
+	
+	
+
+	public Student(String email,int id, String name, String surname, String password, String birthdate, String department,
+			String phone, String address, String createdAt, String updatedAt, int enabled, String createdBy, boolean isPostgraduate, int yearOfEnrollment) {
+		super(id, name, surname, password, birthdate, department, phone, address, createdAt, updatedAt, enabled, createdBy);
+		this.email = email;
+		this.isPostgraduate = isPostgraduate;
+		this.yearOfEnrollment = yearOfEnrollment;
+	}
+
+
+
+
+
+
 	public int getYearOfEnrollment() {
 		return yearOfEnrollment;
 	}
@@ -69,19 +62,8 @@ public class Student extends User{
 		return isPostgraduate;
 	}
 
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", yearOfEnrollment=" + yearOfEnrollment + ", isPostgraduate=" + isPostgraduate
-				+ ", getEmail()=" + getEmail() + ", getName()=" + getName() + ", getSurname()=" + getSurname()
-				+ ", getBirthdate()=" + getBirthdate() + ", getDepartment()=" + getDepartment() + ", getPhone()="
-				+ getPhone() + ", getAddress()=" + getAddress() + ", getCreatedAt()=" + getCreatedAt()
-				+ ", getUpdatedAt()=" + getUpdatedAt() + "]";
-	}
 	
 
-//	public int getEmployeeId() {
-//		return employeeId;
-//	}
 
 
 }

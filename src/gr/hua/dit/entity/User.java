@@ -2,47 +2,45 @@ package gr.hua.dit.entity;
 
 import javax.persistence.MappedSuperclass;
 
-import com.sun.istack.internal.NotNull;
 
 @MappedSuperclass
 public class User{
-//	private int id;
-
-	private String email;
-
+	
+	private int id;
 	private String name;
 	private String surname;
-	//password
+	private String password;
 	private String birthdate;
 	private String department;
 	private String phone;
 	private String address;
 	private String createdAt;
 	private String updatedAt;
-	
+	private int enabled;
+	private String createdBy;
 	public User() {}
 	
-	public User( String email, String name, String surname, String birthdate, String department, String phone,
-			String address, String createdAt, String updatedAt) {
-//		this.id = id;
-		this.email = email;
+	public User( int id, String name, String surname,String password ,String birthdate, String department, String phone,
+			String address, String createdAt, String updatedAt, int enabled, String createdBy) {
+		this.id = id;
 		this.name = name;
 		this.surname = surname;
+		this.password = password;
 		this.birthdate = birthdate;
 		this.department = department;
 		this.phone = phone;
 		this.address = address;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.enabled = enabled;
+		this.createdBy = createdBy;
 	}
 
-//	public int getId() {
-//		return id;
-//	}
-
-	public String getEmail() {
-		return email;
+	public int getId() {
+		return id;
 	}
+
+
 
 	public String getName() {
 		return name;
@@ -76,12 +74,22 @@ public class User{
 		return updatedAt;
 	}
 
+	public int getEnabled() {
+		return enabled;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
 	@Override
 	public String toString() {
-		return "User [email=" + email + ", name=" + name + ", surname=" + surname + ", birthdate=" + birthdate
-				+ ", department=" + department + ", phone=" + phone + ", address=" + address + ", createdAt="
-				+ createdAt + ", updatedAt=" + updatedAt + "]";
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", password=" + password + ", birthdate="
+				+ birthdate + ", department=" + department + ", phone=" + phone + ", address=" + address
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", enabled=" + enabled + ", createdBy="
+				+ createdBy + "]";
 	}
+
 
 	
 	

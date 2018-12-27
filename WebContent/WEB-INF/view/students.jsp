@@ -58,35 +58,22 @@
 								<th class="column5">Department</th>
 								<th class="column6">Phone</th>
 								<th class="column7">Address</th>
-								<th class="column6">Year of Enrollment</th>
-								<th class="column6">Undo</th>
-								<th class="column6">Save</th>
-								<th class="column6">Delete</th>
+								<th class="column8">Year of Enrollment</th>
+								<th class="column9">EmployeeID</th>
 							</tr>
 						</thead>
 						<tbody>
 							<c:forEach var="tempStudent" items="${students}">
 								<tr>
-									<td class="column1"><input type="text" class="cell"
-										value="${tempStudent.getId()}" /></td>
-									<td class="column2"><input type="text" class="cell"
-										value="${tempStudent.getName()}" /></td>
-									<td class="column3"><input type="text" class="cell"
-										value="${tempStudent.getSurname()}" /></td>
-									<td class="column4"><input type="text" class="cell"
-										value="${tempStudent.getBirthdate()}" /></td>
-									<td class="column5"><input type="text" class="cell"
-										value="${tempStudent.getDepartment()}" /></td>
-									<td class="column6"><input type="text" class="cell"
-										value="${tempStudent.getPhone()}" /></td>
-									<td class="column7"><input type="text" class="cell"
-										value="${tempStudent.getAddress()}" /></td>
-									<td class="column8"><input type="text" class="cell"
-										value="${tempStudent.getYearOfEnrollment()}" /></td>
-
-									<td class="column9"><a href="#"
-										class="btn btn-info btn-lg"> <span
-											class="glyphicon glyphicon-trash"></span></td>
+									<td class="column1">${tempStudent.getId()}</td>
+									<td class="column2">${tempStudent.getName()}</td>
+									<td class="column3">${tempStudent.getSurname()}</td>
+									<td class="column4">${tempStudent.getBirthdate()}</td>
+									<td class="column5">${tempStudent.getDepartment()}</td>
+									<td class="column6">${tempStudent.getPhone()}</td>
+									<td class="column7">${tempStudent.getAddress()}</td>
+									<td class="column8">${tempStudent.getYearOfEnrollment()}</td>
+									<td class="column9">${tempStudent.getYearOfEnrollment()}</td>
 								</tr>
 
 

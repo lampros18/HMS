@@ -1,4 +1,4 @@
-package gr.hua.dit.springmvc1.security;
+package gr.hua.dit.security;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

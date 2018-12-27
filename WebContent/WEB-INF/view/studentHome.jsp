@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-hello!
+<h3>Student Home</h3>
 </body>
 </html>
