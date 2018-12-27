@@ -9,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import gr.hua.dit.ajax.AJAXRequestHandler;
+
 import gr.hua.dit.entity.Employee;
+import gr.hua.dit.entity.EmployeeAuthority;
 import gr.hua.dit.fileManager.FileManager;
+import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.service.EmployeeService;
 
 @Controller
@@ -36,22 +38,23 @@ public class AdminController {
 	@ResponseBody
 	public String createStudent(HttpServletRequest request) {
 		// 1- Extract all the necessary data from the request and return a hash map
-		AJAXRequestHandler ajaxRequestHandler = new AJAXRequestHandler();
-		Map<String, String> data =  ajaxRequestHandler.getDataFromRequest(request);
+		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
+		 employeeRequestHandler.getDataFromRequest(request);
 		
 		// 2- Wrte the username and the password before the password will be hashed
-		FileManager fm = new FileManager();
-		fm.writeCredentialsFile(data.get("email"), data.get("password"));
+//		FileManager fm = new FileManager();
+//		fm.writeCredentialsFile(data.get("email"), data.get("password"));
 		
 		// 3- Encode the raw string to a hashed one
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		data.put("password", bCryptPasswordEncoder.encode(data.get("password")));
+//		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+//		data.put("password", bCryptPasswordEncoder.encode(data.get("password")));
 		
 		// 4 - Persist to database
-		Employee employee = new Employee(data);
-		employeeService.createEmployee(employee);
-		
-		return employee.toString();
+//		Employee employee = new Employee(data);
+//		employee.addAuthority(new EmployeeAuthority(data.get("email"), data.get("authority")));
+//		employeeService.createEmployee(employee);
+//		return employee.toString();
+		return null;
 	}
 
 	

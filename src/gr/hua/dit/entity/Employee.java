@@ -1,11 +1,17 @@
 package gr.hua.dit.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -32,6 +38,9 @@ public class Employee extends User {
 	@Column(name = "year_of_recruitment")
 	private int yearOfRecruitment;
 
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="email")
+	private List<EmployeeAuthority> authorities;
 	
 	public Employee() {
 		super();
@@ -39,7 +48,7 @@ public class Employee extends User {
 	
 	public Employee(Map<String, String> data) {
 		super(Integer.parseInt(data.get("id")), data.get("name"), data.get("surname"), data.get("password"), data.get("birthdate"),
-				data.get("department"), data.get("phone"), data.get("address"), "2018-1-1 10:10:10", "2018-1-1 10:10:10", 1, data.get("createdBy"));
+				data.get("department"), data.get("phone"), data.get("address"), "2018-1-1 10:10:10", "2018-1-1 10:10:10", Integer.parseInt(data.get("enabled")), data.get("createdBy"));
 		this.email = data.get("email");
 		this.yearOfRecruitment = Integer.parseInt(data.get("yearOfRecruitment"));
 	}
@@ -61,11 +70,29 @@ public class Employee extends User {
 	public int getYearOfRecruitment() {
 		return yearOfRecruitment;
 	}
+	
+	   // add a convenience method
+	   public void addAuthority(EmployeeAuthority employeeAuthority) {
+	           if (authorities == null) {
+	                   authorities = new ArrayList<>();
+	           }
+	           authorities.add(employeeAuthority);
+	   }
+
+	public List<EmployeeAuthority> getAuthorities() {
+		return authorities;
+	}
 
 	@Override
 	public String toString() {
-		return "Employee [email=" + email + ", yearOfRecruitment=" + yearOfRecruitment + "]";
-	}	
+		return "Employee [email=" + email + ", yearOfRecruitment=" + yearOfRecruitment + ", authorities=" + authorities
+				+ ", getId()=" + getId() + ", getName()=" + getName() + ", getSurname()=" + getSurname()
+				+ ", getBirthdate()=" + getBirthdate() + ", getDepartment()=" + getDepartment() + ", getPhone()="
+				+ getPhone() + ", getAddress()=" + getAddress() + ", getCreatedAt()=" + getCreatedAt()
+				+ ", getUpdatedAt()=" + getUpdatedAt() + ", getEnabled()=" + getEnabled() + ", getCreatedBy()="
+				+ getCreatedBy() + "]";
+	}
+
 	
 	
 }
