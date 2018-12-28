@@ -221,8 +221,14 @@
                 console.log(xhttp.responseText);
             }
         };
+        
+        
+        var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+        
         xhttp.open('POST', '<c:url value="/admin/createEmployee" />', true);
         xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhttp.setRequestHeader(header,token);
         xhttp.send(JSON.stringify({
             email : document.getElementById("employee_email").value,
             id : document.getElementById("employee_id").value,

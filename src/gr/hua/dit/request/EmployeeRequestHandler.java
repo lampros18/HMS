@@ -18,8 +18,9 @@ import org.json.JSONObject;
 
 
 public class EmployeeRequestHandler {
-	BufferedReader bufferedReader = null;
-	StringBuffer sb = null;
+	private BufferedReader bufferedReader = null;
+	private StringBuffer sb = null;
+
 
 	public JSONObject getDataFromRequest(HttpServletRequest request) {
 		sb = new StringBuffer();
@@ -46,6 +47,8 @@ public class EmployeeRequestHandler {
 			return obj;
 			
 
+		//	System.out.println(employeeJson.toString());
+//github.com/lampros18/HMS.git
 			
 //			dataList = convertStringBufferToArrayList(sb, "&");
 //			data = convertDataToKeyValuePairs(dataList, "=");
@@ -57,10 +60,54 @@ public class EmployeeRequestHandler {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * Η μέθοδος αυτή , έχει σαν σκοπό να πάρει ένα response
+	 * από τον χρήστη που περιέχει πληροφορία σε json Και να την
+	 * μετατρέψει σε String
+	 * 	 
+	 * @param request το Response Που περιέχει jsonString
+	 * @return Ένα String Που γίνεται άμεσα jsonObject
+	 */
+	public String getSringifiedHttpResponse(HttpServletRequest request) {
+		StringBuffer buffer = new StringBuffer();
+		BufferedReader delim=null;
+		
+		
+			try {
+				delim=request.getReader();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			char[] charBuffer = new char[64];
+			int bytesRead;
+			try {
+				while ((bytesRead = delim.read(charBuffer)) != -1) {
+					buffer.append(charBuffer, 0, bytesRead);
+				
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		return buffer.toString();
+	}
+	
 //	private String convert(String text) {
 //		return new String(text.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 //	}
+
+	/**
+	 * Προυπόθεση για να δουλέψει αυτός ο getter είναι να έχει κληθεί 
+	 * ο constructor της κλάσης με request παράμετρο
+	 * @return ένα stringbuffer object που μπορεί να γίνει άμεσαjsonObject
+	 */
+	public StringBuffer getSb() {
+		return sb;
+	}
+
 
 	private List<String> convertStringBufferToArrayList(StringBuffer sb, String delim) {
 		StringTokenizer stringTokenizer = new StringTokenizer(sb.toString(), delim);
@@ -106,6 +153,8 @@ public class EmployeeRequestHandler {
 		return dataObject;
 
 	}
+	
+	
 
 	private String convertToUTF8(String text) {
 		return new String(text.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);

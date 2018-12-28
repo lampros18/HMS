@@ -1,6 +1,6 @@
 package gr.hua.dit.entity;
 
-import gr.hua.dit.entity.User;
+import gr.hua.dit.entity.SUser;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -13,16 +13,14 @@ import javax.persistence.Table;
 @AttributeOverride(name = "id", column = @Column(name = "id"))
 @AttributeOverride(name = "name", column = @Column(name = "name"))
 @AttributeOverride(name = "surname", column = @Column(name = "surname"))
-@AttributeOverride(name = "password", column = @Column(name = "password"))
 @AttributeOverride(name = "birthdate", column = @Column(name = "birthdate"))
 @AttributeOverride(name = "department", column = @Column(name = "department"))
 @AttributeOverride(name = "phone", column = @Column(name = "phone"))
 @AttributeOverride(name = "address", column = @Column(name = "address"))
 @AttributeOverride(name = "createdAt", column = @Column(name = "created_at"))
 @AttributeOverride(name = "updatedAt", column = @Column(name = "updated_at"))
-@AttributeOverride(name = "enabled", column = @Column(name = "enabled"))
 @AttributeOverride(name = "createdBy", column = @Column(name = "created_by"))
-public class Student extends User{
+public class Student extends SUser{
 	
 	@Id
 	@Column(name = "email")
@@ -43,7 +41,7 @@ public class Student extends User{
 
 	public Student(String email,int id, String name, String surname, String password, String birthdate, String department,
 			String phone, String address, String createdAt, String updatedAt, int enabled, String createdBy, boolean isPostgraduate, int yearOfEnrollment) {
-		super(id, name, surname, password, birthdate, department, phone, address, createdAt, updatedAt, enabled, createdBy);
+		super(id, name, surname,  birthdate, department, phone, address, createdAt, updatedAt, createdBy);
 		this.email = email;
 		this.isPostgraduate = isPostgraduate;
 		this.yearOfEnrollment = yearOfEnrollment;

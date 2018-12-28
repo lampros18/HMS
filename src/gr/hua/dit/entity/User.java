@@ -1,92 +1,86 @@
 package gr.hua.dit.entity;
 
-import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-@MappedSuperclass
-public class User{
-	
+import org.json.JSONObject;
+
+@Entity(name="User")
+@Table(name="user")
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="id")
 	private int id;
-	private String name;
-	private String surname;
+	
+	//Hibernate uses the id to map the foreign key
+	@Column(name="username")
+	private String username;
+	
+	@Column(name="password")
 	private String password;
-	private String birthdate;
-	private String department;
-	private String phone;
-	private String address;
-	private String createdAt;
-	private String updatedAt;
-	private int enabled;
-	private String createdBy;
+	
+	@Column(name="enabled")
+	private String enabled;
+	
+	@OneToMany(
+	        mappedBy = "user",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
+	    private List<Authorities> authorities;
+
+	
 	public User() {}
 	
-	public User( int id, String name, String surname,String password ,String birthdate, String department, String phone,
-			String address, String createdAt, String updatedAt, int enabled, String createdBy) {
-		this.id = id;
-		this.name = name;
-		this.surname = surname;
+	public User(String username, String password, String enabled) {
+		this.username = username;
 		this.password = password;
-		this.birthdate = birthdate;
-		this.department = department;
-		this.phone = phone;
-		this.address = address;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 		this.enabled = enabled;
-		this.createdBy = createdBy;
+		this.authorities = new ArrayList<>();
+	}
+	
+	public User(JSONObject json) {
+		this.username = json.getString("email");
+		this.password = json.getString("password");
+		this.enabled = json.getString("enabled");
+		this.authorities = new ArrayList<>();
 	}
 
-	public int getId() {
-		return id;
+	public String getUsername() {
+		return username;
 	}
 
-
-
-	public String getName() {
-		return name;
+	public String getPassword() {
+		return password;
 	}
 
-	public String getSurname() {
-		return surname;
-	}
-
-	public String getBirthdate() {
-		return birthdate;
-	}
-
-	public String getDepartment() {
-		return department;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public String getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public int getEnabled() {
+	public String getEnabled() {
 		return enabled;
 	}
 
-	public String getCreatedBy() {
-		return createdBy;
+	public List<Authorities> getAuthorities() {
+		return authorities;
 	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", password=" + password + ", birthdate="
-				+ birthdate + ", department=" + department + ", phone=" + phone + ", address=" + address
-				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", enabled=" + enabled + ", createdBy="
-				+ createdBy + "]";
+	
+	public void addAuthority(Authorities authority) {
+		authorities.add(authority);
+		authority.setUser(this);
 	}
+	
 }

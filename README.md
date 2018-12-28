@@ -1,41 +1,16 @@
-# spring-mvc-demo
 
-## Clone Project into Eclipse
-
-
-File -> Import -> Git/Projects from Git -> Clone URI
-
-the project url is 
-[https://github.com/tsadimas/spring-mvc-demo.git](https://github.com/tsadimas/spring-mvc-hibernate-starter.git)
-
-when the prompt to select the kind of project appears, select *Import as general project*
+#Πρόταση για κοινό login
 
 
-![import_project](screenshots/import.png "Import into Eclipse")
+Θα μπορούσαμε να έχουμε ένα κοινό Login για όλους τους χρήστες και να διαχωρίζουμε τη συμπεριφορά της εφαρμογής μας ανάλογα με τα δικαιώματα , που έχουν.
+
+Έχω φτιάξει μια πιθανή υλοποίηση. Η λογική είναι στο /HMS/src/gr/hua/dit/security/AppSecurityConfig.java οπου ρυθμίζω το security και στη συνέχεια στον /HMS/src/gr/hua/dit/controller/HomeController.java όπου ο χρήστης έχει αναγνωριστέί και τον ανακατευθύνω στο επιθυμητό jsp
 
 
-Next, you should convert the current project to Dynamic Web project.
-To accomplish this, you should right-click the project and in properties go to *Project Facets*
-and select _Dynamic Web Module_ from the facets list.
+To eclass έχει φτιαχτεί με κοινό Login
 
-![facets](screenshots/facets.png "Convert to Dynamic Web Project")
+<img src="screenshots/Επιλογή_251.png" alt="drawing" width="1000" height="800"/>
 
-Set the default JRE runtime to be Java 8. To accomplish this, right click the project and in _Java Build Path_, in Libraries Tab edit the _JRE System Library_ to point to your Java 8 runtime (setting the appropriate value to Alternate JRE).
+<p> Ωστόσο η τράπεζα πειραιώς διαχωρίζει το Login με βάση το ρόλο τον χρήστη <strong>ιδιώτες - επιχειρήσεις</strong></p>
 
-![facets](screenshots/jre.jpg "JRE config")
-
-To fix the errors in jsp files, you should again right click the project, and in properties go to _Targeted Runtimes_ and select the Apache Tomcat that is connected to your eclipse workspace.
-
-![Target Runtime](screenshots/target_runtime.png "Target Runtime")
-
-
-right click on project and select  Maven -> Update Project
-
-
-### add application.properties file with jdbc parameters in src directory
-
-```
-jdbc.url=jdbc:mysql://SERVER-IP/DB-NAME?useSSL=false
-jdbc.user=USER-NAME
-jdbc.password=PASSWORD
-```
+<img src="screenshots/Επιλογή_250.png" alt="drawing" width="1000" height="500"/>
