@@ -6,20 +6,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Καταχώρηση διοικητικού υπαλλήλου</title>
 </head>
 <body>
 
-<h5>Admin home page</h5>
+<a href="${ pageContext.request.contextPath}/admin/createEmployee">Καταχώρηση διοικητικού υπαλλήλου</a>
 
-<a href="${pageContext.request.contextPath}/admin/createEmployee">Create employee</a>
-
-	<!-- Υποστήριξη logout -->
-	<form:form action="${pageContext.request.contextPath}/logout"
-		method="POST">
-		<input type="submit" value="logout" />
-		<br />
-	</form:form>
-	
 </body>
 </html>
+
