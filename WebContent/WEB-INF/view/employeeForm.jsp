@@ -129,19 +129,23 @@
 				</div>
 
 				<div class="wrap-input100 input100-select">
-					<span class="label-input100">Authority</span>
 					<div>
-						<select class="selection-2" name="authority" id="employee_authority">
-							<option value="ROLE_EMPLOYEE">Employee</option>
-							<option value="ROLE_ADMIN">Administrator</option>
-							<option value="ROLE_FOREMAN">Foreman</option>
-						</select>
+					<span class="label-input100">Authorities</span>
+						<br/>
+						<input type="checkbox" name="employee_authority_admin" id="employee_authority_admin" class="has-val"/>
+						<label for="employee_authority_admin" class="label-input100">Admin</label>
+						<br/>
+						<input type="checkbox" name="employee_authority_foreman" id="employee_authority_foreman" class="has-val"/>
+						<label for="employee_authority_foreman" class="label-input100">Foreman</label>
+						<br/>
+						<input type="checkbox" name="employee_authority_employee" id="employee_authority_employee" class="has-val"/>
+						<label for="employee_authority_employee" class="label-input100">Employee</label>
+						<span
+						class="focus-input100"></span>
 					</div>
-					<span class="focus-input100"></span>
-				</div>
-
+					</div>
 				<div class="wrap-input100 input100-select">
-					<span class="label-input100">Enabled</span> <input class="input100"
+					<span class="label-input100">Enabled</span> <input
 						type="checkbox" name="enabled" id="employee_enabled"> <span
 						class="focus-input100"></span>
 				</div>
@@ -231,14 +235,13 @@
             department : document.getElementById("employee_department").value,
             phone : document.getElementById("employee_phone").value,
             address : document.getElementById("employee_address").value,
-            authority : document.getElementById("employee_authority").value,
+            authority_admin : document.getElementById("employee_authority_admin").checked == true ? '1' : '0',
+            authority_foreman : document.getElementById("employee_authority_foreman").checked == true ? '1' : '0',
+            authority_employee : document.getElementById("employee_authority_employee").checked == true ? '1' : '0',
             enabled : document.getElementById("employee_enabled").checked == true ? '1' : '0' 
         }));
         return false;
-	});
-        
- 
-	
+	});	
 	</script>
 
 </body>

@@ -18,8 +18,12 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 		
+		
+		
+		currentSession.merge(employee);
 		currentSession.save(employee);
-		//
+
+		
 		return 0;
 	}
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,19 +14,16 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.gson.Gson;
+import org.json.JSONObject;
 
-import gr.hua.dit.entity.Employee;
-import gr.hua.dit.entity.EmployeeJson;
 
 public class EmployeeRequestHandler {
 	BufferedReader bufferedReader = null;
 	StringBuffer sb = null;
 
-	public void getDataFromRequest(HttpServletRequest request) {
+	public JSONObject getDataFromRequest(HttpServletRequest request) {
 		sb = new StringBuffer();
-		List<String> dataList;
-		Map<String, String> data = new HashMap<>();
+
 		Principal principal = request.getUserPrincipal();
 		try {
 			bufferedReader = request.getReader();
@@ -35,19 +33,28 @@ public class EmployeeRequestHandler {
 				sb.append(charBuffer, 0, bytesRead);
 			}
 			
-			Gson employeeGson = new Gson();
-			EmployeeJson employeeJson = employeeGson.fromJson(sb.toString(), EmployeeJson.class);
+			JSONObject obj = new JSONObject(sb.toString());
+			obj.put("createdBy", principal.getName());
+			String key, value;
+			for(int i = 0 ; i < obj.names().length(); i++) {
+				key = obj.names().getString(i);
+				value = convertToUTF8(obj.getString(key));
+				obj.remove(key);
+				key = convertToUTF8(key);
+				obj.put(key, value);
+			}
+			return obj;
 			
-			System.out.println(employeeJson.toString());
+
 			
 //			dataList = convertStringBufferToArrayList(sb, "&");
 //			data = convertDataToKeyValuePairs(dataList, "=");
 //			decodeUTF8(data);
-//			data.put("createdBy", principal.getName());
+			
 //			return data;
 		} catch (IOException e) {
 //			return data;
-			
+			return null;
 		}
 	}
 
@@ -100,4 +107,8 @@ public class EmployeeRequestHandler {
 
 	}
 
+	private String convertToUTF8(String text) {
+		return new String(text.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+	}
+	
 }
