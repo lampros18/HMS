@@ -1,7 +1,5 @@
-# spring-mvc-demo
 
-## Clone Project into Eclipse
-
+#Πρόταση για κοινό login
 
 File -> Import -> Git/Projects from Git -> Clone URI
 
@@ -11,8 +9,8 @@ the project url is
 when the prompt to select the kind of project appears, select *Import as general project*
 
 
-![import_project](screenshots/import.png "Import into Eclipse")
-
+![import_project](screenshots/Επιλογή_250.png =250x "Import into Eclipse")
+<img src="/screenshots/Επιλογή_250.png" alt="drawing" width="200"/>
 
 Next, you should convert the current project to Dynamic Web project.
 To accomplish this, you should right-click the project and in properties go to *Project Facets*

@@ -15,7 +15,7 @@
 <a href="${pageContext.request.contextPath}/admin/createEmployee">Create employee</a>
 
 	<!-- Υποστήριξη logout -->
-	<form:form action="${pageContext.request.contextPath}/admin_logout"
+	<form:form action="${pageContext.request.contextPath}/logout"
 		method="POST">
 		<input type="submit" value="logout" />
 		<br />
