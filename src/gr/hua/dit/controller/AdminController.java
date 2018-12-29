@@ -1,6 +1,9 @@
 package gr.hua.dit.controller;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,71 +27,71 @@ import gr.hua.dit.service.UserService;
 @RequestMapping("admin")
 public class AdminController {
 
-	
-	
 	@Autowired
 	private UserService userService;
-	
-	//Κεντική σελίδα διαχειριστή
+
+	@Autowired
+	private EmployeeService employeeService;
+
+	// Κεντική σελίδα διαχειριστή
 	@RequestMapping(value = "home", method = RequestMethod.GET)
 	public String showHomePage() {
 		return "adminHome";
 	}
 
-	//Δημιουργία υπαλλήλου στην εφαρμογή 
-	@RequestMapping(value = "createEmployee", method = RequestMethod.GET)
+	// Δημιουργία υπαλλήλου στην εφαρμογή
+	@RequestMapping(value = "createUser", method = RequestMethod.GET)
 	public String getCreateStudentForm() {
-		return "admin/createEmployee";
+		return "admin/createUser";
 	}
 
-	@RequestMapping(value = "createEmployee", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "createUser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String createEmployee(HttpServletRequest request) {
 		// 1- Extract all the necessary data from the request and return a hash map
 		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
 		String data = employeeRequestHandler.getSringifiedHttpResponse(request);
-		 JSONObject json = new JSONObject(data);
-		 Principal principal = request.getUserPrincipal();
-		 json.put("createdBy", principal.getName());
-		 
-		 if(json != null) {
-				// 2- Write the username and the password before the password will be hashed
-				FileManager fm = new FileManager();
-				fm.writeCredentialsFile(json.getString("email"), json.getString("password"));
-				
-				// 3- Encode the raw string to a hashed one
-				BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-				json.put("password", bCryptPasswordEncoder.encode(json.getString("password")));
-				
-				// 4 - Persist to database
-//				Employee employee = new Employee(json);
-//				if(json.getString("authority_admin").equals("1")) {
-//					employee.addAuthority(new EmployeeAuthority(json.getString("email"), "ROLE_ADMIN"));
-//				}
-//				if(json.getString("authority_foreman").equals("1")) {
-//					employee.addAuthority(new EmployeeAuthority(json.getString("email"), "ROLE_FOREMAN"));
-//				}
-//				if(json.getString("authority_employee").equals("1")) {
-//					employee.addAuthority(new EmployeeAuthority(json.getString("email"), "ROLE_EMPLOYEE"));
-//				}
-				
-//				employeeService.createEmployee(employee);
-				User user = new User(json);
-				if(json.getString("authority_admin").equals("1")) {
-					user.addAuthority(new Authorities("ROLE_ADMIN"));
-				}
-				if(json.getString("authority_foreman").equals("1")) {
-					user.addAuthority(new Authorities("ROLE_FOREMAN"));
-				}
-				if(json.getString("authority_employee").equals("1")) {
-					user.addAuthority(new Authorities("ROLE_EMPLOYEE"));
-				}
-				userService.createUser(user);
-				return user.toString();
-		 }
-		 return null;
-		
-	
+		JSONObject json = new JSONObject(data);
+		Principal principal = request.getUserPrincipal();
+		json.put("createdBy", principal.getName());
+
+		if (json != null) {
+			// 2- Write the username and the password before the password will be hashed
+			FileManager fm = new FileManager();
+			fm.writeCredentialsFile(json.getString("email"), json.getString("password"));
+
+			// 3- Encode the raw string to a hashed one
+			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+			json.put("password", bCryptPasswordEncoder.encode(json.getString("password")));
+
+			// 4 - Persist to database
+
+			User user = new User(json);
+			if (json.getString("authority_admin").equals("1")) {
+				user.addAuthority(new Authorities("ROLE_ADMIN"));
+			}
+			if (json.getString("authority_foreman").equals("1")) {
+				user.addAuthority(new Authorities("ROLE_FOREMAN"));
+			}
+			if (json.getString("authority_employee").equals("1")) {
+				user.addAuthority(new Authorities("ROLE_EMPLOYEE"));
+			}
+			if (json.getString("authority_student").equals("1")) {
+				user.addAuthority(new Authorities("ROLE_STUDENT"));
+			}
+			userService.createUser(user);
+
+			// Now
+//			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+//			json.put("createdAt", dateFormatGmt.format(new Date()));
+//			Employee employee = new Employee(json);
+//			employeeService.createEmployee(employee);
+
+			return user.toString();
+		}
+		return null;
+
 	}
-	
+
 }

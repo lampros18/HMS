@@ -31,14 +31,15 @@ public class Employee extends SUser {
 	@Column(name = "year_of_recruitment")
 	private int yearOfRecruitment;
 
+
+	
 	
 	public Employee() {
-		super();
 	}
 	
 	public Employee(JSONObject data) {
 		super(Integer.parseInt(data.getString("id")), data.getString("name"), data.getString("surname"), data.getString("birthdate"),
-				data.getString("department"), data.getString("phone"), data.getString("address"), "2018-1-1 10:10:10", "2018-1-1 10:10:10", data.getString("createdBy"));
+				data.getString("department"), data.getString("phone"), data.getString("address"), data.getString("createdAt"), data.getString("createdAt") , data.getString("createdBy"));
 		this.email = data.getString("email");
 		this.yearOfRecruitment = Integer.parseInt(data.getString("yearOfRecruitment"));
 	}

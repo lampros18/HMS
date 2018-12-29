@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<a href="${ pageContext.request.contextPath}/admin/createEmployee">Καταχώρηση διοικητικού υπαλλήλου</a>
+<a href="${ pageContext.request.contextPath}/admin/createUser">Καταχώρηση χρήστη</a>
 
 </body>
 </html>

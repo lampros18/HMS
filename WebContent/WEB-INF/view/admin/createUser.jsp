@@ -46,13 +46,33 @@
 <!--===============================================================================================-->
 </head>
 <body>
+	<h5>Admin home page</h5>
 
+	<div>
+		<!-- Υποστήριξη logout -->
+		<form:form action="${pageContext.request.contextPath}/logout"
+			style="float:left; padding-right:0.3%;" method="POST">
+			<input type="submit" value="logout" />
+			<br />
+		</form:form>
+
+		<!-- Ο HomeController διακρίνει τους χρήστες ανάλογα με το ρόλο
+			τους και μας γυρνάει στην αρχική σελίδα του διαχειριστή -->
+		<!-- Αξιοθρήνητη προσπάθεια για αισθητική -->
+		<form:form action="${pageContext.request.contextPath}/"
+			style="float:left float:left; padding-right:0.3%;" method="GET">
+			<input type="submit" value="Κεντρική σελίδα" />
+			<br />
+		</form:form>
+
+
+	</div>
 	<div class="container-contact100">
 		<div class="wrap-contact100">
 			<form:form class="contact100-form validate-form"
 				action="${pageContext.request.contextPath}/admin/createEmployee"
 				accept-charset="UTF-8">
-				<span class="contact100-form-title"> Insert Employee </span>
+				<span class="contact100-form-title"> Insert User </span>
 
 
 				<div class="wrap-input100 validate-input"
@@ -63,105 +83,64 @@
 						class="focus-input100"></span>
 				</div>
 
-				<div class="wrap-input100 validate-input"
-					data-validate="id is required">
-					<span class="label-input100">ID</span> <input class="input100"
-						type="text" name="id" id="employee_id" placeholder="Enter id"> <span
+
+					<div class="wrap-input100 validate-input"
+					data-validate="Valid email is required: example@hua.gr">
+					<span class="label-input100">Password</span> <input class="input100"
+						type="text" name="password" id="employee_password"
+						placeholder="Enter an email addess"> <span
 						class="focus-input100"></span>
 				</div>
 
-				<div class="wrap-input100 validate-input"
-					data-validate="name is required">
-					<span class="label-input100">Name</span> <input class="input100"
-						type="text" name="name" id="employee_name" placeholder="Enter name">
-					<span class="focus-input100"></span>
+
+					<div class="wrap-input100 input100-select">
+						<div>
+							<span class="label-input100">User type</span> <br /> <input
+								type="radio" name="user_type"
+								id="type_employee" class="has-val" /> <label
+								for="type_employee" class="label-input100">Employee</label>
+							<br/> <input type="radio" name="user_type"
+								id="type_student" class="has-val" /> <label
+								for="type_student" class="label-input100">Student</label>
+							<span class="focus-input100"></span>
+					</div>
 				</div>
 
-				<div class="wrap-input100 validate-input"
-					data-validate="surname is required">
-					<span class="label-input100">Surname</span> <input class="input100"
-						type="text" name="surname" id="employee_surname"
-						placeholder="Enter surname"> <span class="focus-input100"></span>
-				</div>
 
-				<div class="wrap-input100 validate-input">
-					<span class="label-input100">Password</span> <input
-						class="input100" type="text" name="password" id="employee_password">
-					<span class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="birthdate is required">
-					<span class="label-input100">Birthdate</span> <input
-						class="input100" type="text" name="birthdate" id="employee_birthdate"
-						placeholder="Enter birthdate"> <span
-						class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="year of recruitment is required">
-					<span class="label-input100">Year of recruitment</span> <input
-						class="input100" type="text" name="yearOfRecruitment" id="employee_yearOfRecruitment"
-						placeholder="Enter year of recruitment"> <span
-						class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="Department is required">
-					<span class="label-input100">Department</span> <input
-						class="input100" type="text" name="department" id="employee_department"
-						placeholder="Enter department"> <span
-						class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="phone number is required">
-					<span class="label-input100">Phone</span> <input class="input100"
-						type="text" name="phone" id="employee_phone" placeholder="Enter phone"> <span
-						class="focus-input100"></span>
-				</div>
-
-				<div class="wrap-input100 validate-input"
-					data-validate="address is required">
-					<span class="label-input100">Address</span> <input class="input100"
-						type="text" name="address" id="employee_address" placeholder="Enter address"> <span
-						class="focus-input100"></span>
-				</div>
 
 				<div class="wrap-input100 input100-select">
 					<div>
-					<span class="label-input100">Authorities</span>
-						<br/>
-						<input type="checkbox" name="employee_authority_admin" id="employee_authority_admin" class="has-val"/>
-						<label for="employee_authority_admin" class="label-input100">Admin</label>
-						<br/>
-						<input type="checkbox" name="employee_authority_foreman" id="employee_authority_foreman" class="has-val"/>
-						<label for="employee_authority_foreman" class="label-input100">Foreman</label>
-						<br/>
-						<input type="checkbox" name="employee_authority_employee" id="employee_authority_employee" class="has-val"/>
-						<label for="employee_authority_employee" class="label-input100">Employee</label>
-						<span
-						class="focus-input100"></span>
+						<span class="label-input100">Authorities</span> <br /> <input
+							type="checkbox" name="employee_authority_admin"
+							id="employee_authority_admin" class="has-val" /> <label
+							for="employee_authority_admin" class="label-input100">Admin</label>
+						<br /> <input type="checkbox" name="employee_authority_foreman"
+							id="employee_authority_foreman" class="has-val" /> <label
+							for="employee_authority_foreman" class="label-input100">Foreman</label>
+						<br /> <input type="checkbox" name="employee_authority_employee"
+							id="employee_authority_employee" class="has-val" /> <label
+							for="employee_authority_employee" class="label-input100">Employee</label>
+						<span class="focus-input100"></span>
 					</div>
 				</div>
 				<div class="wrap-input100 input100-select">
-					<span class="label-input100">Enabled</span> <input
-						type="checkbox" name="enabled" id="employee_enabled"> <span
+					<span class="label-input100">Enabled</span> <input type="checkbox"
+						name="enabled" id="employee_enabled"> <span
 						class="focus-input100"></span>
 				</div>
 
 				<div class="container-contact100-form-btn">
 					<div class="wrap-contact100-form-btn">
 						<div class="contact100-form-bgbtn"></div>
-						<button class="contact100-form-btn" id="employee_submit" type="button" onclick="event.preventDefault()">
-							<span>
-								Αποθήκευση διοικητικού υπαλλήλου
-								<i class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
+						<button class="contact100-form-btn" id="employee_submit"
+							type="button" onclick="event.preventDefault()">
+							<span> Αποθήκευση διοικητικού υπαλλήλου <i
+								class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 							</span>
 						</button>
 					</div>
 				</div>
-				
+
 			</form:form>
 		</div>
 	</div>
@@ -208,46 +187,80 @@
 									"l", "(").replace("I", ")").replace("1",
 									"m"));
 				});
-	</script>
+		document.getElementById("type_employee").addEventListener("click", function(){
+				if(document.getElementById("employee_authority_admin").disabled == true)
+					document.getElementById("employee_authority_admin").disabled = false;
+				if(document.getElementById("employee_authority_foreman").disabled == true)
+					document.getElementById("employee_authority_foreman").disabled = false;
+				if(document.getElementById("employee_authority_employee").disabled == true)
+					document.getElementById("employee_authority_employee").disabled = false;
+		});
+		
+		document.getElementById("type_student").addEventListener("click", function(){
+				document.getElementById("employee_authority_admin").disabled = true;
+				document.getElementById("employee_authority_foreman").disabled = true;
+				document.getElementById("employee_authority_employee").disabled = true;
+				if(document.getElementById("employee_authority_admin").checked)
+					document.getElementById("employee_authority_admin").checked = false;
+				if(document.getElementById("employee_authority_foreman").checked)
+					document.getElementById("employee_authority_foreman").checked = false;
+				if(document.getElementById("employee_authority_employee").checked)
+					document.getElementById("employee_authority_employee").checked = false;
+		});
 	
-	<script>
-	document.getElementById("employee_submit").addEventListener("click", function(){
-		var xhttp = new XMLHttpRequest();
+	</script>
 
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                // Typical action to be performed when the document is ready:
-                //document.getElementById("demo").innerHTML = xhttp.responseText;
-                console.log(xhttp.responseText);
-            }
-        };
-        
-        
-        var token = $("meta[name='_csrf']").attr("content");
-		var header = $("meta[name='_csrf_header']").attr("content");
-        
-        xhttp.open('POST', '<c:url value="/admin/createEmployee" />', true);
-        xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhttp.setRequestHeader(header,token);
-        xhttp.send(JSON.stringify({
-            email : document.getElementById("employee_email").value,
-            id : document.getElementById("employee_id").value,
-            name : document.getElementById("employee_name").value,
-            surname : document.getElementById("employee_surname").value,
-            password : document.getElementById("employee_password").value,
-            birthdate : document.getElementById("employee_birthdate").value,
-            yearOfRecruitment : document
-                    .getElementById("employee_yearOfRecruitment").value,
-            department : document.getElementById("employee_department").value,
-            phone : document.getElementById("employee_phone").value,
-            address : document.getElementById("employee_address").value,
-            authority_admin : document.getElementById("employee_authority_admin").checked == true ? '1' : '0',
-            authority_foreman : document.getElementById("employee_authority_foreman").checked == true ? '1' : '0',
-            authority_employee : document.getElementById("employee_authority_employee").checked == true ? '1' : '0',
-            enabled : document.getElementById("employee_enabled").checked == true ? '1' : '0' 
-        }));
-        return false;
-	});	
+	<script>
+		document
+				.getElementById("employee_submit")
+				.addEventListener(
+						"click",
+						function() {
+							var xhttp = new XMLHttpRequest();
+
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+									// Typical action to be performed when the document is ready:
+									//document.getElementById("demo").innerHTML = xhttp.responseText;
+									console.log(xhttp.responseText);
+								}
+							};
+
+							var token = $("meta[name='_csrf']").attr("content");
+							var header = $("meta[name='_csrf_header']").attr(
+									"content");
+
+							xhttp.open('POST',
+									'<c:url value="/admin/createUser" />',
+									true);
+							xhttp.setRequestHeader('Content-Type',
+									'application/json;charset=UTF-8');
+							xhttp.setRequestHeader(header, token);
+							xhttp
+									.send(JSON
+											.stringify({
+												email : document
+														.getElementById("employee_email").value,
+												password : document
+														.getElementById("employee_password").value,
+												authority_admin : document
+														.getElementById("employee_authority_admin").checked == true ? '1'
+														: '0',
+												authority_foreman : document
+														.getElementById("employee_authority_foreman").checked == true ? '1'
+														: '0',
+												authority_employee : document
+														.getElementById("employee_authority_employee").checked == true ? '1'
+														: '0',
+														authority_student : document
+														.getElementById("type_student").checked == true ? '1'
+														: '0',
+												enabled : document
+														.getElementById("employee_enabled").checked == true ? '1'
+														: '0'
+											}));
+							return false;
+						});
 	</script>
 
 </body>
