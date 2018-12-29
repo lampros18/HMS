@@ -85,10 +85,10 @@
 
 
 					<div class="wrap-input100 validate-input"
-					data-validate="Valid email is required: example@hua.gr">
+					data-validate="Valid password  required: example@hua.gr">
 					<span class="label-input100">Password</span> <input class="input100"
 						type="text" name="password" id="employee_password"
-						placeholder="Enter an email addess"> <span
+						placeholder="Enter password"> <span
 						class="focus-input100"></span>
 				</div>
 
@@ -134,15 +134,22 @@
 						<div class="contact100-form-bgbtn"></div>
 						<button class="contact100-form-btn" id="employee_submit"
 							type="button" onclick="event.preventDefault()">
-							<span> Αποθήκευση διοικητικού υπαλλήλου <i
+							<span> Αποθήκευση χρήστη <i
 								class="fa fa-long-arrow-right m-l-7" aria-hidden="true"></i>
 							</span>
 						</button>
 					</div>
 				</div>
-
+				<br/>
+				<div class="wrap-input100">
+				</div>
+				<div class="input100">
+					<div id="result" class="label-input100">
+					</div>
+				</div>
 			</form:form>
 		</div>
+		
 	</div>
 
 
@@ -182,11 +189,9 @@
 	<script>
 		$(document).ready(
 				function() {
-					$("#employee_password").val(
-							Math.random().toString(36).substring(2).replace(
-									"l", "(").replace("I", ")").replace("1",
-									"m"));
+					createPassword();
 				});
+		
 		document.getElementById("type_employee").addEventListener("click", function(){
 				if(document.getElementById("employee_authority_admin").disabled == true)
 					document.getElementById("employee_authority_admin").disabled = false;
@@ -207,7 +212,38 @@
 				if(document.getElementById("employee_authority_employee").checked)
 					document.getElementById("employee_authority_employee").checked = false;
 		});
-	
+
+		
+		function setResultMessage(response){
+			var div = document.getElementById("result");
+			var json = JSON.parse(response);
+			if(json.status == "500")
+				div.innerHTML = '<p id="failure">'+json.result +'</p>'
+			if(json.status == "200"){
+				div.innerHTML = '<p id="success">'+json.result +'</p>'
+				resetForm();	
+			}
+		}
+		
+		function resetForm(){
+			document.getElementById("employee_email").value = "";
+			createPassword();
+			document.getElementById("type_employee").checked = false;
+			document.getElementById("type_student").checked = false;
+			var inputs = document.querySelectorAll("input[type='checkbox']");
+			for(var i = 0; i < inputs.length; i++) {
+			    inputs[i].checked = false;
+			}
+			
+		}
+		
+		function createPassword(){
+			document.getElementById("employee_password").value =
+					Math.random().toString(36).substring(2).replace(
+							"l", "(").replace("I", ")").replace("1",
+							"m");
+		}
+		
 	</script>
 
 	<script>
@@ -222,7 +258,9 @@
 								if (this.readyState == 4 && this.status == 200) {
 									// Typical action to be performed when the document is ready:
 									//document.getElementById("demo").innerHTML = xhttp.responseText;
-									console.log(xhttp.responseText);
+									setResultMessage(xhttp.responseText);
+									switchResultBox();
+								
 								}
 							};
 
