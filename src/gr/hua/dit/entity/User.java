@@ -82,5 +82,17 @@ public class User implements Serializable{
 		authorities.add(authority);
 		authority.setUser(this);
 	}
+
+//	@Override
+//	public String toString() {
+//		return "User [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
+//				+ ", getAuthorities()=" + getAuthorities() + "]";
+//	}
+
+	
+
+
+	
+	
 	
 }

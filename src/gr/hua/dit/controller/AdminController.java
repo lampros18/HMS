@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
+import gr.hua.dit.mail.MailServiceProvider;
+//import gr.hua.dit.mail.MailServiceProvider;
 import gr.hua.dit.request.EmployeeRequestHandler;
-import gr.hua.dit.service.EmployeeService;
 import gr.hua.dit.service.UserService;
 
 @Controller
@@ -27,8 +28,6 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private EmployeeService employeeService;
 
 	// Κεντική σελίδα διαχειριστή
 	@RequestMapping(value = "home", method = RequestMethod.GET)
@@ -82,12 +81,17 @@ public class AdminController {
 					userService.createUser(user);
 					FileManager fm = new FileManager();
 					fm.writeCredentialsFile(json.getString("email"), unhashedPassword);
+					
+					MailServiceProvider msp = new MailServiceProvider();
+					msp.sendEmail(json.getString("email"), "Housing managment system credentials", json.getString("email"), unhashedPassword);
+					
 					result.put("status", "200");
 					result.put("result", "The user has been successfully created");
 				} catch (Exception e) {
 					result.put("status", "500");
 					result.put("result",
 							"We encountered an internal error. Please contact with the system administartor");
+					e.printStackTrace();
 				}
 
 				// Now
@@ -111,5 +115,13 @@ public class AdminController {
 		result.put("status", "500");
 		result.put("result", "We encountered an internal error. Please contact with the system administartor");
 		return result.toString();
+	}
+	
+	@RequestMapping(value = "listUsers", method = RequestMethod.GET)
+	public String getUsers() {
+		for(User user : userService.getUsers()) {
+			System.out.println(user.getUsername());
+		}
+		return null;
 	}
 }

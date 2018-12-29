@@ -1,15 +1,7 @@
 package gr.hua.dit.main;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-
-import gr.hua.dit.mail.MailService;
 
 public class Main {
 	
-	static MailService mm;
 	public static void main(String[] args) {
 //		//Now
 		
@@ -32,8 +24,7 @@ public class Main {
 //            }
 
 
-//		mm = (MailService) context.getBean("MailService");
-		mm.sendMail("housingapplication123@gmail.com", "it21622@hua.gr", "Subject->Test2", "2");
+	
 
 	}
 

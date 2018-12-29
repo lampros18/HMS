@@ -1,5 +1,7 @@
 package gr.hua.dit.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,13 @@ public class UserServiceImplementation implements UserService {
 	public void createUser(User user) {
 		userDAO.insertUser(user);
 	}
+
+	@Override
+	@Transactional
+	public List<User> getUsers() {
+		return userDAO.getUsers();
+	}
+	
 	
 	
 
