@@ -139,44 +139,40 @@ public class AdminController {
 	public String getEditUsers() {
 		List<User> users = userService.getUsers();
 		JSONObject json = new JSONObject();
-		int recordsTotal = 0;
-		json.put("draw", 1);
 		JSONArray data = new JSONArray();
 		
 		JSONObject jsonUser;
 		for(User user : userService.getUsers()) {
 			jsonUser = new JSONObject();
-			jsonUser.put("email", user.getUsername());
+			jsonUser.put("email",user.getUsername());
 			jsonUser.put("password", user.getPassword());
-			jsonUser.put("enabled", user.getEnabled());
+			jsonUser.put("enabled", Integer.parseInt(user.getEnabled()));
 			for(Authorities authorities : user.getAuthorities()) {
 				if(authorities.getAuthority().equals("ROLE_ADMIN"))
-					jsonUser.put("admin", "1");
+					jsonUser.put("admin", 1);
 				else
-					jsonUser.put("admin", "0");
+					jsonUser.put("admin", 0);
 				
 				if(authorities.getAuthority().equals("ROLE_EMPLOYEE"))
-					jsonUser.put("employee", "1");
+					jsonUser.put("employee", 1);
 				else
-					jsonUser.put("employee", "0");
+					jsonUser.put("employee", 0);
 				
 				if(authorities.getAuthority().equals("ROLE_FOREMAN"))
-					jsonUser.put("foreman", "1");
+					jsonUser.put("foreman", 1);
 				else
-					jsonUser.put("foreman", "0");
+					jsonUser.put("foreman", 0);
 				
 				if(authorities.getAuthority().equals("ROLE_STUDENT"))
-					jsonUser.put("student", "1");
+					jsonUser.put("student", 1);
 				else
-					jsonUser.put("student", "0");
+					jsonUser.put("student", 0);
 				
 			}
 			data.put(jsonUser);
-			recordsTotal++;
+
 		} //end of json user
-		json.put("recordsTotal", recordsTotal);
-		json.put("recordsFiltered", recordsTotal);
-		json.put("data", data);
+		json.put("users", data);
 		return json.toString();
 	}
 	
