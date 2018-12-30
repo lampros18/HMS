@@ -25,7 +25,7 @@ public class Authorities {
 	@Column(name="authority")
 	private String authority;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "username", referencedColumnName="username")
     private User user;
 	

@@ -1,9 +1,11 @@
 package gr.hua.dit.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
-import gr.hua.dit.mail.MailServiceProvider;
 //import gr.hua.dit.mail.MailServiceProvider;
 import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.service.UserService;
@@ -82,8 +83,8 @@ public class AdminController {
 					FileManager fm = new FileManager();
 					fm.writeCredentialsFile(json.getString("email"), unhashedPassword);
 					
-					MailServiceProvider msp = new MailServiceProvider();
-					msp.sendEmail(json.getString("email"), "Housing managment system credentials", json.getString("email"), unhashedPassword);
+//					MailServiceProvider msp = new MailServiceProvider();
+//					msp.sendEmail(json.getString("email"), "Housing managment system credentials", json.getString("email"), unhashedPassword);
 					
 					result.put("status", "200");
 					result.put("result", "The user has been successfully created");
@@ -120,8 +121,63 @@ public class AdminController {
 	@RequestMapping(value = "listUsers", method = RequestMethod.GET)
 	public String getUsers() {
 		for(User user : userService.getUsers()) {
-			System.out.println(user.getUsername());
+			System.out.println("username : " + user.getUsername());
+			for(Authorities authorities : user.getAuthorities()) {
+				System.out.println("authority : " + authorities.getAuthority());
+			}
 		}
-		return null;
+		return "null";
 	}
+	
+	@RequestMapping(value = "editUsers", method = RequestMethod.GET)
+	public String editUsers() {
+		return "admin/editUsers";
+	}
+	
+	@RequestMapping(value = "editUsers", method = RequestMethod.POST)
+	@ResponseBody
+	public String getEditUsers() {
+		List<User> users = userService.getUsers();
+		JSONObject json = new JSONObject();
+		int recordsTotal = 0;
+		json.put("draw", 1);
+		JSONArray data = new JSONArray();
+		
+		JSONObject jsonUser;
+		for(User user : userService.getUsers()) {
+			jsonUser = new JSONObject();
+			jsonUser.put("email", user.getUsername());
+			jsonUser.put("password", user.getPassword());
+			jsonUser.put("enabled", user.getEnabled());
+			for(Authorities authorities : user.getAuthorities()) {
+				if(authorities.getAuthority().equals("ROLE_ADMIN"))
+					jsonUser.put("admin", "1");
+				else
+					jsonUser.put("admin", "0");
+				
+				if(authorities.getAuthority().equals("ROLE_EMPLOYEE"))
+					jsonUser.put("employee", "1");
+				else
+					jsonUser.put("employee", "0");
+				
+				if(authorities.getAuthority().equals("ROLE_FOREMAN"))
+					jsonUser.put("foreman", "1");
+				else
+					jsonUser.put("foreman", "0");
+				
+				if(authorities.getAuthority().equals("ROLE_STUDENT"))
+					jsonUser.put("student", "1");
+				else
+					jsonUser.put("student", "0");
+				
+			}
+			data.put(jsonUser);
+			recordsTotal++;
+		} //end of json user
+		json.put("recordsTotal", recordsTotal);
+		json.put("recordsFiltered", recordsTotal);
+		json.put("data", data);
+		return json.toString();
+	}
+	
 }

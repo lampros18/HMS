@@ -2,7 +2,7 @@ package gr.hua.dit.dao;
 
 import java.util.List;
 
-
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,9 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public List<User> getUsers() {
 		Session session = sessionFactory.getCurrentSession();
-		List<User> users = (List<User>)session.createQuery("from User").getResultList();
-		return users;
+		Criteria c = session.createCriteria(User.class, "user");
+		c.createAlias("user.authorities", "authorities");
+		return c.list();
 	}
 
 }
