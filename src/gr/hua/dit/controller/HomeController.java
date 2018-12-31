@@ -18,7 +18,7 @@ public class HomeController {
 
 			
 
-			return "/admin/adminHome";
+			return "/admin/editUsers";
 		}else if(principalInfo.contains("ROLE_EMPLOYEE")) {
 			
 			return "/employee/employeeHome";

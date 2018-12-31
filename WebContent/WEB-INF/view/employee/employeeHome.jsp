@@ -10,13 +10,29 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
 
-
-
-<style type="text/css">
-.pt-3-half {
-	padding-top: 1.4rem;
+<style>
+.loading_margin {
+	margin-top: 5%;
+}
+.table_margin_while_loading {
+	margin-top: 1%;
+}
+.table_margin_after_load {
+	margin-top: 8%;
+}
+.dark-theme {
+	background-color: #212529;
+	color: #fff;
+}
+body {
+	background: #8e9eab; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #eef2f3, #8e9eab);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>
+
 
 <title>Σύστημα διαχείρισης αιτήσεων στέγασης - Διοικητικός
 	υπάλληλος</title>
