@@ -14,31 +14,115 @@
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <title>Users table</title>
 
 <style>
-
-.loading_margin{
-	margin-top: 2%;
+.loading_margin {
+	margin-top: 5%;
 }
 
-.table_margin {
-	margin-top: 3%;
-}
-body{
-background: #8e9eab;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+.table_margin_while_loading {
+	margin-top: 1%;
 }
 
+.table_margin_after_load {
+	margin-top: 8%;
+}
+
+.dark-theme {
+	background-color: #212529;
+	color: #fff;
+}
+
+body {
+	background: #8e9eab; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #eef2f3, #8e9eab);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
 </style>
 
 </head>
 
 <body>
-	<div id="loading" class="loading_margin">
+	<div class="container">
+		<nav class="navbar fixed-top dark-theme">
+			<a class="navbar-brand">Admin Homepage</a>
+			<button class="btn btn-outline-light my-2 my-sm-0" type="button"
+				data-toggle="modal" data-target="#addUserModal" data-whatever="@mdo" id="addUserModalButton">
+				<i class="fas fa-user-plus"></i><span id="addIcon"></span> Add User
+			</button>
+			<form class="form-inline">
+				<input class="form-control mr-sm-2" type="search"
+					placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-light my-2 my-sm-0" type="button">Search</button>
+			</form>
+		</nav>
+	</div>
+
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add user</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="form-group">
+							<label for="email" class="col-form-label">Email</label> <input
+								type="text" class="form-control" id="email">
+						</div>
+						<div class="form-group">
+							<label for="password" class="col-form-label">Password<span id="reload-pass">  <i class="fas fa-redo-alt"></i></span></label> <input
+								type="text" class="form-control" id="password">
+						</div>
+						<br />
+						<div class="form-group">
+							User type <br /> <input type="radio" name="user_type"
+								id="type_employee" /> <label for="type_employee"
+								class="col-form-label">Employee</label> <br /> <input
+								type="radio" name="user_type" id="type_student" class="has-val" />
+							<label for="type_student" class="col-form-label">Student</label>
+
+						</div>
+						<br />
+						<div class="form-group">
+							Authorities <br /> <input type="checkbox"
+								name="employee_authority_admin" id="employee_authority_admin"
+								class="has-val" /> <label for="employee_authority_admin"
+								class="col-form-label">Admin</label> <br /> <input
+								type="checkbox" name="employee_authority_foreman"
+								id="employee_authority_foreman" class="has-val" /> <label
+								for="employee_authority_foreman" class="col-form-label">Foreman</label>
+							<br /> <input type="checkbox" name="employee_authority_employee"
+								id="employee_authority_employee" class="has-val" /> <label
+								for="employee_authority_employee" class="col-form-label">Employee</label>
+						</div>
+						<div class="form-group">
+							<input type="checkbox" name="enabled" id="employee_enabled">
+							<label for="employee_enabled" class="col-form-label">Employee</label>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Add user</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="loading" class="loading_margin container">
 		<div class="text-center">
 			<button class="btn btn-primary" type="button" disabled>
 				<span class="spinner-border spinner-border-sm" role="status"
@@ -47,8 +131,9 @@ background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, F
 		</div>
 	</div>
 
-	<div class="container table_margin">
-		<table class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded">
+	<div id="dataTable" class="container table_margin_while_loading">
+		<table
+			class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded">
 
 			<thead class="thead-dark">
 				<tr>
@@ -95,11 +180,11 @@ background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, F
 							xhttp.send({});
 						});
 
-		
-		function removeLoading(){
-			document.getElementById("loading").outerHTML = "";;
+		function removeLoading() {
+			document.getElementById("loading").outerHTML = "";
+			document.getElementById("dataTable").setAttribute("class", "container table_margin_after_load")
 		}
-		
+
 		function loadTableAndData(response) {
 			let json = JSON.parse(response);
 			let tableBody = document.getElementById("table_body");
@@ -121,25 +206,24 @@ background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, F
 				tableRow.setAttribute("id", "tr" + id);
 				tableBody.appendChild(tableRow);
 			}
-			
-			function createActionsRow(id, tableBody) {
-				let tableRow = document.getElementById("tr"+id);
 
-				
+			function createActionsRow(id, tableBody) {
+				let tableRow = document.getElementById("tr" + id);
+
 				let td = document.createElement("TD");
-				
+
 				let div = document.createElement("DIV");
 				div.setAttribute("class", "container")
-				
+
 				let iDeleteUser = document.createElement("I");
-				iDeleteUser.setAttribute("class","fas fa-user-minus");
-				
+				iDeleteUser.setAttribute("class", "fas fa-user-minus");
+
 				let iUpdateUser = document.createElement("I");
-				iUpdateUser.setAttribute("class","fas fa-user-edit");
+				iUpdateUser.setAttribute("class", "fas fa-user-edit");
 				/*div.setAttribute("class","btn-group");
 				div.setAttribute("role","group");
 				div.setAttribute("aria-label","actions buttons");*/
-				
+
 				/*let updateButton = document.createElement("BUTTON");
 				updateButton.setAttribute("type", "button");
 				updateButton.setAttribute("class", "btn btn-warning");
@@ -165,7 +249,6 @@ background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, F
 				tableRow.appendChild(td);
 				tableBody.appendChild(tableRow);
 			}
-
 
 			function createEmailColumn(email, id) {
 				let tableRow = document.getElementById(("tr" + id));
@@ -339,13 +422,78 @@ background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, F
 			}
 
 		}
+
+		function createPassword() {
+			document.getElementById("password").value = Math.random().toString(
+					36).substring(2).replace("l", "(").replace("I", ")")
+					.replace("1", "m");
+		}
+
+		document.getElementById('reload-pass').addEventListener('click', function(){createPassword()});
+		
+		document
+				.getElementById("type_employee")
+				.addEventListener(
+						"click",
+						function() {
+							if (document
+									.getElementById("employee_authority_admin").disabled == true)
+								document
+										.getElementById("employee_authority_admin").disabled = false;
+							if (document
+									.getElementById("employee_authority_foreman").disabled == true)
+								document
+										.getElementById("employee_authority_foreman").disabled = false;
+							if (document
+									.getElementById("employee_authority_employee").disabled == true)
+								document
+										.getElementById("employee_authority_employee").disabled = false;
+						});
+
+		document
+				.getElementById("type_student")
+				.addEventListener(
+						"click",
+						function() {
+							document.getElementById("employee_authority_admin").disabled = true;
+							document
+									.getElementById("employee_authority_foreman").disabled = true;
+							document
+									.getElementById("employee_authority_employee").disabled = true;
+							if (document
+									.getElementById("employee_authority_admin").checked)
+								document
+										.getElementById("employee_authority_admin").checked = false;
+							if (document
+									.getElementById("employee_authority_foreman").checked)
+								document
+										.getElementById("employee_authority_foreman").checked = false;
+							if (document
+									.getElementById("employee_authority_employee").checked)
+								document
+										.getElementById("employee_authority_employee").checked = false;
+						});
+
+
+		$('#addUserModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  var recipient = button.data('whatever') // Extract info from data-* attributes
+			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			  createPassword();
+			  /*
+			  var modal = $(this)
+			  modal.find('.modal-title').text('New message to ' + recipient)
+			  modal.find('.modal-body input').val(recipient)*/
+			})
+
+
 	</script>
 
 
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
 	<script
