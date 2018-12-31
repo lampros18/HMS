@@ -51,6 +51,7 @@ body {
 
 <body>
 	<div class="container">
+
 		<nav class="navbar fixed-top dark-theme" style="float:left;">
 			<a class="navbar-brand">Admin Homepage</a>
 			<button class="btn btn-outline-light my-2 my-sm-0" type="button"
@@ -67,6 +68,8 @@ body {
 				action="${pageContext.request.contextPath}/logout" method="POST"
 				style="padding-right:0.2%;">
 				<button type="submit" class="btn btn-outline-light my-2 my-sm-0">logout</button>
+
+
 
 
 			</form:form>
@@ -98,6 +101,7 @@ body {
 						<div class="form-group">
 							<label for="password" class="col-form-label">Password<span
 								id="reload-pass"> <i class="fas fa-redo-alt"></i></span></label> <input
+
 								type="text" class="form-control" id="password">
 						</div>
 						<br />
@@ -173,15 +177,21 @@ body {
 				.ready(
 						function() {
 							var xhttp = new XMLHttpRequest();
+
+
 							xhttp.onreadystatechange = function() {
 								if (this.readyState == 4 && this.status == 200) {
+
 									loadTableAndData(xhttp.responseText);
 									removeLoading();
+
 								}
 							};
+
 							var token = $("meta[name='_csrf']").attr("content");
 							var header = $("meta[name='_csrf_header']").attr(
 									"content");
+
 							xhttp.open('POST',
 									'<c:url value="/admin/editUsers" />', true);
 							xhttp.setRequestHeader('Content-Type',
@@ -189,11 +199,12 @@ body {
 							xhttp.setRequestHeader(header, token);
 							xhttp.send({});
 						});
+
 		function removeLoading() {
 			document.getElementById("loading").outerHTML = "";
-			document.getElementById("dataTable").setAttribute("class",
-					"container table_margin_after_load")
+			document.getElementById("dataTable").setAttribute("class", "container table_margin_after_load")
 		}
+
 		function loadTableAndData(response) {
 			let json = JSON.parse(response);
 			let tableBody = document.getElementById("table_body");
@@ -209,23 +220,30 @@ body {
 							json.users[i].foreman, json.users[i].employee, i);
 				createEnabledColumn(json.users[i].enabled, i);
 			}
+
 			function createTableRow(id, tableBody) {
 				let tableRow = document.createElement("TR");
 				tableRow.setAttribute("id", "tr" + id);
 				tableBody.appendChild(tableRow);
 			}
+
 			function createActionsRow(id, tableBody) {
 				let tableRow = document.getElementById("tr" + id);
+
 				let td = document.createElement("TD");
+
 				let div = document.createElement("DIV");
 				div.setAttribute("class", "container")
+
 				let iDeleteUser = document.createElement("I");
 				iDeleteUser.setAttribute("class", "fas fa-user-minus");
+
 				let iUpdateUser = document.createElement("I");
 				iUpdateUser.setAttribute("class", "fas fa-user-edit");
 				/*div.setAttribute("class","btn-group");
 				div.setAttribute("role","group");
 				div.setAttribute("aria-label","actions buttons");*/
+
 				/*let updateButton = document.createElement("BUTTON");
 				updateButton.setAttribute("type", "button");
 				updateButton.setAttribute("class", "btn btn-warning");
@@ -251,139 +269,188 @@ body {
 				tableRow.appendChild(td);
 				tableBody.appendChild(tableRow);
 			}
+
 			function createEmailColumn(email, id) {
 				let tableRow = document.getElementById(("tr" + id));
+
 				let td = document.createElement("TD");
 				let div = document.createElement("DIV");
 				div.setAttribute("contenteditable", "");
 				let textNode = document.createTextNode(email);
+
 				div.appendChild(textNode);
 				td.appendChild(div);
 				tableRow.appendChild(td);
+
 			}
+
 			function createPasswordColumn(password, id) {
 				let tableRow = document.getElementById(("tr" + id));
+
 				let td = document.createElement("TD");
 				let div = document.createElement("DIV");
 				div.setAttribute("contenteditable", "");
 				let textNode = document.createTextNode(password);
+
 				div.appendChild(textNode);
 				td.appendChild(div);
 				tableRow.appendChild(td);
+
 			}
+
 			function createEmployeeAuthoritiesColumn(admin, foreman, employee,
 					id) {
 				let tableRow = document.getElementById(("tr" + id));
+
 				let td = document.createElement("TD");
+
 				//Creating the custom swtch for the admin authority
 				let admin_div = document.createElement("DIV");
 				admin_div.setAttribute("class", "custom-control custom-switch");
+
 				let admin_input = document.createElement("INPUT");
 				admin_input.setAttribute("type", "checkbox");
 				admin_input.setAttribute("class", "custom-control-input");
 				admin_input.setAttribute("id", "admin_switch" + id);
 				if (admin == 1)
 					admin_input.setAttribute("checked", "");
+
 				let admin_label = document.createElement("LABEL");
 				admin_label.setAttribute("class", "custom-control-label");
 				admin_label.setAttribute("for", "admin_switch" + id);
+
 				let textNode = document.createTextNode("Admin");
+
 				admin_label.appendChild(textNode);
+
 				admin_div.appendChild(admin_input);
 				admin_div.appendChild(admin_label);
+
 				//Creating the custom switch for the foreman authority
 				let foreman_div = document.createElement("DIV");
 				foreman_div.setAttribute("class",
 						"custom-control custom-switch");
+
 				let foreman_input = document.createElement("INPUT");
 				foreman_input.setAttribute("type", "checkbox");
 				foreman_input.setAttribute("class", "custom-control-input");
 				foreman_input.setAttribute("id", "foreman_switch" + id);
 				if (foreman == 1)
 					foreman_input.setAttribute("checked", "");
+
 				let foreman_label = document.createElement("LABEL");
 				foreman_label.setAttribute("class", "custom-control-label");
 				foreman_label.setAttribute("for", "foreman_switch" + id);
+
 				let foremanTextNode = document.createTextNode("Foreman");
+
 				foreman_label.appendChild(foremanTextNode);
+
 				foreman_div.appendChild(foreman_input);
 				foreman_div.appendChild(foreman_label);
+
 				//Creating the custom switch for the employee authority
 				let employee_div = document.createElement("DIV");
 				employee_div.setAttribute("class",
 						"custom-control custom-switch");
+
 				let employee_input = document.createElement("INPUT");
 				employee_input.setAttribute("type", "checkbox");
 				employee_input.setAttribute("class", "custom-control-input");
 				employee_input.setAttribute("id", "employee_switch" + id);
 				if (employee == 1)
 					employee_input.setAttribute("checked", "");
+
 				let employee_label = document.createElement("LABEL");
 				employee_label.setAttribute("class", "custom-control-label");
 				employee_label.setAttribute("for", "employee_switch" + id);
+
 				let employeeTextNode = document.createTextNode("Employee");
+
 				employee_label.appendChild(employeeTextNode);
+
 				employee_div.appendChild(employee_input);
 				employee_div.appendChild(employee_label);
+
 				td.appendChild(admin_div);
 				td.appendChild(foreman_div);
 				td.appendChild(employee_div);
 				tableRow.appendChild(td);
+
 			}
+
 			function createStudentAuthoritiesColumn(student, id) {
 				let tableRow = document.getElementById(("tr" + id));
+
 				let td = document.createElement("TD");
+
 				//Creating the custom swtch for the student authority
 				let div = document.createElement("DIV");
 				div.setAttribute("class", "custom-control custom-switch");
+
 				let input = document.createElement("INPUT");
 				input.setAttribute("type", "checkbox");
 				input.setAttribute("class", "custom-control-input");
 				input.setAttribute("id", "student_switch" + id);
 				input.setAttribute("checked", "");
+
 				let label = document.createElement("LABEL");
 				label.setAttribute("class", "custom-control-label");
 				label.setAttribute("for", "student_switch" + id);
+
 				let textNode = document.createTextNode("Student");
+
 				label.appendChild(textNode);
+
 				div.appendChild(input);
 				div.appendChild(label);
+
 				td.appendChild(div);
 				tableRow.appendChild(td);
+
 			}
+
 			function createEnabledColumn(enabled, id) {
 				let tableRow = document.getElementById(("tr" + id));
+
 				let td = document.createElement("TD");
+
 				//Creating the custom swtch for the student authority
 				let div = document.createElement("DIV");
 				div.setAttribute("class", "custom-control custom-switch");
+
 				let input = document.createElement("INPUT");
 				input.setAttribute("type", "checkbox");
 				input.setAttribute("class", "custom-control-input");
 				input.setAttribute("id", "enabled_switch" + id);
 				if (enabled == 1)
 					input.setAttribute("checked", "");
+
 				let label = document.createElement("LABEL");
 				label.setAttribute("class", "custom-control-label");
 				label.setAttribute("for", "enabled_switch" + id);
+
 				let textNode = document.createTextNode("Enabled");
+
 				label.appendChild(textNode);
+
 				div.appendChild(input);
 				div.appendChild(label);
+
 				td.appendChild(div);
 				tableRow.appendChild(td);
 			}
+
 		}
+
 		function createPassword() {
 			document.getElementById("password").value = Math.random().toString(
 					36).substring(2).replace("l", "(").replace("I", ")")
 					.replace("1", "m");
 		}
-		document.getElementById('reload-pass').addEventListener('click',
-				function() {
-					createPassword()
-				});
 
+		document.getElementById('reload-pass').addEventListener('click', function(){createPassword()});
+		
 		document
 				.getElementById("type_employee")
 				.addEventListener(
@@ -402,6 +469,7 @@ body {
 								document
 										.getElementById("employee_authority_employee").disabled = false;
 						});
+
 		document
 				.getElementById("type_student")
 				.addEventListener(
@@ -425,17 +493,22 @@ body {
 								document
 										.getElementById("employee_authority_employee").checked = false;
 						});
-		$('#addUserModal').on('show.bs.modal', function(event) {
-			var button = $(event.relatedTarget) // Button that triggered the modal
-			var recipient = button.data('whatever') // Extract info from data-* attributes
-			// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-			// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-			createPassword();
-			/*
-			var modal = $(this)
-			modal.find('.modal-title').text('New message to ' + recipient)
-			modal.find('.modal-body input').val(recipient)*/
-		})
+
+
+		$('#addUserModal').on('show.bs.modal', function (event) {
+			  var button = $(event.relatedTarget) // Button that triggered the modal
+			  var recipient = button.data('whatever') // Extract info from data-* attributes
+			  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			  createPassword();
+			  /*
+			  var modal = $(this)
+			  modal.find('.modal-title').text('New message to ' + recipient)
+			  modal.find('.modal-body input').val(recipient)*/
+			})
+
+
+
 	</script>
 
 
