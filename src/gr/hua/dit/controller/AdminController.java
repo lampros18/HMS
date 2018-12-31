@@ -1,6 +1,7 @@
 package gr.hua.dit.controller;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +34,7 @@ public class AdminController {
 	// Κεντική σελίδα διαχειριστή
 	@RequestMapping(value = "home", method = RequestMethod.GET)
 	public String showHomePage() {
-		return "adminHome";
+		return "admin/adminHome";
 	}
 
 	// Δημιουργία υπαλλήλου στην εφαρμογή
@@ -140,6 +141,7 @@ public class AdminController {
 		List<User> users = userService.getUsers();
 		JSONObject json = new JSONObject();
 		JSONArray data = new JSONArray();
+		HashSet<User> userSet = new HashSet<>();
 		
 		JSONObject jsonUser;
 		for(User user : userService.getUsers()) {
@@ -147,32 +149,55 @@ public class AdminController {
 			jsonUser.put("email",user.getUsername());
 			jsonUser.put("password", user.getPassword());
 			jsonUser.put("enabled", Integer.parseInt(user.getEnabled()));
+			
+			boolean flagu = false;
+			boolean flage = false;
+			boolean flagf = false;
+			boolean flags = false;
+			
 			for(Authorities authorities : user.getAuthorities()) {
-				if(authorities.getAuthority().equals("ROLE_ADMIN"))
+				if(authorities.getAuthority().equals("ROLE_ADMIN")) {
 					jsonUser.put("admin", 1);
-				else
-					jsonUser.put("admin", 0);
+					flagu = true;
+				}else {
+					if(!flagu) {
+						jsonUser.put("admin", 0);
+					}
+				}
 				
-				if(authorities.getAuthority().equals("ROLE_EMPLOYEE"))
+				if(authorities.getAuthority().equals("ROLE_EMPLOYEE")) {
 					jsonUser.put("employee", 1);
-				else
-					jsonUser.put("employee", 0);
+					flage = true;
+				}else {
+					if(!flage) {
+						jsonUser.put("employee", 0);
+					}
+				}
 				
-				if(authorities.getAuthority().equals("ROLE_FOREMAN"))
+				if(authorities.getAuthority().equals("ROLE_FOREMAN")) {
 					jsonUser.put("foreman", 1);
-				else
-					jsonUser.put("foreman", 0);
-				
-				if(authorities.getAuthority().equals("ROLE_STUDENT"))
+					flagf = true;
+				}else {
+					if(!flagf) {
+						jsonUser.put("foreman", 0);
+					}
+				}
+				if(authorities.getAuthority().equals("ROLE_STUDENT")) {
 					jsonUser.put("student", 1);
-				else
-					jsonUser.put("student", 0);
+					flags = true;
+				}else {
+					if(!flags) {
+						jsonUser.put("student", 0);
+					}
+				}
 				
 			}
-			data.put(jsonUser);
+			if(userSet.add(user))
+				data.put(jsonUser);
 
 		} //end of json user
 		json.put("users", data);
+		userSet = null;
 		return json.toString();
 	}
 	

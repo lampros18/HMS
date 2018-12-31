@@ -14,18 +14,45 @@
 <meta name="_csrf_header" content="${_csrf.headerName}" />
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <title>Users table</title>
+
+<style>
+
+.loading_margin{
+	margin-top: 2%;
+}
+
+.table_margin {
+	margin-top: 3%;
+}
+body{
+background: #8e9eab;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+</style>
+
 </head>
 
 <body>
+	<div id="loading" class="loading_margin">
+		<div class="text-center">
+			<button class="btn btn-primary" type="button" disabled>
+				<span class="spinner-border spinner-border-sm" role="status"
+					aria-hidden="true"></span> Loading...
+			</button>
+		</div>
+	</div>
 
+	<div class="container table_margin">
+		<table class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded">
 
-	<div class="container">
-		<table class="table table-hover table-striped">
-
-			<thead>
+			<thead class="thead-dark">
 				<tr>
+					<th scope="col">Actions</th>
 					<th scope="col">Email</th>
 					<th scope="col">Password</th>
 					<th scope="col">Authorities</th>
@@ -35,7 +62,6 @@
 			</thead>
 
 			<tbody id="table_body">
-
 			</tbody>
 		</table>
 	</div>
@@ -43,223 +69,277 @@
 
 
 	<script>
-    $(document).ready(
-        function() {
-          var xhttp = new XMLHttpRequest();
+		$(document)
+				.ready(
+						function() {
+							var xhttp = new XMLHttpRequest();
 
-          xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
 
-              loadTableAndData(xhttp.responseText);
+									loadTableAndData(xhttp.responseText);
+									removeLoading();
 
-            }
-          };
+								}
+							};
 
-          var token = $("meta[name='_csrf']").attr("content");
-          var header = $("meta[name='_csrf_header']").attr(
-            "content");
+							var token = $("meta[name='_csrf']").attr("content");
+							var header = $("meta[name='_csrf_header']").attr(
+									"content");
 
-          xhttp.open('POST',
-            '<c:url value="/admin/editUsers" />',
-            true);
-          xhttp.setRequestHeader('Content-Type',
-            'application/json;charset=UTF-8');
-          xhttp.setRequestHeader(header, token);
-          xhttp.send({});
-        });
+							xhttp.open('POST',
+									'<c:url value="/admin/editUsers" />', true);
+							xhttp.setRequestHeader('Content-Type',
+									'application/json;charset=UTF-8');
+							xhttp.setRequestHeader(header, token);
+							xhttp.send({});
+						});
+
+		
+		function removeLoading(){
+			document.getElementById("loading").outerHTML = "";;
+		}
+		
+		function loadTableAndData(response) {
+			let json = JSON.parse(response);
+			let tableBody = document.getElementById("table_body");
+			for (let i = 0; i < json.users.length; i++) {
+				createTableRow(i, tableBody);
+				createActionsRow(i, tableBody);
+				createEmailColumn(json.users[i].email, i);
+				createPasswordColumn(json.users[i].password, i);
+				if (json.users[i].student == 1)
+					createStudentAuthoritiesColumn(json.users[i].student, i);
+				else
+					createEmployeeAuthoritiesColumn(json.users[i].admin,
+							json.users[i].foreman, json.users[i].employee, i);
+				createEnabledColumn(json.users[i].enabled, i);
+			}
+
+			function createTableRow(id, tableBody) {
+				let tableRow = document.createElement("TR");
+				tableRow.setAttribute("id", "tr" + id);
+				tableBody.appendChild(tableRow);
+			}
+			
+			function createActionsRow(id, tableBody) {
+				let tableRow = document.getElementById("tr"+id);
+
+				
+				let td = document.createElement("TD");
+				
+				let div = document.createElement("DIV");
+				div.setAttribute("class", "container")
+				
+				let iDeleteUser = document.createElement("I");
+				iDeleteUser.setAttribute("class","fas fa-user-minus");
+				
+				let iUpdateUser = document.createElement("I");
+				iUpdateUser.setAttribute("class","fas fa-user-edit");
+				/*div.setAttribute("class","btn-group");
+				div.setAttribute("role","group");
+				div.setAttribute("aria-label","actions buttons");*/
+				
+				/*let updateButton = document.createElement("BUTTON");
+				updateButton.setAttribute("type", "button");
+				updateButton.setAttribute("class", "btn btn-warning");
+				updateButton.setAttribute("type", "button");
+				
+				let deleteButton = document.createElement("BUTTON");
+				deleteButton.setAttribute("type", "button");
+				deleteButton.setAttribute("class", "btn btn-danger");
+				deleteButton.setAttribute("type", "button");
+				
+				let updateButtonTxtNode = document.createTextNode("Update");
+				let deleteButtonTxtNode = document.createTextNode("Delete");
+				
+				updateButton.appendChild(updateButtonTxtNode);
+				deleteButton.appendChild(deleteButtonTxtNode);
+				div.appendChild(updateButton);
+				div.appendChild(deleteButton);*/
+				div.appendChild(iDeleteUser);
+				div.appendChild(document.createElement("BR"));
+				div.appendChild(document.createElement("BR"));
+				div.appendChild(iUpdateUser);
+				td.appendChild(div);
+				tableRow.appendChild(td);
+				tableBody.appendChild(tableRow);
+			}
 
 
-        function loadTableAndData(response){
-          let json = JSON.parse(response);
-          let tableBody = document.getElementById("table_body");
-          for(let i = 0 ; i < json.users.length; i++){
-            createTableRow(i, tableBody);
-            createEmailColumn(json.users[i].email, i);
-            createPasswordColumn(json.users[i].password, i);
-            if(json.users[i].student == 1)
-              createStudentAuthoritiesColumn(json.users[i].student, i);
-            else
-              createEmployeeAuthoritiesColumn(json.users[i].admin, json.users[i].foreman, json.users[i].employee, i);
-             createEnabledColumn(json.users[i].enabled, i);
-          }
+			function createEmailColumn(email, id) {
+				let tableRow = document.getElementById(("tr" + id));
 
-          function createTableRow(id, tableBody){
-            let tableRow = document.createElement("TR");
-            tableRow.setAttribute("id", "tr" + id );
-            tableBody.appendChild(tableRow);
-          }
+				let td = document.createElement("TD");
+				let div = document.createElement("DIV");
+				div.setAttribute("contenteditable", "");
+				let textNode = document.createTextNode(email);
 
-          function createEmailColumn(email, id){
-            let tableRow = document.getElementById(("tr" + id));
+				div.appendChild(textNode);
+				td.appendChild(div);
+				tableRow.appendChild(td);
 
-            let td = document.createElement("TD");
-            let div = document.createElement("DIV");
-            div.setAttribute("contenteditable", "");
-            let textNode = document.createTextNode(email);
+			}
 
-            div.appendChild(textNode);
-            td.appendChild(div);
-            tableRow.appendChild(td);
+			function createPasswordColumn(password, id) {
+				let tableRow = document.getElementById(("tr" + id));
 
-          }
+				let td = document.createElement("TD");
+				let div = document.createElement("DIV");
+				div.setAttribute("contenteditable", "");
+				let textNode = document.createTextNode(password);
 
-          function createPasswordColumn(password, id){
-            let tableRow = document.getElementById(("tr" + id));
+				div.appendChild(textNode);
+				td.appendChild(div);
+				tableRow.appendChild(td);
 
-            let td = document.createElement("TD");
-            let div = document.createElement("DIV");
-            div.setAttribute("contenteditable", "");
-            let textNode = document.createTextNode(password);
+			}
 
-            div.appendChild(textNode);
-            td.appendChild(div);
-            tableRow.appendChild(td);
+			function createEmployeeAuthoritiesColumn(admin, foreman, employee,
+					id) {
+				let tableRow = document.getElementById(("tr" + id));
 
-          }
+				let td = document.createElement("TD");
 
+				//Creating the custom swtch for the admin authority
+				let admin_div = document.createElement("DIV");
+				admin_div.setAttribute("class", "custom-control custom-switch");
 
-          function createEmployeeAuthoritiesColumn(admin, foreman, employee, id){
-            let tableRow = document.getElementById(("tr" + id));
+				let admin_input = document.createElement("INPUT");
+				admin_input.setAttribute("type", "checkbox");
+				admin_input.setAttribute("class", "custom-control-input");
+				admin_input.setAttribute("id", "admin_switch" + id);
+				if (admin == 1)
+					admin_input.setAttribute("checked", "");
 
-            let td = document.createElement("TD");
+				let admin_label = document.createElement("LABEL");
+				admin_label.setAttribute("class", "custom-control-label");
+				admin_label.setAttribute("for", "admin_switch" + id);
 
-            //Creating the custom swtch for the admin authority
-            let admin_div = document.createElement("DIV");
-            admin_div.setAttribute("class", "custom-control custom-switch");
+				let textNode = document.createTextNode("Admin");
 
-            let admin_input = document.createElement("INPUT");
-            admin_input.setAttribute("type", "checkbox");
-            admin_input.setAttribute("class", "custom-control-input");
-            admin_input.setAttribute("id", "admin_switch");
-            if( admin == 1 )
-              admin_input.setAttribute("checked", "");
+				admin_label.appendChild(textNode);
 
-            let admin_label = document.createElement("LABEL");
-            admin_label.setAttribute("class", "custom-control-label");
-            admin_label.setAttribute("for", "admin_switch");
+				admin_div.appendChild(admin_input);
+				admin_div.appendChild(admin_label);
 
-            let textNode = document.createTextNode("Admin");
+				//Creating the custom switch for the foreman authority
+				let foreman_div = document.createElement("DIV");
+				foreman_div.setAttribute("class",
+						"custom-control custom-switch");
 
-            admin_label.appendChild(textNode);
+				let foreman_input = document.createElement("INPUT");
+				foreman_input.setAttribute("type", "checkbox");
+				foreman_input.setAttribute("class", "custom-control-input");
+				foreman_input.setAttribute("id", "foreman_switch" + id);
+				if (foreman == 1)
+					foreman_input.setAttribute("checked", "");
 
-            admin_div.appendChild(admin_input);
-            admin_div.appendChild(admin_label);
+				let foreman_label = document.createElement("LABEL");
+				foreman_label.setAttribute("class", "custom-control-label");
+				foreman_label.setAttribute("for", "foreman_switch" + id);
 
-            //Creating the custom switch for the foreman authority
-            let foreman_div = document.createElement("DIV");
-            foreman_div.setAttribute("class", "custom-control custom-switch");
+				let foremanTextNode = document.createTextNode("Foreman");
 
-            let foreman_input = document.createElement("INPUT");
-            foreman_input.setAttribute("type", "checkbox");
-            foreman_input.setAttribute("class", "custom-control-input");
-            foreman_input.setAttribute("id", "foreman_switch");
-            if( foreman == 1 )
-              foreman_input.setAttribute("checked");
+				foreman_label.appendChild(foremanTextNode);
 
-            let foreman_label = document.createElement("LABEL");
-            foreman_label.setAttribute("class", "custom-control-label");
-            foreman_label.setAttribute("for", "foreman_switch");
+				foreman_div.appendChild(foreman_input);
+				foreman_div.appendChild(foreman_label);
 
-            let foremanTextNode = document.createTextNode("Foreman");
+				//Creating the custom switch for the employee authority
+				let employee_div = document.createElement("DIV");
+				employee_div.setAttribute("class",
+						"custom-control custom-switch");
 
-            foreman_label.appendChild(foremanTextNode);
+				let employee_input = document.createElement("INPUT");
+				employee_input.setAttribute("type", "checkbox");
+				employee_input.setAttribute("class", "custom-control-input");
+				employee_input.setAttribute("id", "employee_switch" + id);
+				if (employee == 1)
+					employee_input.setAttribute("checked", "");
 
-            foreman_div.appendChild(foreman_input);
-            foreman_div.appendChild(foreman_label);
+				let employee_label = document.createElement("LABEL");
+				employee_label.setAttribute("class", "custom-control-label");
+				employee_label.setAttribute("for", "employee_switch" + id);
 
-            //Creating the custom switch for the employee authority
-            let employee_div = document.createElement("DIV");
-            employee_div.setAttribute("class", "custom-control custom-switch");
+				let employeeTextNode = document.createTextNode("Employee");
 
-            let employee_input = document.createElement("INPUT");
-            employee_input.setAttribute("type", "checkbox");
-            employee_input.setAttribute("class", "custom-control-input");
-            employee_input.setAttribute("id", "employee_switch");
-            if( employee == 1 )
-              employee_input.setAttribute("checked", "");
+				employee_label.appendChild(employeeTextNode);
 
-            let employee_label = document.createElement("LABEL");
-            employee_label.setAttribute("class", "custom-control-label");
-            employee_label.setAttribute("for", "employee_switch");
+				employee_div.appendChild(employee_input);
+				employee_div.appendChild(employee_label);
 
-            let employeeTextNode = document.createTextNode("Employee");
+				td.appendChild(admin_div);
+				td.appendChild(foreman_div);
+				td.appendChild(employee_div);
+				tableRow.appendChild(td);
 
-            employee_label.appendChild(employeeTextNode);
+			}
 
-            employee_div.appendChild(employee_input);
-            employee_div.appendChild(employee_label);
+			function createStudentAuthoritiesColumn(student, id) {
+				let tableRow = document.getElementById(("tr" + id));
 
-            td.appendChild(admin_div);
-            td.appendChild(foreman_div);
-            td.appendChild(employee_div);
-            tableRow.appendChild(td);
+				let td = document.createElement("TD");
 
-          }
+				//Creating the custom swtch for the student authority
+				let div = document.createElement("DIV");
+				div.setAttribute("class", "custom-control custom-switch");
 
-          function createStudentAuthoritiesColumn(student, id){
-            let tableRow = document.getElementById(("tr" + id));
+				let input = document.createElement("INPUT");
+				input.setAttribute("type", "checkbox");
+				input.setAttribute("class", "custom-control-input");
+				input.setAttribute("id", "student_switch" + id);
+				input.setAttribute("checked", "");
 
-            let td = document.createElement("TD");
+				let label = document.createElement("LABEL");
+				label.setAttribute("class", "custom-control-label");
+				label.setAttribute("for", "student_switch" + id);
 
-            //Creating the custom swtch for the student authority
-            let div = document.createElement("DIV");
-            div.setAttribute("class", "custom-control custom-switch");
+				let textNode = document.createTextNode("Student");
 
-            let input = document.createElement("INPUT");
-            input.setAttribute("type", "checkbox");
-            input.setAttribute("class", "custom-control-input");
-            input.setAttribute("id", "student_switch");
-            input.setAttribute("checked", "");
+				label.appendChild(textNode);
 
-            let label = document.createElement("LABEL");
-            label.setAttribute("class", "custom-control-label");
-            label.setAttribute("for", "student_switch");
+				div.appendChild(input);
+				div.appendChild(label);
 
-            let textNode = document.createTextNode("Student");
+				td.appendChild(div);
+				tableRow.appendChild(td);
 
-            label.appendChild(textNode);
+			}
 
-            div.appendChild(input);
-            div.appendChild(label);
+			function createEnabledColumn(enabled, id) {
+				let tableRow = document.getElementById(("tr" + id));
 
-            td.appendChild(div);
-            tableRow.appendChild(td);
+				let td = document.createElement("TD");
 
-          }
+				//Creating the custom swtch for the student authority
+				let div = document.createElement("DIV");
+				div.setAttribute("class", "custom-control custom-switch");
 
-          function createEnabledColumn(enabled, id){
-            let tableRow = document.getElementById(("tr" + id));
+				let input = document.createElement("INPUT");
+				input.setAttribute("type", "checkbox");
+				input.setAttribute("class", "custom-control-input");
+				input.setAttribute("id", "enabled_switch" + id);
+				if (enabled == 1)
+					input.setAttribute("checked", "");
 
-            let td = document.createElement("TD");
+				let label = document.createElement("LABEL");
+				label.setAttribute("class", "custom-control-label");
+				label.setAttribute("for", "enabled_switch" + id);
 
-            //Creating the custom swtch for the student authority
-            let div = document.createElement("DIV");
-            div.setAttribute("class", "custom-control custom-switch");
+				let textNode = document.createTextNode("Enabled");
 
-            let input = document.createElement("INPUT");
-            input.setAttribute("type", "checkbox");
-            input.setAttribute("class", "custom-control-input");
-            input.setAttribute("id", "enabled_switch");
-            if(enabled == 1)
-              input.setAttribute("checked", "");
+				label.appendChild(textNode);
 
-            let label = document.createElement("LABEL");
-            label.setAttribute("class", "custom-control-label");
-            label.setAttribute("for", "enabled_switch");
+				div.appendChild(input);
+				div.appendChild(label);
 
-            let textNode = document.createTextNode("Enabled");
+				td.appendChild(div);
+				tableRow.appendChild(td);
+			}
 
-            label.appendChild(textNode);
-
-            div.appendChild(input);
-            div.appendChild(label);
-
-            td.appendChild(div);
-            tableRow.appendChild(td);
-          }
-
-        }
-  </script>
+		}
+	</script>
 
 
 
