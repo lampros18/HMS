@@ -21,6 +21,15 @@
 <title>Users table</title>
 
 <style>
+.error-checkbox {
+	box-shadow: 0 0 8px red;
+	background-color: red;
+}
+
+.error {
+	box-shadow: 0 0 8px red;
+}
+
 .loading_margin {
 	margin-top: 5%;
 }
@@ -33,10 +42,17 @@
 	margin-left: 9.2%;
 }
 
+.result_container {
+	margin-left: 30%;
+	margin-top: 4%;
+	margin-bottom: -7.5%;
+	width: 50%;
+}
+
 .logout_margin_after_load {
 	margin-left: 9%;
-	margin-top:6%;
-	margin-bottom:-7%;
+	margin-top: 6%;
+	margin-bottom: -7%;
 }
 
 .table_margin_after_load {
@@ -61,7 +77,6 @@
 #pagination-element {
 	margin-left: -3%;
 }
-
 
 body {
 	background: #8e9eab; /* fallback for old browsers */
@@ -103,12 +118,12 @@ body {
 					<form>
 						<div class="form-group">
 							<label for="email" class="col-form-label">Email</label> <input
-								type="text" class="form-control" id="email">
+								type="text" class="form-control" id="employee_email">
 						</div>
 						<div class="form-group">
 							<label for="password" class="col-form-label">Password<span
 								id="reload-pass"> <i class="fas fa-redo-alt"></i></span></label> <input
-								type="text" class="form-control" id="password">
+								type="text" class="form-control" id="employee_password">
 						</div>
 						<br />
 						<div class="form-group">
@@ -141,7 +156,8 @@ body {
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary"
 						data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Add user</button>
+					<button type="button" class="btn btn-primary" id="submit-btn"
+						onclick="event.preventDefault();">Add user</button>
 				</div>
 			</div>
 		</div>
@@ -159,10 +175,19 @@ body {
 	<div id="logout-form" class="logout_margin_while_loading">
 		<form:form class="form-inline"
 			action="${pageContext.request.contextPath}/logout" method="POST">
-			<button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i>  Logout</button>
+			<button type="submit" class="btn btn-danger btn-sm">
+				<i class="fas fa-sign-out-alt"></i> Logout
+			</button>
 		</form:form>
 	</div>
 
+	<div id="result">
+		<button type="button" class="close" onclick="closeResult();"
+			aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+
+	</div>
 
 	<div id="dataTable" class="container table_margin_while_loading">
 		<table
@@ -209,37 +234,38 @@ body {
 
 
 	<script>
-		$(document)
-				.ready(
-						function() {
-							var xhttp = new XMLHttpRequest();
+		function init() {
+			var xhttp = new XMLHttpRequest();
 
-							xhttp.onreadystatechange = function() {
-								if (this.readyState == 4 && this.status == 200) {
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					document.getElementById("table_body").innerHTML = "";
+					loadTableAndData(xhttp.responseText);
+					removeLoading();
 
-									loadTableAndData(xhttp.responseText);
-									removeLoading();
+				}
+			};
 
-								}
-							};
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
 
-							var token = $("meta[name='_csrf']").attr("content");
-							var header = $("meta[name='_csrf_header']").attr(
-									"content");
+			xhttp.open('POST', '<c:url value="/admin/editUsers" />', true);
+			xhttp.setRequestHeader('Content-Type',
+					'application/json;charset=UTF-8');
+			xhttp.setRequestHeader(header, token);
+			xhttp.send({});
 
-							xhttp.open('POST',
-									'<c:url value="/admin/editUsers" />', true);
-							xhttp.setRequestHeader('Content-Type',
-									'application/json;charset=UTF-8');
-							xhttp.setRequestHeader(header, token);
-							xhttp.send({});
-						});
+		}
+		$(document).ready(function() {
+			init();
+		});
 
 		function removeLoading() {
 			document.getElementById("loading").outerHTML = "";
 			document.getElementById("dataTable").setAttribute("class",
 					"container table_margin_after_load");
-			document.getElementById("logout-form").setAttribute("class", "logout_margin_after_load");
+			document.getElementById("logout-form").setAttribute("class",
+					"logout_margin_after_load");
 		}
 
 		function loadTableAndData(response) {
@@ -481,9 +507,9 @@ body {
 		}
 
 		function createPassword() {
-			document.getElementById("password").value = Math.random().toString(
-					36).substring(2).replace("l", "(").replace("I", ")")
-					.replace("1", "m");
+			document.getElementById("employee_password").value = Math.random()
+					.toString(36).substring(2).replace("l", "(").replace("I",
+							")").replace("1", "m");
 		}
 
 		document.getElementById('reload-pass').addEventListener('click',
@@ -545,6 +571,177 @@ body {
 			modal.find('.modal-title').text('New message to ' + recipient)
 			modal.find('.modal-body input').val(recipient)*/
 		})
+
+		document
+				.getElementById("submit-btn")
+				.addEventListener(
+						"click",
+						function() {
+							document.getElementById("employee_email")
+									.setAttribute("class", "form-control");
+							document.getElementById("employee_password")
+									.setAttribute("class", "form-control");
+							document.getElementById("type_employee")
+									.setAttribute("class", "has-val");
+							document.getElementById("type_student")
+									.setAttribute("class", "has-val");
+							document.getElementById(
+									"employee_authority_foreman").setAttribute(
+									"class", "has-val");
+							document.getElementById("employee_authority_admin")
+									.setAttribute("class", "has-val");
+							document.getElementById(
+									"employee_authority_employee")
+									.setAttribute("class", "has-val");
+
+							if (document.getElementById("employee_email").value
+									.trim() == "") {
+								document.getElementById("employee_email")
+										.setAttribute("class",
+												"form-control error");
+								document.getElementById("exampleModalLabel")
+										.scrollIntoView();
+								return;
+							}
+
+							if (document.getElementById("employee_password").value
+									.trim() == "") {
+								document.getElementById("employee_password")
+										.setAttribute("class",
+												"form-control error");
+								document.getElementById("exampleModalLabel")
+										.scrollIntoView();
+								return;
+							}
+
+							if (document.getElementById("type_employee").checked) {
+								if (!document
+										.getElementById("employee_authority_foreman").checked
+										&& !document
+												.getElementById("employee_authority_admin").checked
+										&& !document
+												.getElementById("employee_authority_foreman").checked) {
+									document.getElementById(
+											"employee_authority_foreman")
+											.setAttribute("class",
+													"error-checkbox has-val");
+									document.getElementById(
+											"employee_authority_admin")
+											.setAttribute("class",
+													"error-checkbox has-val");
+									document.getElementById(
+											"employee_authority_employee")
+											.setAttribute("class",
+													"error-checkbox has-val");
+									return;
+								}
+							}
+
+							if (!document.getElementById("type_employee").checked) {
+								if (!document.getElementById("type_student").checked) {
+									document.getElementById("type_employee")
+											.setAttribute("class",
+													"has-val error-checkbox");
+									document.getElementById("type_student")
+											.setAttribute("class",
+													"has-val error-checkbox");
+									return;
+								}
+							}
+
+							$('#addUserModal').modal('hide');
+							var xhttp = new XMLHttpRequest();
+
+							xhttp.onreadystatechange = function() {
+								if (this.readyState == 4 && this.status == 200) {
+									// Typical action to be performed when the document is ready:
+									//docufment.getElementById("demo").innerHTML = xhttp.responseText;
+									setResultMessage(xhttp.responseText);
+									init();
+								}
+							};
+
+							var token = $("meta[name='_csrf']").attr("content");
+							var header = $("meta[name='_csrf_header']").attr(
+									"content");
+
+							xhttp.open('POST', '/Springmvc1/admin/createUser',
+									true);
+							xhttp.setRequestHeader('Content-Type',
+									'application/json;charset=UTF-8');
+							xhttp.setRequestHeader(header, token);
+							xhttp
+									.send(JSON
+											.stringify({
+												email : document
+														.getElementById("employee_email").value,
+												password : document
+														.getElementById("employee_password").value,
+												authority_admin : document
+														.getElementById("employee_authority_admin").checked == true ? '1'
+														: '0',
+												authority_foreman : document
+														.getElementById("employee_authority_foreman").checked == true ? '1'
+														: '0',
+												authority_employee : document
+														.getElementById("employee_authority_employee").checked == true ? '1'
+														: '0',
+												authority_student : document
+														.getElementById("type_student").checked == true ? '1'
+														: '0',
+												enabled : document
+														.getElementById("employee_enabled").checked == true ? '1'
+														: '0'
+											}));
+						});
+
+		function setResultMessage(response) {
+			let div = document.getElementById("result");
+
+			let json = JSON.parse(response);
+			closeResult();
+			let span = document.createElement("SPAN");
+			span.setAttribute("id", "text-node");
+			let txtNode = document.createTextNode(json.result);
+			span.appendChild(txtNode);
+			if (json.status == "500") {
+				div.setAttribute("role", "alert");
+				div
+						.setAttribute("class",
+								"result_container alert alert-danger alert-dismissible fade show");
+			}
+			if (json.status == "200") {
+				div.setAttribute("role", "alert");
+				div
+						.setAttribute("class",
+								"result_container alert alert-primary alert-dismissible fade show");
+				resetForm();
+			}
+			div.appendChild(span);
+			window.scroll(0, 0);
+		}
+
+		function resetForm() {
+			document.getElementById("employee_email").value = "";
+			createPassword();
+			document.getElementById("type_employee").checked = false;
+			document.getElementById("type_student").checked = false;
+			document.getElementById("employee_authority_admin").checked = false;
+			document.getElementById("employee_authority_foreman").checked = false;
+			document.getElementById("employee_authority_employee").checked = false;
+			document.getElementById("employee_enabled").checked = false;
+		}
+
+		function closeResult() {
+			let div = document.getElementById("result");
+			let span = document.getElementById("text-node");
+			if (span != null)
+				span.parentNode.removeChild(span);
+			if (div != null) {
+				div.removeAttribute("class");
+				div.removeAttribute("role");
+			}
+		}
 	</script>
 
 

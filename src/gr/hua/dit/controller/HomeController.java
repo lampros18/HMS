@@ -15,9 +15,6 @@ public class HomeController {
 		String principalInfo=httpSe.toString();
 		
 		if(principalInfo.contains("ROLE_ADMIN")) {
-
-			
-
 			return "/admin/editUsers";
 		}else if(principalInfo.contains("ROLE_EMPLOYEE")) {
 			

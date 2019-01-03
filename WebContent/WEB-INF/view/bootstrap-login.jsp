@@ -22,21 +22,15 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style>
-.loading_margin {
-	margin-top: 5%;
+
+.container{
+	margin:0 auto;
 }
 
-.table_margin_while_loading {
-	margin-top: 1%;
-}
-
-.table_margin_after_load {
-	margin-top: 8%;
-}
-
-.dark-theme {
-	background-color: #212529;
-	color: #fff;
+#loginbox{
+	margin: 0 auto;
+	width:40%;
+	min-width:280px;
 }
 
 body{
@@ -47,15 +41,6 @@ body{
 	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.body-style{
-
-	background: #8e9eab; /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-	/* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to right, #eef2f3, #8e9eab);
-	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-}
 
 </style>
 
@@ -67,8 +52,7 @@ body{
 
 	<div class="container">
 
-		<div id="loginbox" style="margin-top: 20%; width: 40%;"
-			class="mainbox col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+		<div id="loginbox">
 
 			<div class="panel panel-info body-style">
 
