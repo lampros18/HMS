@@ -28,6 +28,12 @@ public class UserServiceImplementation implements UserService {
 	public List<User> getUsers() {
 		return userDAO.getUsers();
 	}
+
+	@Override
+	@Transactional
+	public void removeUser(int id) {
+		userDAO.removeUser(id);
+	}
 	
 	
 	

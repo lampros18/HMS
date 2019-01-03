@@ -22,13 +22,6 @@
 </head>
 <body class="jumbotron">
 
-
-
-
-
-
-
-
 	<div class="jumbotron" style="padding: 5%;">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">

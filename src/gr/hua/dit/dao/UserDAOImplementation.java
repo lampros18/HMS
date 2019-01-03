@@ -35,4 +35,11 @@ public class UserDAOImplementation implements UserDAO {
 		return c.list();
 	}
 
+	@Override
+	public void removeUser(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		User user = session.find(User.class, id);
+		session.remove(user);
+	}
+
 }
