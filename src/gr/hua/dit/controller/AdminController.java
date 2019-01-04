@@ -146,6 +146,7 @@ public class AdminController {
 		JSONObject jsonUser;
 		for(User user : userService.getUsers()) {
 			jsonUser = new JSONObject();
+			jsonUser.put("id", user.getId());
 			jsonUser.put("email",user.getUsername());
 			jsonUser.put("password", user.getPassword());
 			jsonUser.put("enabled", Integer.parseInt(user.getEnabled()));
@@ -199,6 +200,30 @@ public class AdminController {
 		json.put("users", data);
 		userSet = null;
 		return json.toString();
+	}
+	
+	@RequestMapping(value = "deleteUser", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteUser(HttpServletRequest request) {
+		
+		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
+		String data = employeeRequestHandler.getSringifiedHttpResponse(request);
+		
+		JSONObject result = new JSONObject();
+		try {
+			JSONObject json = new JSONObject(data);
+			userService.removeUser(json.getInt("id"));
+			result.put("status", "200");
+			result.put("result", "The user has been successfully deleted");
+			return result.toString();
+		} catch (Exception e) {
+			result.put("status", "500");
+			result.put("result",
+					"We encountered an internal error. Please contact with the system administartor");
+			e.printStackTrace();
+			return result.toString();
+		}
+		
 	}
 	
 }

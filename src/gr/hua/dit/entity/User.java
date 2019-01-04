@@ -68,6 +68,11 @@ public class User implements Serializable{
 		return username;
 	}
 
+	
+	public int getId() {
+		return id;
+	}
+
 	public String getPassword() {
 		return password;
 	}

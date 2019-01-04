@@ -272,26 +272,26 @@ body {
 			let json = JSON.parse(response);
 			let tableBody = document.getElementById("table_body");
 			for (let i = 0; i < json.users.length; i++) {
-				createTableRow(i, tableBody);
-				createActionsRow(i, tableBody);
-				createEmailColumn(json.users[i].email, i);
-				createPasswordColumn(json.users[i].password, i);
+				createTableRow(json.users[i].id, tableBody);
+				createActionsRow(json.users[i].id, tableBody);
+				createEmailColumn(json.users[i].email, json.users[i].id);
+				createPasswordColumn(json.users[i].password, json.users[i].id);
 				if (json.users[i].student == 1)
-					createStudentAuthoritiesColumn(json.users[i].student, i);
+					createStudentAuthoritiesColumn(json.users[i].student, json.users[i].id);
 				else
 					createEmployeeAuthoritiesColumn(json.users[i].admin,
-							json.users[i].foreman, json.users[i].employee, i);
-				createEnabledColumn(json.users[i].enabled, i);
+							json.users[i].foreman, json.users[i].employee, json.users[i].id);
+				createEnabledColumn(json.users[i].enabled, json.users[i].id);
 			}
 
 			function createTableRow(id, tableBody) {
 				let tableRow = document.createElement("TR");
-				tableRow.setAttribute("id", "tr" + id);
+				tableRow.setAttribute("id", id);
 				tableBody.appendChild(tableRow);
 			}
 
 			function createActionsRow(id, tableBody) {
-				let tableRow = document.getElementById("tr" + id);
+				let tableRow = document.getElementById( id);
 
 				let td = document.createElement("TD");
 
@@ -300,6 +300,8 @@ body {
 
 				let iDeleteUser = document.createElement("I");
 				iDeleteUser.setAttribute("class", "fas fa-user-minus");
+				iDeleteUser.setAttribute("style",  "cursor:pointer;");
+				iDeleteUser.setAttribute("onclick", "deleteUser("+id+");");
 
 				let iUpdateUser = document.createElement("I");
 				iUpdateUser.setAttribute("class", "fas fa-user-edit");
@@ -334,11 +336,12 @@ body {
 			}
 
 			function createEmailColumn(email, id) {
-				let tableRow = document.getElementById(("tr" + id));
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 				let div = document.createElement("DIV");
 				div.setAttribute("contenteditable", "");
+				div.setAttribute("onblur", "editEmail("+ id + ");"); 
 				let textNode = document.createTextNode(email);
 
 				div.appendChild(textNode);
@@ -348,7 +351,7 @@ body {
 			}
 
 			function createPasswordColumn(password, id) {
-				let tableRow = document.getElementById(("tr" + id));
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 				let div = document.createElement("DIV");
@@ -363,7 +366,7 @@ body {
 
 			function createEmployeeAuthoritiesColumn(admin, foreman, employee,
 					id) {
-				let tableRow = document.getElementById(("tr" + id));
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 
@@ -443,7 +446,7 @@ body {
 			}
 
 			function createStudentAuthoritiesColumn(student, id) {
-				let tableRow = document.getElementById(("tr" + id));
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 
@@ -474,7 +477,7 @@ body {
 			}
 
 			function createEnabledColumn(enabled, id) {
-				let tableRow = document.getElementById(("tr" + id));
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 
@@ -741,6 +744,52 @@ body {
 				div.removeAttribute("class");
 				div.removeAttribute("role");
 			}
+		}
+		
+		function deleteUser(uid){
+			var xhttp = new XMLHttpRequest();
+
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log("deleted");
+				}
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			xhttp.open('POST', '<c:url value="/admin/deleteUser"/>', true);
+			xhttp.setRequestHeader('Content-Type',
+					'application/json;charset=UTF-8');
+			xhttp.setRequestHeader(header, token);
+			xhttp.send(JSON.stringify(
+			{
+				id:uid
+			}		
+			));
+		}	
+		
+		function editEmail(uid){
+			var xhttp = new XMLHttpRequest();
+
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log("edited");
+				}
+			};
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			xhttp.open('POST', '<c:url value="/admin/deleteUser"/>', true);
+			xhttp.setRequestHeader('Content-Type',
+					'application/json;charset=UTF-8');
+			xhttp.setRequestHeader(header, token);
+			xhttp.send(JSON.stringify(
+			{
+				id:uid
+			}		
+			));
 		}
 	</script>
 
