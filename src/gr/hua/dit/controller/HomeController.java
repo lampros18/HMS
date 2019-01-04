@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-	@GetMapping("/")
+	@GetMapping("/authenticated")
 	public String showHomePage(Principal httpSe) {		
 		
 		String principalInfo=httpSe.toString();

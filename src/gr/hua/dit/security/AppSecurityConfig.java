@@ -38,7 +38,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","FOREMAN","STUDENT")
 		.antMatchers("/admin/**").hasRole("ADMIN")
 		.antMatchers("/employee/**").hasRole("EMPLOYEE")
 		.antMatchers("/foreman/**").hasRole("FOREMAN")
@@ -49,6 +48,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/commonLogin")
 			.loginProcessingUrl("/authUser")
 			.permitAll()
+			.defaultSuccessUrl("/authenticated")
 		.and()
 		.logout().permitAll();
 

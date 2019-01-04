@@ -17,9 +17,9 @@ public class EmployeeController {
 	@Autowired
 	private StudentService studentService;
 
-	@RequestMapping(value="home", method=RequestMethod.GET)
+	@RequestMapping(value="employeeHome", method=RequestMethod.GET)
 	public String showHomePage() {
-		return "employeeHome";
+		return "employee/employeeHome";
 	}
 	
 	@RequestMapping(value="listStudents", method=RequestMethod.GET)
