@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
-	@GetMapping("/authenticated")
+	@GetMapping("/")
 	public String showHomePage(Principal httpSe) {		
 		
 		String principalInfo=httpSe.toString();
 		
 		if(principalInfo.contains("ROLE_ADMIN")) {
-			return "/admin/adminHome";
+			return "/admin/editUsers";
 		}else if(principalInfo.contains("ROLE_EMPLOYEE")) {
 			
 			return "/employee/employeeHome";
