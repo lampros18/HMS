@@ -46,7 +46,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated()
 		.and()
 		.formLogin()
-			.loginPage("/commonLogin")
+			.loginPage("/Login")
 			.loginProcessingUrl("/authUser")
 			.permitAll()
 			.defaultSuccessUrl("/")

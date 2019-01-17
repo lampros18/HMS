@@ -32,7 +32,7 @@ public class HomeController {
 		return null;
 	}
 	
-	@GetMapping("/commonLogin")
+	@GetMapping("/Login")
 	public String loginPage(Model model) {
 		
 		return "bootstrap-login";
