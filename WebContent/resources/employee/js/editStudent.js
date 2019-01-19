@@ -92,7 +92,7 @@ document.getElementsByClassName('btn btn-primary btn-lg my-2 my-sm-0')[0].addEve
 		
 		if(validRow(row)){
 			
-			console.log(returnEntryFromRow(row));
+			console.log(sendEntry(returnEntryFromRow(row)));
 			
 						
 			
@@ -556,5 +556,43 @@ function returnEntryFromRow(row){
 	return entry;
 	
 }
+
+
+
+
+
+function sendEntry(student){
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr(
+	  "content");
+
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST','employee/employeeHome/createStudent',
+			  true);
+	xhttp.setRequestHeader('Content-Type',
+	  'application/json;charset=UTF-8');
+	xhttp.setRequestHeader(header, token);
+	xhttp.send(JSON.stringify(student));
+	
+
+	
+	xhttp.onreadystatechange = function() {
+	  if (this.readyState == 4 && this.status == 200) {
+	    
+		  
+		  result=xhttp.responseText;
+	  }
+	};
+	
+	
+
+	
+}
+
+
+
+
 
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import gr.hua.dit.dao.EmployeeDAO;
 import gr.hua.dit.entity.Employee;
+import gr.hua.dit.entity.Student;
 
 @Service
 public class EmployeeServiceImplementation implements EmployeeService {
@@ -19,6 +20,15 @@ public class EmployeeServiceImplementation implements EmployeeService {
 	@Transactional
 	public int createEmployee(Employee employee) {
 		return employeeDAO.insertEmployee(employee);
+	}
+
+
+	@Override
+	@Transactional
+	public void createStudent(Student student) {
+		
+		employeeDAO.insertStudent(student);
+		
 	}
 
 }
