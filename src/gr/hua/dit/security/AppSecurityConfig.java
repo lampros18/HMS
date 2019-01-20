@@ -49,6 +49,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.loginPage("/commonLogin")
 			.loginProcessingUrl("/authUser")
 			.permitAll()
+			.defaultSuccessUrl("/")
 		.and()
 		.logout().permitAll();
 

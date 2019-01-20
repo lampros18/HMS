@@ -8,4 +8,5 @@ public interface UserService {
 	public void createUser(User user);
 	public List<User> getUsers();
 	void removeUser(int id);
+	User findUserByUsername(String username);
 }

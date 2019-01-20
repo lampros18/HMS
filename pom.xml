@@ -88,7 +88,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.13</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.3.4.RELEASE</version>
+		</dependency>
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -112,12 +117,6 @@
 			<version>2.1.4</version>
 			<type>pom</type>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>4.3.4.RELEASE</version>
-		</dependency>
 
 		<!-- JSON -->
 		<!-- https://mvnrepository.com/artifact/org.json/json -->
@@ -132,6 +131,7 @@
 			<artifactId>mail</artifactId>
 			<version>1.4.3</version>
 		</dependency>
+		
 	</dependencies>
 	<build>
 		<sourceDirectory>src</sourceDirectory>

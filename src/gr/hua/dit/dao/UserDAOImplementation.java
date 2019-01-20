@@ -2,12 +2,16 @@ package gr.hua.dit.dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
 
 @Repository
@@ -41,5 +45,24 @@ public class UserDAOImplementation implements UserDAO {
 		User user = session.find(User.class, id);
 		session.remove(user);
 	}
+
+	@Override
+	public User findUserByUsername(String username) {
+		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		// create a query
+		Query<User> query = currentSession.createQuery("from User where username=:username", User.class);
+		query.setParameter("username", username);
+		// execute the query and get the results list
+		List<User> users = query.getResultList();
+		
+		// return the results
+		if(users.size() > 0)
+			return users.get(0);
+		else
+			return null;
+	}
+	
 
 }

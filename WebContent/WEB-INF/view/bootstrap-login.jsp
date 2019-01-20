@@ -84,7 +84,7 @@ body{
 
 										<i id="info2"
 											class="alert alert-success col-xs-offset-1 col-xs-10">You
-											have disconnected</i>
+											have been disconnected</i>
 
 									</c:if>
 
