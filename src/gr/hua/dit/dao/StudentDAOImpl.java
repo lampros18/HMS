@@ -19,7 +19,6 @@ public class StudentDAOImpl implements StudentDAO {
 	private SessionFactory sessionFactory;
 
 	@Override
-	@Transactional
 	public List<Student> getStudents() {
 
 		// get current hibernate session
@@ -34,6 +33,15 @@ public class StudentDAOImpl implements StudentDAO {
 		// return the results
 		return students;
 	}
+	
+	
+	@Override
+    public Student getStudentById(int id) {
+        Session currentSession = sessionFactory.getCurrentSession();
+        return (Student)currentSession.get(Student.class, id);
+    }
+
+	
 	
 
 	@Override

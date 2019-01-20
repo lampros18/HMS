@@ -6,4 +6,7 @@ import gr.hua.dit.entity.Student;
 
 public interface StudentService {
 	List<Student> getStudents();
+
+	Student getStudentById(int id);
+	
 }

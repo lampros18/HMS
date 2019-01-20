@@ -90,6 +90,14 @@ public class User implements Serializable{
 		authority.setUser(this);
 	}
 
+	public boolean isStudent() {
+		for(Authorities authority : this.authorities) {
+			if(authority.getAuthority().equals("ROLE_STUDENT"))
+				return true;
+		}
+		return false;
+	}
+	
 //	@Override
 //	public String toString() {
 //		return "User [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled

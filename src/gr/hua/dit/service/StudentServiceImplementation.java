@@ -2,6 +2,8 @@ package gr.hua.dit.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,15 @@ public class StudentServiceImplementation implements StudentService {
 	
 	//Service provider method
 	@Override
+	@Transactional
 	public List<Student> getStudents() { 
 		return studentDAO.getStudents();
 	}
+	
+	@Override
+	@Transactional
+    public Student getStudentById(int id) {
+        return studentDAO.getStudentById(id);
+    }
 	
 }
