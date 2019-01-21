@@ -38,8 +38,8 @@ public class Student extends SUser {
 	@Column(name = "is_postgraduate")
 	private boolean isPostgraduate;
 
-	@OneToOne
-	@JoinColumn(name="username")
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="username", referencedColumnName="username")
 	private User user;
 	
 	public Student() {

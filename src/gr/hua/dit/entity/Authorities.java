@@ -52,6 +52,7 @@ public class Authorities {
 	public String getAuthority() {
 		return authority;
 	}
+	
 
 	
 	

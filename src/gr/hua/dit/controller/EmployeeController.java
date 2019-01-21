@@ -41,11 +41,12 @@ public class EmployeeController {
 		JSONObject jsonObject = new JSONObject(employeeRequestHandler.getSringifiedHttpResponse(request));
 		jsonObject.put("createdBy", principal.getName());
 //		String ecryptedPassword=BCrypt.hashpw("pass", BCrypt.gensalt());
-
+		
 		if (Student.validStudent(jsonObject)) {
 			User user = userService.findUserByUsername(jsonObject.getString("email"));
 			Student student = new Student(jsonObject);
 			student.setUser(user);
+			System.out.println(student.getUser().getUsername());
 			System.out.println(studentService.insertStudent(student));
 		}
 

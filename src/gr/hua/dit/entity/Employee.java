@@ -37,8 +37,8 @@ public class Employee extends SUser {
 	@Column(name = "year_of_recruitment")
 	private int yearOfRecruitment;
 	
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="username")
+	@OneToOne
+	@JoinColumn(name="username", referencedColumnName="username")
 	private User user;
 	
 	public Employee() {
