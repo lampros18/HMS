@@ -1,20 +1,29 @@
 package gr.hua.dit.entity;
 
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.json.JSONObject;
 
-@Entity
+@Entity(name="Student")
 @Table(name = "student_profile")
 @AttributeOverride(name = "name", column = @Column(name = "name"))
 @AttributeOverride(name = "surname", column = @Column(name = "surname"))
@@ -25,7 +34,12 @@ import org.json.JSONObject;
 @AttributeOverride(name = "createdAt", column = @Column(name = "created_at"))
 @AttributeOverride(name = "updatedAt", column = @Column(name = "updated_at"))
 @AttributeOverride(name = "createdBy", column = @Column(name = "created_by"))
-public class Student extends SUser {
+public class Student extends SUser implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,6 +52,15 @@ public class Student extends SUser {
 	@Column(name = "is_postgraduate")
 	private boolean isPostgraduate;
 
+	@OneToMany(
+	        mappedBy = "student",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
+	    @LazyCollection(LazyCollectionOption.FALSE)
+	    private List<HousingApplication> housingApplications;
+	
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="username", referencedColumnName="username")
 	private User user;
@@ -169,6 +192,38 @@ public class Student extends SUser {
 
 	public void setPostgraduate(boolean isPostgraduate) {
 		this.isPostgraduate = isPostgraduate;
+	}
+	
+	/**
+	 * 
+	 * @param housingApplication 
+	 * This method is used to insert housing applications. It also replaces applications of the same year.
+	 */
+	public void addHousingApplication(HousingApplication housingApplication) {	
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+		Date date;
+		Calendar calendar = Calendar.getInstance();
+		
+		int curYear = calendar.get(Calendar.YEAR); 
+		
+		HousingApplication tmp = null;
+		for(HousingApplication ha : this.housingApplications) {
+			try {
+				date = format.parse(ha.getCreated_at());
+				calendar.setTime(date);
+				if( calendar.get(Calendar.YEAR) == curYear ) {
+					tmp = ha;
+					break;
+				}
+			} catch (ParseException e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		if(tmp != null)
+			this.housingApplications.remove(tmp);
+		this.housingApplications.add(housingApplication);
+		housingApplication.setStudent(this);
 	}
 	
 	

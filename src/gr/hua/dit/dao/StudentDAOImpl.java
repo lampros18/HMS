@@ -10,7 +10,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
+import gr.hua.dit.entity.User;
 
 @Repository
 public class StudentDAOImpl implements StudentDAO {
@@ -41,7 +43,24 @@ public class StudentDAOImpl implements StudentDAO {
         return (Student)currentSession.get(Student.class, id);
     }
 
+	@Override
+	public Student findStudentByUsername(String username) {
+		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
 
+		// create a query
+		Query<Student> query = currentSession.createQuery("from Student where username=:username", Student.class);
+		query.setParameter("username", username);
+		// execute the query and get the results list
+		List<Student> students = query.getResultList();
+		
+		// return the results
+		if(students.size() > 0)
+			return students.get(0);
+		else
+			return null;
+	}
+	
 
 	@Override
 	public int insertStudent(Student student) {
@@ -50,9 +69,7 @@ public class StudentDAOImpl implements StudentDAO {
 			currentSession.saveOrUpdate(student);
 			return 0;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return -1;
-
 		}
 	}
 

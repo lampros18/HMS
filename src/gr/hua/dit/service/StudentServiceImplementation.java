@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gr.hua.dit.dao.StudentDAO;
+import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 
 @Service
@@ -36,4 +37,10 @@ public class StudentServiceImplementation implements StudentService {
 		return studentDAO.insertStudent(student);
 	}
 	
+	@Override
+	@Transactional
+	public Student findStudentByUsername(String username) {
+		return studentDAO.findStudentByUsername(username);
+	}
+
 }

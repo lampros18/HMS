@@ -24,11 +24,7 @@ public class UserDAOImplementation implements UserDAO {
 	public void insertUser(User user) {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
-		
-
 		currentSession.persist(user);
-
-		
 	}
 
 	@Override
