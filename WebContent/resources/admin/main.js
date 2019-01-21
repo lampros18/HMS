@@ -13,7 +13,7 @@
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 
-			xhttp.open('POST', 'admin/editUsers', true);
+			xhttp.open('POST', 'editUsers', true);
 			xhttp.setRequestHeader('Content-Type',
 					'application/json;charset=UTF-8');
 			xhttp.setRequestHeader(header, token);
@@ -432,7 +432,7 @@
 							var header = $("meta[name='_csrf_header']").attr(
 									"content");
 
-							xhttp.open('POST', '/Springmvc1/admin/createUser',
+							xhttp.open('POST', 'createUser',
 									true);
 							xhttp.setRequestHeader('Content-Type',
 									'application/json;charset=UTF-8');
@@ -522,7 +522,7 @@
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 
-			xhttp.open('POST', '<c:url value="/admin/deleteUser"/>', true);
+			xhttp.open('POST', 'deleteUser', true);
 			xhttp.setRequestHeader('Content-Type',
 					'application/json;charset=UTF-8');
 			xhttp.setRequestHeader(header, token);
@@ -549,7 +549,7 @@
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
 
-			xhttp.open('POST', '<c:url value="/admin/deleteUser"/>', true);
+			xhttp.open('POST', 'deleteUser', true);
 			xhttp.setRequestHeader('Content-Type',
 					'application/json;charset=UTF-8');
 			xhttp.setRequestHeader(header, token);

@@ -1,7 +1,6 @@
 package gr.hua.dit.controller;
  
 import javax.servlet.http.HttpServletRequest;
- 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,7 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
- 
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.service.StudentService;
@@ -34,7 +32,6 @@ public class APIController {
     public String Authenticate(HttpServletRequest request) {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
- 
         User user = userService.findUserByUsername(username);
         if( user==null || (!user.isStudent()) ) {
             JSONObject json = new JSONObject();

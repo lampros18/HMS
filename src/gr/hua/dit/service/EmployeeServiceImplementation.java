@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import gr.hua.dit.dao.EmployeeDAO;
 import gr.hua.dit.entity.Employee;
+import gr.hua.dit.entity.Student;
 
 @Service
 public class EmployeeServiceImplementation implements EmployeeService {

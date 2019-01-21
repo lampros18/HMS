@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
 	@GetMapping("/")
-	public String showHomePage(Principal httpSe) {		
+	public String showHomePage(Principal principal) {		
 		
-		String principalInfo=httpSe.toString();
+		String principalInfo=principal.toString();
 		
 		if(principalInfo.contains("ROLE_ADMIN")) {
-			return "/admin/editUsers";
+			 return "redirect:/admin/editUsers";
 		}else if(principalInfo.contains("ROLE_EMPLOYEE")) {
 			
-			return "/employee/employeeHome";
+			return "redirect:/employee/employeeHome";
 		}
 		else if(principalInfo.contains("ROLE_STUDENT")) {
 			
-			return "/student/studentHome";
+			return "redirect:/student/studentHome";
 		}
 		
 		

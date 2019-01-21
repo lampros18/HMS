@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import gr.hua.dit.entity.Employee;
+import gr.hua.dit.entity.Student;
 
 @Repository
 public class EmployeeDAOImplementation implements EmployeeDAO {
@@ -17,11 +18,7 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 	public int insertEmployee(Employee employee) {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
-		
-
 		currentSession.persist(employee);
-
-		
 		return 0;
 	}
 

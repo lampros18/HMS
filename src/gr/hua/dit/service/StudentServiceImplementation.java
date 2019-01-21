@@ -30,4 +30,10 @@ public class StudentServiceImplementation implements StudentService {
         return studentDAO.getStudentById(id);
     }
 	
+	@Override
+	@Transactional
+	public int insertStudent(Student student) {
+		return studentDAO.insertStudent(student);
+	}
+	
 }

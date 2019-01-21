@@ -41,13 +41,17 @@ public class StudentDAOImpl implements StudentDAO {
         return (Student)currentSession.get(Student.class, id);
     }
 
-	
-	
+
 
 	@Override
-	public int addStudent(Student student) {
-		
-		return 0;
+	public int insertStudent(Student student) {
+		Session currentSession = sessionFactory.getCurrentSession();
+		try {
+			currentSession.persist(student);
+			return 0;
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 
 }
