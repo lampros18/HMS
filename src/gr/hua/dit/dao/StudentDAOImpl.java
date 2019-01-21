@@ -47,10 +47,12 @@ public class StudentDAOImpl implements StudentDAO {
 	public int insertStudent(Student student) {
 		Session currentSession = sessionFactory.getCurrentSession();
 		try {
-			currentSession.persist(student);
+			currentSession.saveOrUpdate(student);
 			return 0;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return -1;
+
 		}
 	}
 

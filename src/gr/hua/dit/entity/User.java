@@ -11,7 +11,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.json.JSONObject;
@@ -46,7 +48,9 @@ public class User implements Serializable{
 	        orphanRemoval = true
 	    )
 	    private List<Authorities> authorities;
+	
 
+	
 	
 	public User() {}
 	
@@ -97,17 +101,12 @@ public class User implements Serializable{
 		}
 		return false;
 	}
-	
-//	@Override
-//	public String toString() {
-//		return "User [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
-//				+ ", getAuthorities()=" + getAuthorities() + "]";
-//	}
 
-	
-
-
-	
-	
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", password=" + password + ", enabled=" + enabled
+				+ ", authorities=" + authorities + "]";
+	}
+		
 	
 }

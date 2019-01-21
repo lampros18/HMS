@@ -6,7 +6,6 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class SUser{
 	
-	private int id;
 	private String name;
 	private String surname;
 	private String birthdate;
@@ -18,9 +17,8 @@ public class SUser{
 	private String createdBy;
 	public SUser() {}
 	
-	public SUser( int id, String name, String surname ,String birthdate, String department, String phone,
+	public SUser( String name, String surname ,String birthdate, String department, String phone,
 			String address, String createdAt, String updatedAt, String createdBy) {
-		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.birthdate = birthdate;
@@ -32,9 +30,7 @@ public class SUser{
 		this.createdBy = createdBy;
 	}
 
-	public int getId() {
-		return id;
-	}
+
 
 
 
@@ -77,7 +73,7 @@ public class SUser{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", birthdate=" + birthdate
+		return "User [name=" + name + ", surname=" + surname + ", birthdate=" + birthdate
 				+ ", department=" + department + ", phone=" + phone + ", address=" + address + ", createdAt="
 				+ createdAt + ", updatedAt=" + updatedAt + ", createdBy=" + createdBy + "]";
 	}

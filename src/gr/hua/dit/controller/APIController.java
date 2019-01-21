@@ -14,13 +14,10 @@ import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
  
  
- 
- 
 @RestController
 @RequestMapping("api")
 public class APIController {
-   
-   
+     
     @Autowired
     private UserService userService;
    

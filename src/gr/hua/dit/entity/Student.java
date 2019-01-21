@@ -1,16 +1,21 @@
 package gr.hua.dit.entity;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.json.JSONObject;
 
 @Entity
 @Table(name = "student_profile")
-@AttributeOverride(name = "id", column = @Column(name = "id"))
 @AttributeOverride(name = "name", column = @Column(name = "name"))
 @AttributeOverride(name = "surname", column = @Column(name = "surname"))
 @AttributeOverride(name = "birthdate", column = @Column(name = "birthdate"))
@@ -23,8 +28,9 @@ import org.json.JSONObject;
 public class Student extends SUser {
 
 	@Id
-	@Column(name = "email")
-	private String email;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name = "id")
+	private int id;
 
 	@Column(name = "year_of_enrollment")
 	private int yearOfEnrollment;
@@ -32,8 +38,29 @@ public class Student extends SUser {
 	@Column(name = "is_postgraduate")
 	private boolean isPostgraduate;
 
+	@OneToOne
+	@JoinColumn(name="username")
+	private User user;
+	
 	public Student() {
 		super();
+	}
+	
+	public Student(JSONObject jsonObject) {
+		this(
+					jsonObject.getString("name"),
+					jsonObject.getString("surname"),
+					"2005-05-13",
+//					jsonObject.getString("birthDate"),
+					jsonObject.getString("department"),
+					jsonObject.getString("phone"),
+					jsonObject.getString("address")
+					,"2005-05-13 07:15:31",
+					"2005-05-13 07:15:31",
+					jsonObject.getString("createdBy")
+					,jsonObject.getBoolean("postGraduate"),
+					jsonObject.getInt("yearOfEnrollment")
+			   );
 	}
 
 	/**
@@ -104,11 +131,10 @@ public class Student extends SUser {
 		return true;
 	}
 
-	public Student(String email, int id, String name, String surname, String password, String birthdate,
-			String department, String phone, String address, String createdAt, String updatedAt, int enabled,
+	public Student(String name, String surname, String birthdate,
+			String department, String phone, String address, String createdAt, String updatedAt,
 			String createdBy, boolean isPostgraduate, int yearOfEnrollment) {
-		super(id, name, surname, birthdate, department, phone, address, createdAt, updatedAt, createdBy);
-		this.email = email;
+		super(name, surname, birthdate, department, phone, address, createdAt, updatedAt, createdBy);
 		this.isPostgraduate = isPostgraduate;
 		this.yearOfEnrollment = yearOfEnrollment;
 	}
@@ -121,4 +147,30 @@ public class Student extends SUser {
 		return isPostgraduate;
 	}
 
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setYearOfEnrollment(int yearOfEnrollment) {
+		this.yearOfEnrollment = yearOfEnrollment;
+	}
+
+	public void setPostgraduate(boolean isPostgraduate) {
+		this.isPostgraduate = isPostgraduate;
+	}
+	
+	
+	
 }
