@@ -10,62 +10,66 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity(name="HousingApplication")
-@Table(name="housing_application")
+@Entity(name = "HousingApplication")
+@Table(name = "housing_application")
 public class HousingApplication {
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
-	
+
 	@Column(name = "personal_income")
 	private double personalIncome;
-	
-	@Column(name="unemployed_parents")
-	private int unemployedParents;
-	
-	@Column(name="family_income")
-	private double familyIncome;
-	
-	@Column(name="number_of_student_siblings")
-	private int numberOfStudentSiblings;
-	
-	@Column(name="is_local_resident")
-	private int isLocalResident;
-	
-	@Column(name="grade")
-	private int grade;
-	
-	@Column(name="verified")
-	private int verified;
-	
-	@Column(name="created_at")
-	private String created_at;
-	
-	@Column(name="updated_at")
-	private String updated_at;
 
-	
+	@Column(name = "unemployed_parents")
+	private int unemployedParents;
+
+	@Column(name = "family_income")
+	private double familyIncome;
+
+	@Column(name = "number_of_student_siblings")
+	private int numberOfStudentSiblings;
+
+	@Column(name = "is_local_resident")
+	private int isLocalResident;
+
+	@Column(name = "grade")
+	private int grade;
+
+	@Column(name = "verified")
+	private int verified;
+
+	@Column(name = "created_at")
+	private String createdAt;
+
+	@Column(name = "updated_at")
+	private String updatedAt;
+
+	@Column(name = "file_type")
+	private String fileType;
+
+	@Column(name = "file")
+	private byte[] file;
+
 	@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "created_by_student", referencedColumnName="username")
-    private Student student;
-	
-	
+	@JoinColumn(name = "created_by_student", referencedColumnName = "username")
+	private Student student;
+
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-	
+
 	public Student getStudent() {
 		return this.student;
 	}
-	
-	
-	public HousingApplication() {}
-	
-	public HousingApplication( double personalIncome, int unemployedParents, double familyIncome,
-			int numberOfStudentSiblings, int isLocalResident, int grade, String created_at,
-			String updated_at) {
+
+	public HousingApplication() {
+	}
+
+	public HousingApplication(double personalIncome, int unemployedParents, double familyIncome,
+			int numberOfStudentSiblings, int isLocalResident, int grade, String createdAt, String updatedAt,
+			String fileType, byte[] file) {
 		this.personalIncome = personalIncome;
 		this.unemployedParents = unemployedParents;
 		this.familyIncome = familyIncome;
@@ -73,8 +77,10 @@ public class HousingApplication {
 		this.isLocalResident = isLocalResident;
 		this.grade = grade;
 		this.verified = 0;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.fileType = fileType;
+		this.file = file;
 	}
 
 	public int getId() {
@@ -142,21 +148,35 @@ public class HousingApplication {
 	}
 
 	public String getCreated_at() {
-		return created_at;
+		return createdAt;
 	}
 
-	public void setCreated_at(String created_at) {
-		this.created_at = created_at;
+	public void setCreated_at(String createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public String getUpdated_at() {
-		return updated_at;
+	public String getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(String updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdated_at(String updatedAt) {
+		this.updatedAt = updatedAt;
 	}
-	
-	
-	
+
+	public String getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+
+	public byte[] getFile() {
+		return file;
+	}
+
+	public void setFile(byte[] file) {
+		this.file = file;
+	}
+
 }

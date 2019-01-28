@@ -78,6 +78,14 @@ public class SUser{
 				+ createdAt + ", updatedAt=" + updatedAt + ", createdBy=" + createdBy + "]";
 	}
 
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	
 	
 }

@@ -69,6 +69,7 @@ public class StudentDAOImpl implements StudentDAO {
 			currentSession.saveOrUpdate(student);
 			return 0;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return -1;
 		}
 	}

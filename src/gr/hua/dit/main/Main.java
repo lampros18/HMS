@@ -5,6 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 //		//Now
 		
+		
+		
 //		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
 //		System.out.println(dateFormatGmt.format(new Date()) + "    now");
