@@ -13,5 +13,6 @@ public class MailServiceProvider {
     		   receiver,
     		   subject, 
     		   message);
+		((ClassPathXmlApplicationContext)context).close();
 	}
 }

@@ -163,7 +163,7 @@ public class APIController {
 
 		int i = 0;
 		boolean found = false;
-		
+
 		for (HousingApplication hs : housingApplications) {
 			if (hs.getStudent().getUser().getUsername().equals(student.getUser().getUsername())) {
 				found = true;
@@ -175,8 +175,7 @@ public class APIController {
 		if (found) {
 			HashMap<String, String> gvMap = generalVariablesService.getGeneralVariables();
 			int max = 0;
-			if( housingApplications.get(i).getVerified() == 0)
-			{
+			if (housingApplications.get(i).getVerified() == 0) {
 				json.put("status", "success");
 				json.put("qualify", "unverified");
 				return json.toString();
@@ -200,10 +199,10 @@ public class APIController {
 					break;
 				}
 				json.put("status", "success");
-				json.put("rank", i+1);
-				if(housingApplications.get(i).getVerified() == 1)
-					json.put("qualify", i+1 <= max ? "true" : "full");
-				else if(housingApplications.get(i).getVerified() == -1)
+				json.put("rank", i + 1);
+				if (housingApplications.get(i).getVerified() == 1)
+					json.put("qualify", i + 1 <= max ? "true" : "full");
+				else if (housingApplications.get(i).getVerified() == -1)
 					json.put("qualify", "false");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());

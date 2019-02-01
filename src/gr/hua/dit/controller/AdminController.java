@@ -2,10 +2,7 @@ package gr.hua.dit.controller;
 
 import java.security.Principal;
 import java.util.HashSet;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
@@ -138,7 +134,6 @@ public class AdminController {
 	@RequestMapping(value = "editUsers", method = RequestMethod.POST)
 	@ResponseBody
 	public String getEditUsers() {
-		List<User> users = userService.getUsers();
 		JSONObject json = new JSONObject();
 		JSONArray data = new JSONArray();
 		HashSet<User> userSet = new HashSet<>();

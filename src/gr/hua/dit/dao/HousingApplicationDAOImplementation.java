@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import gr.hua.dit.entity.HousingApplication;
 
+@SuppressWarnings("deprecation")
 @Repository
 public class HousingApplicationDAOImplementation implements HousingApplicationDAO {
 	

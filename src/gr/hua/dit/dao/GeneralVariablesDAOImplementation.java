@@ -1,8 +1,6 @@
 package gr.hua.dit.dao;
 
 import java.util.HashMap;
-import java.util.List;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import gr.hua.dit.entity.GeneralVariables;
 
+@SuppressWarnings("deprecation")
 @Repository
 public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 

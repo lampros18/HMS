@@ -1,9 +1,6 @@
 package gr.hua.dit.dao;
 
 import java.util.List;
-
-import javax.transaction.Transactional;
-
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -11,9 +8,9 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
 
+@SuppressWarnings("deprecation")
 @Repository
 public class UserDAOImplementation implements UserDAO {
 
@@ -27,6 +24,7 @@ public class UserDAOImplementation implements UserDAO {
 		currentSession.persist(user);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> getUsers() {
 		Session session = sessionFactory.getCurrentSession();

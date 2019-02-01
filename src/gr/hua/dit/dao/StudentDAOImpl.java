@@ -1,19 +1,15 @@
 package gr.hua.dit.dao;
 
 import java.util.List;
-
-import javax.transaction.Transactional;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
-import gr.hua.dit.entity.User;
 
+@SuppressWarnings("deprecation")
 @Repository
 public class StudentDAOImpl implements StudentDAO {
 
