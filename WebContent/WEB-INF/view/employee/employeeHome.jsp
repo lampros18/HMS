@@ -37,11 +37,14 @@
 
 		<nav class="navbar fixed-top dark-theme" style="float: left;">
 			<a class="navbar-brand">Employee Homepage</a>
-			<!--<form class="form-inline" style="float: left; padding-right: 0%;">
-				<input class="form-control mr-sm-2" type="search"
-					placeholder="Search" aria-label="Search">
-				<button class="btn btn-outline-light my-2 my-sm-0" type="button">Search</button>
-			</form> -->
+
+			<form:form id="command" class="form-inline"
+				action="${pageContext.request.contextPath}/logout" method="POST">
+				<button type="submit" class="btn btn-danger btn-sm">
+					<i class="fas fa-sign-out-alt"></i> Logout
+				</button>
+				<div></div>
+			</form:form>
 		</nav>
 	</div>
 
@@ -54,35 +57,32 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Caution</h5>
-					
+
 				</div>
 				<div class="modal-body">
 					<p></p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-danger" onclick="return false">Delete</button>
-					<button type="button" class="btn btn-primary"
-						data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="saveError" class="modal" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Error Occured</h5>
-					
+
 				</div>
 				<div class="modal-body">
-					<p>Some fields are not filled correctly please fix
-					the errors.</p>
+					<p>Some fields are not filled correctly please fix the errors.</p>
 				</div>
 				<div class="modal-footer">
-					
-					<button type="button" class="btn btn-primary"
-						data-dismiss="modal">Close</button>
+
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 				</div>
 			</div>
 		</div>
@@ -97,14 +97,13 @@
 
 
 
-	<div class=container id="logout-form"
-		class="logout_margin_while_loading">
-		<form:form class="form-inline"
-			action="${pageContext.request.contextPath}/logout" method="POST">
-			<button type="submit" class="btn btn-danger btn-sm">
-				<i class="fas fa-sign-out-alt"></i> Logout
+	<div id="loading" class="loading_margin container">
+		<div class="text-center">
+			<button class="btn btn-primary" type="button" disabled>
+				<span class="spinner-border spinner-border-sm" role="status"
+					aria-hidden="true"></span> Loading...
 			</button>
-		</form:form>
+		</div>
 	</div>
 
 
@@ -131,16 +130,28 @@
 			<tbody id="table_body">
 			</tbody>
 		</table>
-		<div class="container" id="bottom-container">
-			<button class="btn btn-primary btn-lg my-2 my-sm-0" type="button"
-				data-toggle="modal" data-whatever="@mdo" id="addUserModalButton"
-				onclick="return false;">
-				<i class="fas fa-user-plus"></i><span id="addIcon"></span> Add User
-			</button>
-			<nav aria-label="Page navigation example"></nav>
+		<div class="container" id="bottom-container"
+			style="width: 102.5%; margin-left: -1.1%; opacity: 0.7;">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+
+
+
+				<div class="collapse navbar-collapse" id="navbarColor02"
+					style="width: 105px;">
+
+					<form class="form-inline">
+						<input class="form-control mr-sm-2" aria-label="Search"
+							placeholder="Filter by Surname" type="search">
+
+					</form>
+					<span style="padding-left: 65%;">
+						<button class="btn btn-outline-light my-2 my-sm-0" type="submit"
+							id="addStudent">Add student</button>
+					</span>
+				</div>
+			</nav>
 		</div>
 	</div>
-
 
 	<script type="text/javascript"
 		src="${ pageContext.request.contextPath}/resources/employee/js/editStudent.js"></script>

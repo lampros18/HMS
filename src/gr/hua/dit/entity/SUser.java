@@ -78,13 +78,41 @@ public class SUser{
 				+ createdAt + ", updatedAt=" + updatedAt + ", createdBy=" + createdBy + "]";
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+
+	public void setBirthdate(String birthdate) {
+		this.birthdate = birthdate;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+
+
+
 
 	
 	

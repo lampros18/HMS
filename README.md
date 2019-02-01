@@ -1,6 +1,6 @@
-<h3>Μήνυμα προς κο Τσαδήμα (the hidden collaborator)</h3>
+<h3></h3>
 
-Αν θέλετε να δοκιμάσετε την εφαρμογή <a href="https://drive.google.com/open?id=14oFFHAHRx43NMJCoBhLUcliE4dGbJXgx">εδώ</a> είναι το αρχείο ρυθμίσεων για τη σύνδεση στη βάση.(Έχει ζητηθεί να μην βρίσκεται στο αποθετήριο)
+ <a href="https://drive.google.com/open?id=14oFFHAHRx43NMJCoBhLUcliE4dGbJXgx">εδώ</a> είναι το καινούργιο αρχείο ρυθμίσεων για κρυπρογράφηση. το bean που είχαμε με xml το έβαλα μαζί με τα υπόλοιπα beans
 <hr/>
 
 
@@ -9,6 +9,3 @@
 <br/>
 
 
-Νομίζω πως επίλυσα το πρόβλημα των ανακατευθύνσεων. Μοιάζει να προέρχεται από τα web.xml και spring-mvc-servlet.xml
-
-Άλλαξα το root της εφαρμογής σε HMS. Αν οι αλλαγές δεν φαίνονται σε πρώτη φάση δοκιμάστε δεξί click πάνω στον server και clean.

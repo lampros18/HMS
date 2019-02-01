@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,13 +47,23 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.anyRequest().authenticated()
 		.and().csrf().ignoringAntMatchers("/api/**").and()
 		.formLogin()
-			.loginPage("/commonLogin")
+			.loginPage("/login")
 			.loginProcessingUrl("/authUser")
 			.permitAll()
 			.defaultSuccessUrl("/")
 		.and()
 		.logout().permitAll();
 
+	}
+	
+	/**
+	 * Στην κρυπτογράφηση κάπως θα πρέπει να μπαίνει ο χρήστης.
+	 * Δεν μπορώ να κάνω intersept την μέθοδο αναγνώρισης , οποτε θα του 
+	 * στέλνω πίσω το username του κρυπτογραφημένο
+	 */
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+	    web.ignoring().antMatchers("/resources/login/**");
 	}
 
 

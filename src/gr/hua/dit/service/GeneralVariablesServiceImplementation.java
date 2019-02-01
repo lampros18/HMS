@@ -21,4 +21,27 @@ public class GeneralVariablesServiceImplementation implements GeneralVariablesSe
 		return gvdao.getGeneralVariables();
 	}
 
+	@Override
+	@Transactional
+	public int setApplicationsLimit(String department, int limit) {
+		return gvdao.setApplicationsLimit(department, limit);
+	}
+
+	@Override
+	@Transactional
+	public int setDates(String startingDate, String endingDate) {
+		return gvdao.setDates(startingDate, endingDate);
+	}
+
+	@Override
+	@Transactional
+	public int getApplicationsLimit(String department) {
+		return gvdao.getApplicationsLimit(department);
+	}
+
+	@Override
+	public HashMap<String, String> getDateVariables() {
+		return gvdao.getDateVariables();
+	}
+
 }

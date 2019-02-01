@@ -1,6 +1,7 @@
 package gr.hua.dit.entity;
 
 import javax.persistence.AttributeOverride;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import org.json.JSONObject;
 
 @Entity(name="Employee")
@@ -60,6 +62,17 @@ public class Employee extends SUser {
 
 	public int getYearOfRecruitment() {
 		return yearOfRecruitment;
+	}
+	
+	public JSONObject getJsonFromStudent() {
+		
+		JSONObject jsonStudent=new JSONObject();
+		
+		jsonStudent.put("name",this.getName());
+		
+		
+		
+		return null;
 	}
 
 	@Override

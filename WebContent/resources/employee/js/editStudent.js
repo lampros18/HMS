@@ -1,3 +1,411 @@
+
+
+$('.form-control.mr-sm-2').on('input keypress',function(){
+	
+
+	
+	let trs=document.getElementsByTagName('tr');
+	
+	let cntr=0;
+	
+	for(let i=1;i<trs.length;i++){
+		
+		if(this.value.trim().length==0){
+			
+			
+			try{
+			
+				if(trs[i].getAttribute('style').match('display:none')!=null){
+					
+					trs[i].removeAttribute('style');
+					continue;
+				}
+			
+			}catch(expt){
+				
+			}
+			
+		}
+		
+		if(trs[i].getElementsByTagName('td')[3].textContent.trim().toLowerCase().match(this.value.trim().toLowerCase())==null
+				&& !trs[i].getElementsByClassName('fas fa-user-minus').length>0){
+			
+			trs[i].setAttribute('style','display:none;');
+		}
+		
+	}
+	
+	let trs2=document.getElementsByTagName('tr');
+	
+	for(let k=0;k<trs2.length;k++){
+		
+		try{
+			if(trs2[k].getAttribute('style')==null){
+				
+				trs2[k].getElementsByTagName('td')[0].childNodes[0].textContent=++cntr;
+			}
+		
+		}catch(exp){
+			
+		
+		}
+		
+	}
+	
+	
+	
+});
+
+
+var students=new Student();
+function Student(){
+	
+	this.studentSet=new Set();
+	
+	
+	
+	this.addEntryOnSet=function (row){
+		
+		entry=returnEntryFromRow(row);
+		this.studentSet.add(entry);
+	}
+	
+	this.getSet=function (){
+		
+		return this.studentSet;
+	}
+	
+	this.contains=function(student){
+		
+		let result=false;
+		this.studentSet.forEach(function(item){
+			
+			
+			
+			if(student.email==item.email &&
+					student.name==item.name && student.surname==item.surname
+					&& student.birthDate==item.birthDate && student.yearOfEnrollment==item.yearOfEnrollment
+					&& student.postGraduate==item.postGraduate && student.department==item.department
+					&& student.phone==item.phone && student.address==item.address){
+				
+				result=true;
+			}
+			
+			
+			
+			
+		});
+		
+		return result;
+	}
+	
+    
+	
+}
+
+
+$('document').ready(function(){
+	
+	
+	document.getElementById('saveError').getElementsByTagName('button')[0].
+	addEventListener('click',function(){
+		
+		$('#saveError').hide();
+	});
+	
+	var token = $("meta[name='_csrf']").attr("content");
+	var header = $("meta[name='_csrf_header']").attr(
+	  "content");
+
+//	
+// var xhttp = new XMLHttpRequest();
+// xhttp.open('POST','createStudent',
+// true);
+// xhttp.setRequestHeader('Content-Type',
+// 'application/json;charset=UTF-8');
+// xhttp.setRequestHeader(header, token);
+// xhttp.send(JSON.stringify(student));
+	
+	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST','getAllStudents',
+			  true);
+	xhttp.setRequestHeader('Content-Type',
+	  'application/json;charset=UTF-8');
+	xhttp.setRequestHeader(header, token);
+	xhttp.send("{}");
+	
+	
+	
+	xhttp.onreadystatechange = function() {
+	  if (this.readyState == 4 && this.status == 200) {
+	    
+		  existingStudents=JSON.parse(xhttp.responseText);
+		  
+		  existingStudents=existingStudents.sort(function(a,b){
+			  
+			  if(a.surname>b.surname){
+				  return 1
+			  }
+			  
+			  if(a.surname<b.surname){
+				  return -1
+			  }
+			  
+			  return 0;
+			  
+		  });
+		  
+		  for(let i=0;i<existingStudents.length;i++){
+			  
+			  var newRow=createRow();
+			  
+			  let table=document.getElementsByTagName('tbody');
+				
+			  let allRows=table[0].getElementsByTagName('tr');
+			  
+			  document.getElementsByClassName('btn btn-outline-light my-2 my-sm-0')[0].click();
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[1].textContent=existingStudents[i].user;
+						  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[2].textContent=existingStudents[i].name;
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[3].textContent=existingStudents[i].surname;
+			  
+			  var tmp=existingStudents[i].birthdate.split("-");
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('input')[0].value=existingStudents[i].birthdate=tmp[1]+"/"+tmp[2]+"/"+tmp[0];
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[5].textContent=existingStudents[i].yearOfEnrollment;
+			  
+			  if(!existingStudents[i].postGraduate){
+				  
+				  document.getElementsByTagName('tr')[i+1].
+				  getElementsByTagName('td')[6].click();
+				  
+			  }
+			  
+			  let dropDownList=document.getElementsByTagName('tr')[i+1].
+			  getElementsByClassName('dropdown-menu')[0].getElementsByTagName('a');
+			  
+			  for(let k=0;k<dropDownList.length;k++){
+				  
+				  if(existingStudents[i].department.match(dropDownList[k].textContent)!=null){
+					  
+					  dropDownList[k].click();
+					  break;
+				  }
+			  }
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[8].textContent=existingStudents[i].phone;
+			  
+			  
+			  document.getElementsByTagName('tr')[i+1].
+			  getElementsByTagName('td')[9].textContent=existingStudents[i].address;
+			  
+		  	  var numOfExistingStudents=document.getElementsByTagName('tr').length;
+		  	  
+		  	 		  	  
+		  	  document.getElementsByTagName('tr')[numOfExistingStudents-1].
+		  	  getElementsByClassName('fas')[0].remove();
+		  	  
+		  	 document.getElementsByTagName('tr')[numOfExistingStudents-1].
+		  	 getElementsByClassName('far')[0].setAttribute('class','fas fa-user-edit');
+		  	 
+		  	 document.getElementsByTagName('tr')[numOfExistingStudents-1].
+		  	 getElementsByClassName('fas')[0].setAttribute('title','Update student on database');
+			  
+		  	 let currentTr=document.getElementsByTagName('tr')[numOfExistingStudents-1];
+		  	 
+		  	 let currentTds=currentTr.getElementsByTagName('td');
+		  	 
+		  	 let oldElement;
+		  	 
+		  	 let newElement;
+		  	 
+		  	 for(let i=0;i<currentTds.length-2;i++){
+		  		 
+		  		 newElement=currentTds[i].cloneNode(true);
+		  		 
+		  		currentTds[i].parentNode.replaceChild(newElement,currentTds[i]);
+		  		 
+		  		newElement.setAttribute('data-toggle','tooltip');
+		  		
+		  		newElement.setAttribute('title',"Employee is now allowed to modify this field");
+		  		
+		  		currentTds[i].setAttribute('contenteditable','false')
+		  		
+		  				  		
+		  		if(i==4){
+		  			
+		  			currentTds[i].getElementsByTagName('input')[0].readOnly=true;
+		  		}
+		  		
+		  		 
+		  		
+		  	 }
+		  	 
+		  	currentTr.getElementsByClassName('dropdown-menu')[0].remove();
+		  	
+		  	currentTr.getElementsByClassName('fas fa-user-edit')[0].
+		  	addEventListener('click',function(){
+		  		
+		  		let element=this;
+		  		setTimeout(function(){
+		  			
+		  			if(element.parentNode.parentNode.parentNode.getElementsByClassName('fas fa-times').length==0){
+		  				
+		  				if(students.contains(returnEntryFromRow(element.parentNode.parentNode.parentNode))){
+		  					
+		  					let modal=document.getElementById('saveError');
+		  					
+		  					modal.getElementsByTagName('p')[0].textContent='Row is identical with the one in the database.\n\
+		  						Update will not take place.';
+		  					
+		  					$("#saveError").show('modal');
+		  				}else{
+		  					
+		  					let token = $("meta[name='_csrf']").attr("content");
+		  					let header = $("meta[name='_csrf_header']").attr(
+		  					  "content");
+
+		  					
+		  					let xhttp = new XMLHttpRequest();
+		  					xhttp.open('POST','updateStudent',
+		  							  true);
+		  					xhttp.setRequestHeader('Content-Type',
+		  					  'application/json;charset=UTF-8');
+		  					xhttp.setRequestHeader(header, token);
+		  					
+		  					let student=returnEntryFromRow(element.parentNode.parentNode.parentNode);
+		  					
+		  					xhttp.send(JSON.stringify(student));
+		  					
+
+		  					
+		  					xhttp.onreadystatechange = function() {
+		  					  if (this.readyState == 4 && this.status == 200) {
+		  					    
+		  						  
+		  						 result=xhttp.responseText;
+		  						  
+		  						 result=JSON.parse(result);
+		  						  
+		  						 let resultMessage=document.createElement('div');
+		  						 
+		  						 resultMessage.setAttribute('class','alert alert-success');
+		  						  
+		  						 resultMessage.innerHTML=`User with email:${result.email} was successfully updated`
+		  						  
+		  						 resultMessage.setAttribute('style','width:40%;margin-left:33%;\
+		  								 opacity 1; transition:opacity 5s');
+		  						 
+		  						 
+		  							 
+		  						 document.getElementById('dataTable').
+		  						 prepend(resultMessage); 
+		  						 
+		  						 resultMessage.scrollIntoView();
+		  						 
+		  						 let position=resultMessage.getBoundingClientRect();
+		  						 
+		  						 window.scrollTo(position.x,position.y);
+		  						 
+		  						 let previousMessages=document.getElementsByClassName('alert alert-success');
+		  						 
+		  						 if(previousMessages.length>1){
+		  							 
+		  							 for(let i=1;i<previousMessages.length;i++){
+		  								 
+		  								previousMessages[i].remove();
+		  							 }
+		  						 }
+		  						 
+		  						 
+		  						 let cnt=0;
+		  						 let timeRunner=setInterval(function(){
+		  							 
+		  							 
+		  							 
+		  							 cnt++;
+		  							 
+		  							 resultMessage.style.opacity=0.02*resultMessage.style.opacity;
+		  							 
+		  							 if(cnt>65){
+		  								 
+		  								 position=element.parentNode.parentNode.parentNode.getBoundingClientRect();		  								 
+		  								 window.scrollTo(position.x,position.y);
+		  								 resultMessage.remove();
+		  								 
+		  								 clearInterval(timeRunner)
+		  								 return;
+		  							 }
+		  							 
+		  						 },100);
+		  					  }
+		  					};
+		  					
+		  					let correspondinStudent=returnEntryFromRow(element.parentNode.parentNode.parentNode);
+		  					
+		  					console.log(correspondinStudent);
+		  					
+		  					students.studentSet.forEach(function(student){
+		  						
+		  						if(correspondinStudent.email==student.email){
+		  							
+		  							student.address=correspondinStudent.address;
+		  							
+		  							student.phone=correspondinStudent.phone;
+		  							
+		  						//	students.studentSet.add(correspondinStudent);
+		  						
+		  						}
+		  						
+		  						
+		  					});
+		  					
+		  				}
+		  				
+		  				
+		  				
+		  			}
+		  			
+		  		},10);
+		  		
+		  	});
+		  	 
+		  	 
+		  
+		  	 
+			  
+		  }
+		  
+		   
+			
+			let trs=document.getElementsByTagName('tr');
+			
+			for(let i=1;i<trs.length;i++){
+				
+				students.addEntryOnSet(trs[i]);
+			}
+			
+			document.getElementById('loading').setAttribute('style','display:none;');
+		  
+	  }
+	};
+	
+	
+	
+	
+});
+
+
+
 document.getElementById('confirm').getElementsByClassName('btn btn-danger')[0].
 addEventListener('click',function(event){
 	
@@ -14,25 +422,23 @@ addEventListener('click',function(event){
 });
 
 
-//event listener για να προστεθεί επιπλέον γραμμή στον πίνακα
-document.getElementsByClassName('btn btn-primary btn-lg my-2 my-sm-0')[0].addEventListener('click',function(){
 
+function createRow(){
 	
-	let table=document.getElementsByTagName('tbody');
+let newRow=document.createElement('tr');
 	
-	let allRows=table[0].getElementsByTagName('tr');
-	
-	let newRow=document.createElement('tr');
-	
-	
+let table=document.getElementsByTagName('tbody');
+
+let allRows=table[0].getElementsByTagName('tr');
 	
 	newRow.innerHTML=`\
 			<tr>		<td style="	    display: inline-flex;	">\
 		<div class="container" style="	    display: inline-flex;	">	\
-		<i class="fas fa-user-minus" style="cursor:pointer;padding-right: 15%; color:red;"\
+		<i class="fas fa-user-minus" style="cursor:pointer;padding-right: 30%; color:red;"\
 		data-toggle="tooltip" title="Delete row" >	\
 		</i>	\
-		<i style="	    padding-right: 15%;	" class="far fa-save"></i>	\
+		<i style="	    padding-right: 15%;	" class="far fa-save" data-toggle="tooltip" title=
+		"Save student on database"></i>	\
 		</div></td><td data-toggle="tooltip" title="Please insert student\'s E-mail (required)" contenteditable="true">\
 		<div contenteditable="true"></div><br></td>\
 		<td data-toggle="tooltip" title="Please insert student\'s Name (required)" contenteditable="true">\
@@ -57,11 +463,75 @@ document.getElementsByClassName('btn btn-primary btn-lg my-2 my-sm-0')[0].addEve
   </div>
 </div>
 		</td>\
-			<td contenteditable="true"><div></div><br></td>
-			<td contenteditable="true"><div></div><br></td></tr>`
+			<td contenteditable="true" data-toggle="tooltip" title="Please insert student's phone"><div></div><br></td>
+			<td contenteditable="true" data-toggle="tooltip" title="Please insert student's address"><div></div><br></td></tr>`
 	
+		return newRow;
+}
+
+
+// event listener για να προστεθεί επιπλέον γραμμή στον πίνακα
+document.getElementById('addStudent').addEventListener('click',function(){
+
+	
+	let table=document.getElementsByTagName('tbody');
+	
+	let allRows=table[0].getElementsByTagName('tr');
+	
+	
+	
+	let newRow=createRow();
 		
+	
 	table[0].appendChild(newRow);
+	
+	let tds2 =newRow.getElementsByTagName('td');
+	
+	
+	for(let i =1;i<tds2.length;i++){
+		
+		switch (i){
+		
+				case 1: case 2: case 3: case 5: case 8: case 9:
+				tds2[i].addEventListener('mouseover',function(){
+					
+					if(this.getElementsByClassName('fas').length==0 && this.textContent.trim().length>0 
+							
+					 && !$(this).is(':focus')){
+						
+						this.title="Looks good";
+					}else if(this.title.trim().match('Looks')!=null){
+						
+						this.title='Please correct this one';
+					}
+				
+				});
+			break;
+			
+			case 4:
+				
+				tds2[i].addEventListener('mouseover',function(){
+				
+				
+					if(this.childNodes[1].childNodes[0].value.trim().match(/\d{2}\/\d{2}\/\d{4}/)!=null &&
+							this.childNodes[1].childNodes[0].value.trim().length>0 && this.getElementsByClassName('fas').
+							length==0){
+						
+						this.title="Looks good";
+					}else{
+						
+						this.title='Please correct this one';
+					}
+					
+				});
+				
+				
+			
+				
+				
+				break;
+		}
+	}
 	
 	newRow.getElementsByClassName('fas fa-user-minus')[0].addEventListener('click',function(){
 		
@@ -183,7 +653,7 @@ document.getElementsByClassName('btn btn-primary btn-lg my-2 my-sm-0')[0].addEve
 // continue;
 // }
 		 
-		//Διπλό Event
+		// Διπλό Event
 		 $(ts[i]).on('click focus',function(){
 			 
 			
@@ -480,7 +950,7 @@ function fixFirstColumnIndex(){
 	
 	for(let i=1;i<rows.length;i++){
 		
-		//console.log(rows[i].getElementsByTagName('td')[0].firstChild,i);
+		// console.log(rows[i].getElementsByTagName('td')[0].firstChild,i);
 		
 		try{		
 			rows[i].getElementsByTagName('td')[0].childNodes[0].textContent=i;
@@ -578,6 +1048,58 @@ function sendEntry(student){
 	    
 		  
 		  result=xhttp.responseText;
+		  
+		  handleResult(result);
 	  }
 	};
 }
+
+function handleResult(result){
+	
+	result=JSON.parse(result);
+	
+	if(result.result==200){
+		
+		let allTrs=document.getElementsByTagName('tr');
+		
+		for(let i=1;i<allTrs.length;i++){
+			
+			if(returnEntryFromRow(allTrs[i]).email==result.username){
+				
+			   	 let currentTr=allTrs[i];
+			  	 
+			  	 let currentTds=currentTr.getElementsByTagName('td');
+			  	 
+			  	 let oldElement;
+			  	 
+			  	 let newElement;
+			  	 
+			  	 for(let i=0;i<currentTds.length-2;i++){
+			  		 
+			  		newElement=currentTds[i].cloneNode(true);
+			  		
+			  		currentTds[i].parentNode.replaceChild(newElement,currentTds[i]);
+			  		 
+			  		newElement.setAttribute('data-toggle','tooltip');
+			  		
+			  		newElement.setAttribute('title',"Employee is now allowed to modify this field");
+			  		
+			  		currentTds[i].setAttribute('contenteditable','false')
+			  		
+			  				  		
+			  		if(i==4){
+			  			
+			  			currentTds[i].getElementsByTagName('input')[0].readOnly=true;
+			  		}
+			  		
+			  		 
+			  		
+			  	 }
+			}
+			
+			break;
+		}
+		
+	}
+}
+

@@ -68,7 +68,10 @@ public class Student extends SUser implements Serializable{
 	public Student() {
 		super();
 	}
-	
+	/**
+	 * Φτιάχνει έναν φοιτητή από ένα αντικείμενο JsonObject
+	 * @param jsonObject 
+	 */
 	public Student(JSONObject jsonObject) {
 		this(
 					jsonObject.getString("name"),
@@ -85,6 +88,36 @@ public class Student extends SUser implements Serializable{
 					jsonObject.getInt("yearOfEnrollment")
 			   );
 	}
+	/**
+	 * 
+	 * @return Την αναπαράσταση του φοιτητή σε Json
+	 */
+	public JSONObject getJsonFromStudent() {
+		
+		JSONObject jsonStudent=new JSONObject();
+		
+		
+		jsonStudent.put("email",this.getUser().getUsername());
+		jsonStudent.put("name",this.getName());
+		jsonStudent.put("surname", this.getSurname());
+		jsonStudent.put("birthdate", this.getBirthdate());
+		jsonStudent.put("department", this.getDepartment());
+		jsonStudent.put("phone", this.getPhone());
+		jsonStudent.put("address", this.getAddress());
+		jsonStudent.put("createdAt", this.getCreatedAt());
+		jsonStudent.put("updatedAt", this.getUpdatedAt());
+		jsonStudent.put("yearOfEnrollment", this.getYearOfEnrollment());
+		jsonStudent.put("postGraduate", this.isPostgraduate());
+		jsonStudent.put("user", this.user.getUsername());
+		
+		
+		return jsonStudent;
+	}
+	
+
+
+
+
 
 	/**
 	 * 
@@ -178,10 +211,6 @@ public class Student extends SUser implements Serializable{
 		return id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public User getUser() {
 		return user;
 	}
@@ -194,6 +223,11 @@ public class Student extends SUser implements Serializable{
 		this.isPostgraduate = isPostgraduate;
 	}
 	
+	
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 	/**
 	 * 
 	 * @param housingApplication 
@@ -225,6 +259,8 @@ public class Student extends SUser implements Serializable{
 		this.housingApplications.add(housingApplication);
 		housingApplication.setStudent(this);
 	}
+
+	
 
 	@Override
 	public int hashCode() {
