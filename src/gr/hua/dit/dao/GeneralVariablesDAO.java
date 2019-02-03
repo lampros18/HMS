@@ -16,9 +16,12 @@ public interface GeneralVariablesDAO {
 
 	int setApplicationsLimit(String department, int limit);
 
-	int setDates(String startingDate, String endingDate);
 
 	int getApplicationsLimit(String department);
 
 	HashMap<String, String> getDateVariables();
+
+	int setStartingDate(String startingDate);
+
+	int setEndingDate(String endingDate);
 }

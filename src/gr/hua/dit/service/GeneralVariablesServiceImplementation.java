@@ -29,8 +29,14 @@ public class GeneralVariablesServiceImplementation implements GeneralVariablesSe
 
 	@Override
 	@Transactional
-	public int setDates(String startingDate, String endingDate) {
-		return gvdao.setDates(startingDate, endingDate);
+	public int setStartingDate(String startingDate) {
+		return gvdao.setStartingDate(startingDate);
+	}
+	
+	@Override
+	@Transactional
+	public int setEndingDate(String endingDate) {
+		return gvdao.setEndingDate(endingDate);
 	}
 
 	@Override

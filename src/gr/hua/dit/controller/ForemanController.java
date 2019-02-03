@@ -50,13 +50,13 @@ public class ForemanController {
 	public String setDateVaribles(HttpServletRequest request) {
 		String startingDate = request.getParameter("starting_date");
 		String endingDate = request.getParameter("ending_date");
-		int result = gvService.setDates(startingDate, endingDate);
-		JSONObject json = new JSONObject();
-		if (result == 0)
-			json.put("status", "success");
-		else
-			json.put("status", "failure");
-		return json.toString();
+//		int result = gvService.setDates(startingDate, endingDate);
+//		JSONObject json = new JSONObject();
+//		if (result >= 0)
+//			json.put("status", "success");
+//		else
+//			json.put("status", "failure");
+//		return json.toString();
 	}
 
 	@RequestMapping(value = "setApplicationsLimit", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

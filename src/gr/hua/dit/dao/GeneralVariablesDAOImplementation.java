@@ -70,18 +70,26 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 	}
 
 	@Override
-	public int setDates(String startingDate, String endingDate) {
+	public int setStartingDate(String startingDate) {
 		Session curSession = session.getCurrentSession();
-		GeneralVariables gvStartingDate = new GeneralVariables();
-		gvStartingDate.setKey(STARTING_DATE_DB_KEY);
-		gvStartingDate.setValue(startingDate);
-		GeneralVariables gvEndingDate = new GeneralVariables();
-		gvStartingDate.setKey(ENDING_DATE_DB_KEY);
-		gvStartingDate.setValue(endingDate);
+		Query<GeneralVariables> query = curSession.createQuery("update GeneralVariables set value =: value where key = :key", GeneralVariables.class);
+		query.setParameter("value", startingDate);
+		query.setParameter("key",STARTING_DATE_DB_KEY);
 		try {
-			curSession.saveOrUpdate(gvStartingDate);
-			curSession.saveOrUpdate(gvEndingDate);
-			return 0;
+			return query.executeUpdate();
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+	
+	@Override
+	public int setEndingDate( String endingDate) {
+		Session curSession = session.getCurrentSession();
+		Query<GeneralVariables> query = curSession.createQuery("update GeneralVariables set value =: value where key = :key", GeneralVariables.class);
+		query.setParameter("value", endingDate);
+		query.setParameter("key",ENDING_DATE_DB_KEY);
+		try {
+			return query.executeUpdate();
 		} catch (Exception e) {
 			return -1;
 		}

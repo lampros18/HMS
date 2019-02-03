@@ -13,9 +13,11 @@ public interface GeneralVariablesService {
 	
 	int setApplicationsLimit(String department, int limit);
 
-	int setDates(String startingDate, String endingDate);
-
 	int getApplicationsLimit(String department);
 
 	HashMap<String, String> getDateVariables();
+
+	int setEndingDate(String endingDate);
+
+	int setStartingDate(String startingDate);
 }
