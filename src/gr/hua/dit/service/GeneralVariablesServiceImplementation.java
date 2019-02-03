@@ -46,6 +46,7 @@ public class GeneralVariablesServiceImplementation implements GeneralVariablesSe
 	}
 
 	@Override
+	@Transactional
 	public HashMap<String, String> getDateVariables() {
 		return gvdao.getDateVariables();
 	}

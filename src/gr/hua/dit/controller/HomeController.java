@@ -57,7 +57,6 @@ public class HomeController {
 
 		String username = employeeRequestHandler.getSringifiedHttpResponse(request);
 
-		System.out.println(username);
 
 		JSONObject jsonObject = new JSONObject(username);
 

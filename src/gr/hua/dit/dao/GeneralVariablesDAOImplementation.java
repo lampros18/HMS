@@ -34,36 +34,53 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 	@Override
 	public int setApplicationsLimit(String department, int limit) {
 		Session curSession = session.getCurrentSession();
-		GeneralVariables gv = new GeneralVariables();
+		@SuppressWarnings("rawtypes")
+		Query query = null;
+		int res = -1;
 		try {
 			switch (department) {
 			case "Home economics and ecology":
-				gv.setKey(ECOLOGY_DEPARTMENT_DB_KEY);
-				gv.setValue("" + limit);
-				curSession.saveOrUpdate(gv);
+				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
+				if(query == null)
+					return -1;
+				query.setParameter("value", limit);
+				query.setParameter("key", ECOLOGY_DEPARTMENT_DB_KEY);
+				res = query.executeUpdate();
 				break;
 			case "Geography":
-				gv.setKey(GEOGRAPHY_DEPARTMENT_DB_KEY);
-				gv.setValue("" + limit);
-				curSession.saveOrUpdate(gv);
+				curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
+				if(query == null)
+					return -1;
+				query.setParameter("value", limit);
+				query.setParameter("key", GEOGRAPHY_DEPARTMENT_DB_KEY);
+				res = query.executeUpdate();
 				break;
 			case "International master of sustainable tourism development":
-				gv.setKey(TOURISM_DEPARTMENT_DB_KEY);
-				gv.setValue("" + limit);
-				curSession.saveOrUpdate(gv);
+				curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
+				if(query == null)
+					return -1;
+				query.setParameter("value", limit);
+				query.setParameter("key", TOURISM_DEPARTMENT_DB_KEY);
+				res = query.executeUpdate();
 				break;
 			case "Nutrition and dietics":
-				gv.setKey(NUTRIRION_DEPARTMENT_DB_KEY);
-				gv.setValue("" + limit);
-				curSession.saveOrUpdate(gv);
+				curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
+				if(query == null)
+					return -1;
+				query.setParameter("value", limit);
+				query.setParameter("key", NUTRIRION_DEPARTMENT_DB_KEY);
+				res = query.executeUpdate();
 				break;
 			case "Informatics and Telematics":
-				gv.setKey(INFORMATICS_DEPARTMENT_DB_KEY);
-				gv.setValue("" + limit);
-				curSession.saveOrUpdate(gv);
+				curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
+				if(query == null)
+					return -1;
+				query.setParameter("value", limit);
+				query.setParameter("key", INFORMATICS_DEPARTMENT_DB_KEY);
+				res = query.executeUpdate();
 				break;
 			}
-			return 0;
+			return res;
 		} catch (Exception e) {
 			return -1;
 		}
@@ -72,7 +89,7 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 	@Override
 	public int setStartingDate(String startingDate) {
 		Session curSession = session.getCurrentSession();
-		Query<GeneralVariables> query = curSession.createQuery("update GeneralVariables set value =: value where key = :key", GeneralVariables.class);
+		Query query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
 		query.setParameter("value", startingDate);
 		query.setParameter("key",STARTING_DATE_DB_KEY);
 		try {
@@ -85,7 +102,7 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 	@Override
 	public int setEndingDate( String endingDate) {
 		Session curSession = session.getCurrentSession();
-		Query<GeneralVariables> query = curSession.createQuery("update GeneralVariables set value =: value where key = :key", GeneralVariables.class);
+		Query query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
 		query.setParameter("value", endingDate);
 		query.setParameter("key",ENDING_DATE_DB_KEY);
 		try {

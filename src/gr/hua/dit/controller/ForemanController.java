@@ -1,16 +1,13 @@
 package gr.hua.dit.controller;
 
 import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import gr.hua.dit.service.GeneralVariablesService;
 
 @Controller
@@ -31,17 +28,19 @@ public class ForemanController {
 
 		JSONObject json = new JSONObject();
 		HashMap<String, String> dateVariables = gvService.getDateVariables();
+	
 
 		if (dateVariables.containsKey(GeneralVariablesService.STARTING_DATE_DB_KEY))
 			json.put("starting_date", dateVariables.get(GeneralVariablesService.STARTING_DATE_DB_KEY));
 		else
 			json.put("starting_date", "undefined");
 
-		if (dateVariables.containsKey(GeneralVariablesService.STARTING_DATE_DB_KEY))
-			json.put("ending_date", dateVariables.get(GeneralVariablesService.STARTING_DATE_DB_KEY));
+		if (dateVariables.containsKey(GeneralVariablesService.ENDING_DATE_DB_KEY))
+			json.put("ending_date", dateVariables.get(GeneralVariablesService.ENDING_DATE_DB_KEY));
 		else
 			json.put("ending_date", "undefined");
 
+		
 		return json.toString();
 	}
 
@@ -50,13 +49,16 @@ public class ForemanController {
 	public String setDateVaribles(HttpServletRequest request) {
 		String startingDate = request.getParameter("starting_date");
 		String endingDate = request.getParameter("ending_date");
-//		int result = gvService.setDates(startingDate, endingDate);
-//		JSONObject json = new JSONObject();
-//		if (result >= 0)
-//			json.put("status", "success");
-//		else
-//			json.put("status", "failure");
-//		return json.toString();
+			
+		int res = gvService.setStartingDate(startingDate);
+		int res1 = gvService.setEndingDate(endingDate);
+		JSONObject json = new JSONObject();
+		if ( res >= 0 && res1 >=0 )
+			json.put("status", "success");
+		else
+			json.put("status", "failure");
+		return json.toString();
+		
 	}
 
 	@RequestMapping(value = "setApplicationsLimit", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -87,6 +89,7 @@ public class ForemanController {
 	@ResponseBody
 	public String getApplicationsLimit(HttpServletRequest request) {
 		String department = request.getParameter("department");
+			
 		JSONObject json = new JSONObject();
 
 		int res = gvService.getApplicationsLimit(department);

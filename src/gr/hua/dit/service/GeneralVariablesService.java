@@ -7,7 +7,7 @@ import gr.hua.dit.dao.GeneralVariablesDAO;
 public interface GeneralVariablesService {
 	
 	String STARTING_DATE_DB_KEY = GeneralVariablesDAO.STARTING_DATE_DB_KEY;
-	String ENDING_DATE_DB_KEY = GeneralVariablesDAO.ECOLOGY_DEPARTMENT_DB_KEY;
+	String ENDING_DATE_DB_KEY = GeneralVariablesDAO.ENDING_DATE_DB_KEY;
 	
 	HashMap<String, String> getGeneralVariables();
 	
