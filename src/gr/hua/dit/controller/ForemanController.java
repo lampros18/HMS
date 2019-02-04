@@ -70,18 +70,18 @@ public class ForemanController {
 		try {
 			limit = Integer.parseInt(request.getParameter("limit"));
 		} catch (Exception e) {
-			json.put("status", "failure");
+			json.put("status", "failure1");
 			return json.toString();
 		}
 		if (limit < 0) {
-			json.put("status", "failure");
+			json.put("status", "failure2");
 			return json.toString();
 		}
 		int result = gvService.setApplicationsLimit(department, limit);
-		if (result == 0)
+		if (result >= 0)
 			json.put("status", "success");
 		else
-			json.put("status", "failure");
+			json.put("status", "failure3");
 		return json.toString();
 	}
 

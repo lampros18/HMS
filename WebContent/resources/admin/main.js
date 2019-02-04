@@ -25,11 +25,10 @@
 		});
 
 		function removeLoading() {
-			document.getElementById("loading").outerHTML = "";
+			if(document.getElementById("loading") != null)
+				document.getElementById("loading").outerHTML = "";
 			document.getElementById("dataTable").setAttribute("class",
 					"container table_margin_after_load");
-			document.getElementById("logout-form").setAttribute("class",
-					"logout_margin_after_load");
 		}
 
 		function loadTableAndData(response) {
@@ -39,7 +38,6 @@
 				createTableRow(json.users[i].id, tableBody);
 				createActionsRow(json.users[i].id, tableBody);
 				createEmailColumn(json.users[i].email, json.users[i].id);
-				createPasswordColumn(json.users[i].password, json.users[i].id);
 				if (json.users[i].student == 1)
 					createStudentAuthoritiesColumn(json.users[i].student, json.users[i].id);
 				else
@@ -67,33 +65,12 @@
 				iDeleteUser.setAttribute("style",  "cursor:pointer;");
 				iDeleteUser.setAttribute("onclick", "deleteUser("+id+");");
 
-				let iUpdateUser = document.createElement("I");
-				iUpdateUser.setAttribute("class", "fas fa-user-edit");
-				/*div.setAttribute("class","btn-group");
-				div.setAttribute("role","group");
-				div.setAttribute("aria-label","actions buttons");*/
-
-				/*let updateButton = document.createElement("BUTTON");
-				updateButton.setAttribute("type", "button");
-				updateButton.setAttribute("class", "btn btn-warning");
-				updateButton.setAttribute("type", "button");
+				let iUpdatePassword = document.createElement("I");
+				iUpdatePassword.setAttribute("class", "fas fa-key favicon_margin");
+				iUpdatePassword.setAttribute("style",  "cursor:pointer;");
 				
-				let deleteButton = document.createElement("BUTTON");
-				deleteButton.setAttribute("type", "button");
-				deleteButton.setAttribute("class", "btn btn-danger");
-				deleteButton.setAttribute("type", "button");
-				
-				let updateButtonTxtNode = document.createTextNode("Update");
-				let deleteButtonTxtNode = document.createTextNode("Delete");
-				
-				updateButton.appendChild(updateButtonTxtNode);
-				deleteButton.appendChild(deleteButtonTxtNode);
-				div.appendChild(updateButton);
-				div.appendChild(deleteButton);*/
 				div.appendChild(iDeleteUser);
-				div.appendChild(document.createElement("BR"));
-				div.appendChild(document.createElement("BR"));
-				div.appendChild(iUpdateUser);
+				div.appendChild(iUpdatePassword);
 				td.appendChild(div);
 				tableRow.appendChild(td);
 				tableBody.appendChild(tableRow);
@@ -114,19 +91,6 @@
 
 			}
 
-			function createPasswordColumn(password, id) {
-				let tableRow = document.getElementById(id);
-
-				let td = document.createElement("TD");
-				let div = document.createElement("DIV");
-				div.setAttribute("contenteditable", "");
-				let textNode = document.createTextNode(password);
-
-				div.appendChild(textNode);
-				td.appendChild(div);
-				tableRow.appendChild(td);
-
-			}
 
 			function createEmployeeAuthoritiesColumn(admin, foreman, employee,
 					id) {
@@ -135,9 +99,9 @@
 				let td = document.createElement("TD");
 
 				//Creating the custom swtch for the admin authority
-				let admin_div = document.createElement("DIV");
-				admin_div.setAttribute("class", "custom-control custom-switch");
-
+				let admin_div = document.createElement("SPAN");
+				admin_div.setAttribute("class", "custom-switch");
+				
 				let admin_input = document.createElement("INPUT");
 				admin_input.setAttribute("type", "checkbox");
 				admin_input.setAttribute("class", "custom-control-input");
@@ -157,9 +121,9 @@
 				admin_div.appendChild(admin_label);
 
 				//Creating the custom switch for the foreman authority
-				let foreman_div = document.createElement("DIV");
+				let foreman_div = document.createElement("SPAN");
 				foreman_div.setAttribute("class",
-						"custom-control custom-switch");
+						"custom-switch switch_input_span");
 
 				let foreman_input = document.createElement("INPUT");
 				foreman_input.setAttribute("type", "checkbox");
@@ -180,9 +144,9 @@
 				foreman_div.appendChild(foreman_label);
 
 				//Creating the custom switch for the employee authority
-				let employee_div = document.createElement("DIV");
+				let employee_div = document.createElement("SPAN");
 				employee_div.setAttribute("class",
-						"custom-control custom-switch");
+						" custom-switch switch_input_span");
 
 				let employee_input = document.createElement("INPUT");
 				employee_input.setAttribute("type", "checkbox");
@@ -387,7 +351,7 @@
 										&& !document
 												.getElementById("employee_authority_admin").checked
 										&& !document
-												.getElementById("employee_authority_foreman").checked) {
+												.getElementById("employee_authority_employee").checked) {
 									document.getElementById(
 											"employee_authority_foreman")
 											.setAttribute("class",
@@ -464,7 +428,8 @@
 
 		function setResultMessage(response) {
 			let div = document.getElementById("result");
-
+			div.style.visibility = "visible";
+			document.getElementById("close_button").style.visibility = "visible";
 			let json = JSON.parse(response);
 			closeResult();
 			let span = document.createElement("SPAN");
@@ -508,6 +473,10 @@
 				div.removeAttribute("class");
 				div.removeAttribute("role");
 			}
+		}
+		
+		function hideButton(){
+			document.getElementById("close_button").style.visibility = "hidden";
 		}
 		
 		function deleteUser(uid){

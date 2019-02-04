@@ -1,5 +1,12 @@
 package gr.hua.dit.main;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import com.itextpdf.text.DocumentException;
+
+import gr.hua.dit.pdf.PDFMaker;
+
 public class Main {
 	
 	public static void main(String[] args) {
@@ -26,8 +33,14 @@ public class Main {
 //            }
 
 
-	
-
+	PDFMaker pdf = new PDFMaker();
+	try {
+		pdf.init();
+	} catch (IOException | URISyntaxException | DocumentException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	System.out.println("ok");
 	}
 
 }

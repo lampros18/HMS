@@ -22,10 +22,10 @@ $(document)
 							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[1].style.border = '1px solid #ced4da';
 
 					document
-							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[0].style['padding-top'] = '2.5%';
+							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[0].style['padding'] = '7px';
 
 					document
-							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[1].style['padding-top'] = '2.5%';
+							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[1].style['padding'] = '7px';
 
 					document
 							.getElementsByClassName('gj-datepicker gj-datepicker-md gj-unselectable')[0].style['border-radius'] = '0.25rem';
@@ -291,25 +291,27 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 						freeSlotsArray.push(freeSlots[i].selectedIndex);
 					}
-					
-					let strDate=document.getElementById('date');
-					let enDate=document.getElementById('date1');
-					
-					dd1=strDate.value.split('-');
-					
-					dd2=enDate.value.split('-');
-					
-					dd1=new Date(dd1[0],dd1[1],dd1[2]);
-					
-					dd2=new Date(dd2[0],dd2[1],dd2[2]);
-					
-					if(dd2<dd1){
-						
-						err.push(`End date ${enDate.value} can\'t be less than start date ${strDate.value} `)
+
+					let strDate = document.getElementById('date');
+					let enDate = document.getElementById('date1');
+
+					dd1 = strDate.value.split('-');
+
+					dd2 = enDate.value.split('-');
+
+					dd1 = new Date(dd1[0], dd1[1], dd1[2]);
+
+					dd2 = new Date(dd2[0], dd2[1], dd2[2]);
+
+					if (dd2 < dd1) {
+
+						err
+								.push(`End date ${enDate.value} can\'t be less than start date ${strDate.value} `)
 					}
-					
 
 					if (errDpt.length == 0 && err.length == 0) {
+
+						let numOfsuccesses = 0;
 
 						let token = $("meta[name='_csrf']").attr("content");
 						let header = $("meta[name='_csrf_header']").attr(
@@ -335,6 +337,13 @@ document.getElementsByClassName('btn btn-primary')[0]
 							if (this.readyState == 4 && this.status == 200) {
 
 								result = xhttp.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 
 							}
 
@@ -363,6 +372,14 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 							if (this.readyState == 4 && this.status == 200) {
 
+								result = xhttp1.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 							}
 
 						};
@@ -386,6 +403,14 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 							if (this.readyState == 4 && this.status == 200) {
 
+								result = xhttp2.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 							}
 
 						};
@@ -409,10 +434,18 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 							if (this.readyState == 4 && this.status == 200) {
 
+								result = xhttp3.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 							}
 
 						};
-						
+
 						department = 'International master of sustainable tourism development';
 
 						limit = document.getElementsByTagName('select')[3].selectedIndex;
@@ -432,14 +465,22 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 							if (this.readyState == 4 && this.status == 200) {
 
+								result = xhttp4.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 							}
 
 						};
-						
-						department='Nutrition and dietics';
-						
+
+						department = 'Nutrition and dietics';
+
 						limit = document.getElementsByTagName('select')[4].selectedIndex;
-						
+
 						let xhttp5 = new XMLHttpRequest();
 						xhttp5
 								.open(
@@ -455,9 +496,51 @@ document.getElementsByClassName('btn btn-primary')[0]
 
 							if (this.readyState == 4 && this.status == 200) {
 
+								result = xhttp5.responseText;
+
+								result = JSON.parse(result);
+
+								if (result.status == "success") {
+
+									numOfsuccesses++;
+								}
 							}
 
 						};
+						
+						let cnt=0;
+						let timeRunner=setInterval(function(){
+ 							 
+ 							 
+ 							 
+ 							 cnt++;
+ 							 
+ 							if(numOfsuccesses==6){
+								 
+								 let modal=document.getElementById('success');
+								 
+								 modal.getElementsByTagName('p')[0].textContent="Updates successfuly took place";
+								 
+								 $('#success').modal('show');
+								 clearInterval(timeRunner);
+								 return;
+							 }
+ 							 
+ 							 
+ 							 if(cnt>50){
+ 								 
+ 								 let modal=document.getElementById('success');
+								 
+								 modal.getElementsByTagName('p')[0].textContent="Error occured on updates";
+								 
+								 $('#success').modal('show');
+ 								 
+ 								 
+								 clearInterval(timeRunner);
+ 								 return;
+ 							 }
+ 							 
+ 						 },100);
 
 					} else {
 

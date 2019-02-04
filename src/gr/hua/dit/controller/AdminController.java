@@ -9,9 +9,12 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
@@ -20,12 +23,18 @@ import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.service.UserService;
 
 @Controller
+@SessionAttributes("username")
 @RequestMapping("admin")
 public class AdminController {
 
 	@Autowired
 	private UserService userService;
 
+	
+    @ModelAttribute("username")
+    public String getUsername(Principal principlal) {
+        return principlal.getName(); 
+    }  
 
 	// Κεντική σελίδα διαχειριστή
 	@RequestMapping(value = "home", method = RequestMethod.GET)

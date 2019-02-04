@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page session="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
@@ -42,6 +43,10 @@
 	margin-left: 9.2%;
 }
 
+#result {
+	visibility: hidden;
+}
+
 .result_container {
 	margin-left: 30%;
 	margin-top: 4%;
@@ -64,6 +69,19 @@
 	color: #fff;
 }
 
+#username_span {
+	margin-left: 70%;
+}
+
+.switch_input_span {
+	margin-left: 15px;
+}
+
+.favicon_margin{
+	margin-left: 20px;
+}
+
+
 #addUserModalButton {
 	float: right;
 }
@@ -79,11 +97,9 @@
 }
 
 body {
-	background: #8e9eab; /* fallback for old browsers */
+	background: #8e9eab;
 	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-	/* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #eef2f3, #8e9eab);
-	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>
 
@@ -92,13 +108,15 @@ body {
 <body>
 	<div class="container">
 
-		<nav class="navbar fixed-top dark-theme" style="float: left;">
-			<a class="navbar-brand">Admin Homepage</a>
-			<form class="form-inline" style="float: left; padding-right: 0%;">
-				<input id="searchText" class="form-control mr-sm-2" type="search"
-					placeholder="Search" aria-label="Search">
-				<button id="searchButton" class="btn btn-outline-light my-2 my-sm-0" type="button">Search</button>
-			</form>
+		<nav class="navbar fixed-top dark-theme">
+			<a class="navbar-brand">Admin Homepage</a> <span id="username_span"><i
+				class="fas fa-user-tie"> <c:out value="${username}" /></i></span>
+			<form:form class="form-inline"
+				action="${pageContext.request.contextPath}/logout" method="POST">
+				<button type="submit" class="btn btn-danger btn-sm">
+					<i class="fas fa-sign-out-alt"></i> Logout
+				</button>
+			</form:form>
 		</nav>
 	</div>
 
@@ -172,32 +190,23 @@ body {
 		</div>
 	</div>
 
-	<div id="logout-form" class="logout_margin_while_loading">
-		<form:form class="form-inline"
-			action="${pageContext.request.contextPath}/logout" method="POST">
-			<button type="submit" class="btn btn-danger btn-sm">
-				<i class="fas fa-sign-out-alt"></i> Logout
-			</button>
-		</form:form>
-	</div>
 
 	<div id="result">
-		<button type="button" class="close" onclick="closeResult();"
-			aria-label="Close">
-			<span aria-hidden="true">&times;</span>
+		<button type="button" class="close"
+			onclick="closeResult();hideButton();" aria-label="Close">
+			<span aria-hidden="true" id="close_button">&times;</span>
 		</button>
 
 	</div>
 
-	<div id="dataTable" class="container table_margin_while_loading">
+	<div id="dataTable" class="container table_margin_while_loading panel panel-default">
 		<table
-			class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded">
+			class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded table table-bordered">
 
 			<thead class="thead-dark">
 				<tr>
 					<th scope="col">Actions</th>
 					<th scope="col">Email</th>
-					<th scope="col">Password</th>
 					<th scope="col">Authorities</th>
 					<th scope="col">Enabled</th>
 				</tr>
@@ -233,7 +242,9 @@ body {
 
 
 
-	<script src="${pageContext.request.contextPath}/resources/admin/main.js">
+	<script
+		src="${pageContext.request.contextPath}/resources/admin/main.js">
+		
 	</script>
 
 

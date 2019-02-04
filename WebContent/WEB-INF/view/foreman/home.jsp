@@ -34,7 +34,7 @@
 
 <body>
 
-
+	<!-- Επιπλέον modal -->
 	<div id="error" class="modal" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -46,12 +46,35 @@
 					<p></p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger"  data-dismiss="modal">ok</button>
-					
+					<button type="button" class="btn btn-danger" data-dismiss="modal">ok</button>
+
 				</div>
 			</div>
 		</div>
 	</div>
+
+	<div class="modal" id="success" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">System report</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p></p>
+				</div>
+				<div class="modal-footer">
+					
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<nav aria-label="breadcrumb">
 		<ol class="breadcrumb">
@@ -162,19 +185,19 @@
 					<div class="form-group col-md-4" style="display: grid;">
 						<label for="inputState" style="width: 2;">Informatics and
 							telematics</label> <select id="inputState" size="5" style="">
-					
+
 						</select>
 					</div>
 					<div class="form-group col-md-4" style="display: grid;">
 						<label for="inputState" style="width: 2;">Home economics
 							and ecology</label> <select id="inputState" size="5" style="">
-						
+
 						</select>
 					</div>
 					<div class="form-group col-md-4" style="display: grid;">
 						<label for="inputState" style="width: 2;">Geography</label> <select
 							id="inputState" size="5" style="">
-						
+
 						</select>
 					</div>
 
@@ -187,13 +210,13 @@
 						<label for="inputState" style="width: 2;">International
 							master of sustainable tourism development </label> <select
 							id="inputState" size="5" style="">
-							
+
 						</select>
 					</div>
 					<div class="form-group col-md-4" style="display: grid;">
 						<label for="inputState" style="width: 2;">Nutrition and
-							dietics </label> <select id="inputState" size="5" style="">
-						
+							dietics<br>&nbsp;</label> <select id="inputState" size="5" style="">
+
 						</select>
 					</div>
 
@@ -205,14 +228,15 @@
 			</div>
 
 
-			<button type="submit" class="btn btn-primary" style="margin-top: 5%" onclick="return false">Update
-				system</button>
+			<button type="submit" class="btn btn-primary" style="margin-top: 5%"
+				onclick="return false">Update system</button>
 		</form>
 
 
 	</div>
 
-	<script src="${pageContext.request.contextPath}/resources/foreman/home.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/foreman/home.js"></script>
 
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->

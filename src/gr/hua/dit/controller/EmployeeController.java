@@ -1,12 +1,8 @@
 package gr.hua.dit.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.aspectj.lang.annotation.Aspect;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.mysql.cj.xdevapi.JsonArray;
-
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
@@ -57,7 +50,7 @@ public class EmployeeController {
 		if (Student.validStudent(jsonObject)) {
 			User user = userService.findUserByUsername(jsonObject.getString("email"));
 
-			Student student2 = new Student(jsonObject);
+//			Student student2 = new Student(jsonObject);
 
 //			if(user!=null) {
 //				
