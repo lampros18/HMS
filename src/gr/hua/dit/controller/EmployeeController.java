@@ -1,21 +1,37 @@
 package gr.hua.dit.controller;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.security.Principal;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.itextpdf.text.DocumentException;
+
 import gr.hua.dit.entity.Authorities;
+import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
+import gr.hua.dit.pdf.PDFMaker;
 import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.security.Crypto;
+import gr.hua.dit.service.HousingApplicationService;
 import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
 
@@ -29,6 +45,9 @@ public class EmployeeController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private HousingApplicationService housingApplicationService;
+	
 	@Autowired
 	private Crypto crypto;
 
@@ -157,5 +176,72 @@ public class EmployeeController {
 		}
 
 	}
+	
+	@RequestMapping(value = "getHousingApplications", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String getHousingApplications(HttpServletRequest request) {
+		
+		JSONObject json = new JSONObject();
+		JSONArray jsonArray = new JSONArray();
+		JSONObject housingApplication = new JSONObject();
+		for(HousingApplication ha : housingApplicationService.getAllUnverifiedHousingApplications()) {
+			housingApplication.put("id", ha.getId());
+			housingApplication.put("username", ha.getStudent().getUser().getUsername());
+			housingApplication.put("createdAt", ha.getCreated_at());
+			jsonArray.put(housingApplication);
+		}
+		json.put("housingApplications", jsonArray);
+		return json.toString();
+	}
+	
+	@RequestMapping(value = "housingApplications", method = RequestMethod.GET)
+	public String housingApplications (Model model) {
+		return "employee/housingApplications";
+	}
 
+	@RequestMapping(value="/applications/{id}", method=RequestMethod.GET)
+	public ResponseEntity<byte[]> getPDF(@PathVariable(value="id") int id) {
+
+		
+		//Retrieve the whole housing application from database
+		HousingApplication ha = housingApplicationService.getHousingApplicationById(id);
+		
+
+	    // generate PDF
+	    byte[] contents = null;
+		try {
+			contents = new PDFMaker().init(ha);
+		} catch (IOException | URISyntaxException | DocumentException e) {
+			e.printStackTrace();
+		}
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.parseMediaType("application/pdf"));
+	    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+	    ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+	    return response;
+	}
+	
+	@RequestMapping(value = "verify/{id}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String verifyHousingApplication(@PathVariable(value="id") int id) {
+		JSONObject json = new JSONObject();
+		if(housingApplicationService.verifyHousingApplication(id, 1) == 1)
+			json.put("status","success");
+		else
+			json.put("status", "failure");
+		return json.toString();
+	}
+	
+	@RequestMapping(value = "reject/{id}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String rejectHousingApplication(@PathVariable(value="id") int id) {
+		JSONObject json = new JSONObject();
+		if(housingApplicationService.verifyHousingApplication(id, -1) == 1)
+			json.put("status","success");
+		else
+			json.put("status", "failure");
+		return json.toString();
+	}
+	
 }

@@ -93,6 +93,8 @@
 	<ol class="breadcrumb">
 		<li class="breadcrumb-item active"><a
 			href="${pageContext.request.contextPath}/"> Home </a></li>
+			<li class="breadcrumb-item"><a
+			href="${pageContext.request.contextPath}/employee/housingApplications">Housing Applications</a></li>
 	</ol>
 
 

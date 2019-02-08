@@ -1,7 +1,7 @@
 package gr.hua.dit.aspect;
 
 import java.util.List;
-import java.util.regex.Pattern;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -35,6 +35,23 @@ public class Aspect {
 //
 //	@Autowired
 //	private MailService mailService;
+	
+
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.UserService.getUsers())", returning = "result")
+	public void decryptUsers(List<User> result) {
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		for(User user:result) {
+			
+			currentSession.evict(user);
+			if(crypto.isEncrypted(user.getUsername())) {
+				
+				user.setUsername(crypto.decrypt(user.getUsername()));
+			}
+		}
+		
+	}
 
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.dao.StudentDAOImpl.getStudents(..))", returning = "result")
 	public void decryptGetStudents(JoinPoint joinPoint, List<Student> result) {
@@ -47,37 +64,37 @@ public class Aspect {
 
 			currentSession.evict(student.getUser());
 
-			if (isEncrypted(student.getUser().getUsername())) {
+			if (crypto.isEncrypted(student.getUser().getUsername())) {
 
 				student.getUser().setUsername(crypto.decrypt(student.getUser().getUsername()));
 			}
 
-			if (isEncrypted(student.getName())) {
+			if (crypto.isEncrypted(student.getName())) {
 
 				student.setName(crypto.decrypt(student.getName()));
 			}
 
-			if (isEncrypted(student.getSurname())) {
+			if (crypto.isEncrypted(student.getSurname())) {
 
 				student.setSurname(crypto.decrypt(student.getSurname()));
 			}
 
-			if (isEncrypted(student.getDepartment())) {
+			if (crypto.isEncrypted(student.getDepartment())) {
 
 				student.setDepartment(crypto.decrypt(student.getDepartment()));
 			}
 
-			if (isEncrypted(student.getPhone())) {
+			if (crypto.isEncrypted(student.getPhone())) {
 
 				student.setPhone(crypto.decrypt(student.getPhone()));
 			}
 
-			if (isEncrypted(student.getAddress())) {
+			if (crypto.isEncrypted(student.getAddress())) {
 
 				student.setAddress((crypto.decrypt(student.getAddress())));
 			}
 
-			if (isEncrypted(student.getCreatedBy())) {
+			if (crypto.isEncrypted(student.getCreatedBy())) {
 
 				student.setCreatedBy(crypto.decrypt(student.getCreatedBy()));
 			}
@@ -95,29 +112,29 @@ public class Aspect {
 
 		Student student = (Student) objects[0];
 
-		if (!isEncrypted(student.getSurname())) {
+		if (!crypto.isEncrypted(student.getSurname())) {
 
 			student.setSurname(crypto.encrypt(student.getSurname()));
 		}
 
-		if (!isEncrypted(student.getAddress())) {
+		if (!crypto.isEncrypted(student.getAddress())) {
 
 			student.setAddress(crypto.encrypt(student.getAddress()));
 		}
 		
-		if (!isEncrypted(student.getName())) {
+		if (!crypto.isEncrypted(student.getName())) {
 
 			student.setName(crypto.encrypt(student.getName()));
 		}
 		
 
-		if (!isEncrypted(student.getPhone())) {
+		if (!crypto.isEncrypted(student.getPhone())) {
 
 			student.setPhone(crypto.encrypt(student.getPhone()));
 		}
 		
 
-		if (!isEncrypted(student.getDepartment())) {
+		if (!crypto.isEncrypted(student.getDepartment())) {
 
 			student.setDepartment(crypto.encrypt(student.getDepartment()));
 		}
@@ -125,7 +142,7 @@ public class Aspect {
 
 		// student.setBirthdate(crypto.encrypt(student.getBirthdate()));
 
-		if (!isEncrypted(student.getCreatedBy())) {
+		if (!crypto.isEncrypted(student.getCreatedBy())) {
 
 			student.setCreatedBy(crypto.encrypt(student.getCreatedBy()));
 		}
@@ -136,7 +153,7 @@ public class Aspect {
 
 		// System.out.println(user.toString());
 		
-		if (!isEncrypted(user.getUsername())) {
+		if (!crypto.isEncrypted(user.getUsername())) {
 
 			user.setUsername(crypto.encrypt(user.getUsername()));
 		}
@@ -240,20 +257,7 @@ public class Aspect {
 //		//System.out.println("some method in the security");
 //	}
 
-	/**
-	 * Βασίζεται στο γεγονός ότι κάθε κρυπτογραφημμένο μήνυμα τελειώνει σε "="
-	 * 
-	 * 
-	 * @param text Το κείμενο που θέλουμε να ελέγξουμε αν είναι κρυπτογραφημένο με
-	 *             aes
-	 * @return true αν είναι κρυπτογραφημένο false διαφορετικά
-	 */
-	public boolean isEncrypted(String text) {
+	
 
-		Pattern pattern = Pattern.compile(".+=$");
-
-		return pattern.matcher(text).matches();
-
-	}
 
 }

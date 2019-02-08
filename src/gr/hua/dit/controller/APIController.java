@@ -2,12 +2,13 @@ package gr.hua.dit.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
@@ -100,26 +102,8 @@ public class APIController {
 
 		Student student = studentService.findStudentByUsername(username);
 
-		int grade = 0;
-
-		if (personalIncome == 0 && unemployedParents == 2)
-			grade = 1000;
-		else {
-			if (familyIncome < 10_000)
-				grade += 100;
-			else if (familyIncome < 15_000)
-				grade += 30;
-
-			grade += studyingSiblings * 20;
-
-			Calendar calendar = Calendar.getInstance();
-
-			if (calendar.get(Calendar.YEAR) - student.getYearOfEnrollment() > 4)
-				grade = -1;
-		}
-
 		student.addHousingApplication(
-				new HousingApplication(personalIncome, unemployedParents, familyIncome, studyingSiblings, check, grade,
+				new HousingApplication(personalIncome, unemployedParents, familyIncome, studyingSiblings, check, 0,
 						dateFormatGmt.format(new Date()), dateFormatGmt.format(new Date()), type, data));
 
 		JSONObject json = new JSONObject();

@@ -22,6 +22,39 @@
 		}
 		$(document).ready(function() {
 			init();
+			
+			$('#searchField').on('change paste keyup',function(){
+				
+				let trs=document.getElementsByTagName('tr');
+				
+				let textContent=this.value;
+				
+				let regex=new RegExp('^'+textContent,'g');
+				
+				for(let i=1;i<trs.length;i++){
+					
+					
+					if(textContent.trim()==''){
+						
+						trs[i].removeAttribute('style');
+						continue;
+					}
+					
+					if(trs[i].getElementsByTagName('td')[1]
+							.getElementsByTagName('div')[0].textContent.toLocaleLowerCase().
+							match(regex)==null){
+						
+						trs[i].style['display']='none';
+						
+//						console.log(textContent, trs[i].getElementsByTagName('td')[1]
+//								.getElementsByTagName('div')[0].textContent);
+//						
+					}else{
+						
+						trs[i].removeAttribute('style');
+					}
+				}
+			})
 		});
 
 		function removeLoading() {

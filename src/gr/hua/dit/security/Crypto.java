@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.regex.Pattern;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -91,5 +92,21 @@ public class Crypto {
 			}
 			return null;
 		}
+	}
+	
+	/**
+	 * Βασίζεται στο γεγονός ότι κάθε κρυπτογραφημμένο μήνυμα τελειώνει σε "="
+	 * 
+	 * 
+	 * @param text Το κείμενο που θέλουμε να ελέγξουμε αν είναι κρυπτογραφημένο με
+	 *             aes
+	 * @return true αν είναι κρυπτογραφημένο false διαφορετικά
+	 */
+	public boolean isEncrypted(String text) {
+
+		Pattern pattern = Pattern.compile(".+=$");
+
+		return pattern.matcher(text).matches();
+
 	}
 }

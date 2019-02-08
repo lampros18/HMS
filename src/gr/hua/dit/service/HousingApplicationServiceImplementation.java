@@ -20,5 +20,22 @@ public class HousingApplicationServiceImplementation implements HousingApplicati
 	public List<HousingApplication> getAllHousingApplicationsOrderedDesc() {
 		return haDAO.getAllHousingApplicationsOrderedDesc();
 	}
+
+	@Override
+	@Transactional
+	public List<HousingApplication> getAllUnverifiedHousingApplications() {
+		return haDAO.getAllUnverifiedHousingApplications();
+	}
 	
+	@Override
+	@Transactional
+	public HousingApplication getHousingApplicationById(int id) {
+		return haDAO.getHousingApplicationById(id);
+	}
+	
+	@Override
+	@Transactional
+	 public int verifyHousingApplication(int id, int verified) {
+		return haDAO.verifyHousingApplication(id, verified);
+	}
 }

@@ -77,10 +77,9 @@
 	margin-left: 15px;
 }
 
-.favicon_margin{
+.favicon_margin {
 	margin-left: 20px;
 }
-
 
 #addUserModalButton {
 	float: right;
@@ -199,7 +198,8 @@ body {
 
 	</div>
 
-	<div id="dataTable" class="container table_margin_while_loading panel panel-default">
+	<div id="dataTable"
+		class="container table_margin_while_loading panel panel-default">
 		<table
 			class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded table table-bordered">
 
@@ -217,6 +217,10 @@ body {
 			</tbody>
 		</table>
 		<div class="container" id="bottom-container">
+			<input id="searchField" class="form-control mr-sm-2"
+				aria-label="Search"
+				style="width: 15%; margin: 9px; border: 1px solid grey;"
+				placeholder="Filter by username" type="search">
 			<button class="btn btn-primary btn-lg my-2 my-sm-0" type="button"
 				data-toggle="modal" data-target="#addUserModal" data-whatever="@mdo"
 				id="addUserModalButton">
@@ -238,6 +242,8 @@ body {
 				</ul>
 			</nav>
 		</div>
+
+
 	</div>
 
 
