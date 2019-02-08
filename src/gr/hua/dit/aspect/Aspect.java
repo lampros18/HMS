@@ -1,7 +1,7 @@
 package gr.hua.dit.aspect;
 
 import java.util.List;
-
+import java.util.regex.Pattern;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
+import gr.hua.dit.entity.Authorities;
+import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
 //import gr.hua.dit.mail.MailService;
@@ -52,7 +54,95 @@ public class Aspect {
 		}
 		
 	}
-
+	
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.StudentServiceImplementation.findStudentByUsername(String))", returning = "result")
+	public void decryptStudent2(Student result) {
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		currentSession.evict(result);
+		
+		System.out.println("PointCut After gr.hua.dit.service.StudentServiceImplementation.findStudentByUsername(String)");
+		
+		if(crypto.isEncrypted(result.getAddress())) {
+			
+			result.setAddress(crypto.decrypt(result.getAddress()));
+		}
+		
+		if(crypto.isEncrypted(result.getBirthdate())) {
+			
+			result.setBirthdate(crypto.decrypt(result.getBirthdate()));
+		}
+		
+		if(crypto.isEncrypted(result.getCreatedBy())) {
+			
+			result.setCreatedBy(crypto.decrypt(result.getCreatedBy()));
+		}
+		
+		if(crypto.isEncrypted(result.getName())) {
+			result.setName(crypto.decrypt(result.getName()));
+		}
+		
+		if(crypto.isEncrypted(result.getPhone())) {
+			
+			result.setPhone(crypto.decrypt(result.getPhone()));
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.StudentServiceImplementation.getStudentById(int))", returning = "result")
+	public void decryptStudent(Student result) {
+		
+		
+		
+		System.out.println("PointCut after returning gr.hua.dit.service.StudentService.getStudentById(int) ");
+		if(result==null) {
+			return;
+		}
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		
+		currentSession.evict(result);
+		
+		if(crypto.isEncrypted(result.getAddress())) {
+			
+			result.setAddress(crypto.decrypt(result.getAddress()));
+		}
+		
+		if(crypto.isEncrypted(result.getBirthdate())) {
+			
+			result.setBirthdate(crypto.decrypt(result.getBirthdate()));
+		}
+		
+		if(crypto.isEncrypted(result.getName())) {
+			
+			result.setName(crypto.decrypt(result.getName()));
+		}
+		
+		if(crypto.isEncrypted(result.getPhone())) {
+			
+			result.setPhone(crypto.decrypt(result.getPhone()));
+		}
+		
+		if(crypto.isEncrypted(result.getDepartment())) {
+			
+			result.setDepartment(crypto.decrypt(result.getDepartment()));
+		}
+		
+		if(crypto.isEncrypted(result.getCreatedBy())) {
+			
+			result.setCreatedBy(crypto.decrypt(result.getCreatedBy()));
+		}
+		
+		
+	}
+	
+	
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.dao.StudentDAOImpl.getStudents(..))", returning = "result")
 	public void decryptGetStudents(JoinPoint joinPoint, List<Student> result) {
 
@@ -111,7 +201,9 @@ public class Aspect {
 		Object[] objects = joinPoint.getArgs();
 
 		Student student = (Student) objects[0];
-
+		
+		Session currentSession = sessionFactory.getCurrentSession();
+		
 		if (!crypto.isEncrypted(student.getSurname())) {
 
 			student.setSurname(crypto.encrypt(student.getSurname()));
@@ -140,8 +232,6 @@ public class Aspect {
 		}
 		
 
-		// student.setBirthdate(crypto.encrypt(student.getBirthdate()));
-
 		if (!crypto.isEncrypted(student.getCreatedBy())) {
 
 			student.setCreatedBy(crypto.encrypt(student.getCreatedBy()));
@@ -150,16 +240,70 @@ public class Aspect {
 		
 
 		User user = student.getUser();
-
-		// System.out.println(user.toString());
 		
 		if (!crypto.isEncrypted(user.getUsername())) {
 
 			user.setUsername(crypto.encrypt(user.getUsername()));
 		}
+	
+	
 
+	}
+	
+	@Around("execution(* gr.hua.dit.entity.SUser.setPhone(String))")
+	public void encryptPhone(ProceedingJoinPoint joinPoint) {
 		
-
+		System.out.println("PointCut around gr.hua.dit.entity.SUser.setPhone(String)");
+		
+		Object[] objects = joinPoint.getArgs();
+		
+		String phone=new String((String)objects[0]);
+		
+		if(!crypto.isEncrypted(phone)) {
+			
+			try {
+				Object result=joinPoint.proceed(new Object[] {crypto.encrypt(phone)});
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			
+			try {
+				joinPoint.proceed(new Object[] {phone});
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Around("execution(* gr.hua.dit.entity.SUser.setAddress(String))")
+	public void encryptAddress(ProceedingJoinPoint joinPoint) {
+		
+		System.out.println("PointCut around gr.hua.dit.entity.SUser.setPhone(String)");
+		
+		Object[] objects = joinPoint.getArgs();
+		
+		String phone=new String((String)objects[0]);
+		
+		if(!crypto.isEncrypted(phone)) {
+			
+			try {
+				Object result=joinPoint.proceed(new Object[] {crypto.encrypt(phone)});
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			
+			try {
+				joinPoint.proceed(new Object[] {phone});
+			} catch (Throwable e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Around("execution(* gr.hua.dit.service.UserServiceImplementation.findUserByUsername(..))")
