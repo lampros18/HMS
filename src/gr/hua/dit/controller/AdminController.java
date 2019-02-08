@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
+import gr.hua.dit.mail.MailService;
 //import gr.hua.dit.mail.MailServiceProvider;
 import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.service.UserService;
@@ -30,10 +31,12 @@ public class AdminController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private MailService mailService;
 	
     @ModelAttribute("username")
-    public String getUsername(Principal principlal) {
-        return principlal.getName(); 
+    public String getUsername(Principal principal) {
+        return principal.getName(); 
     }  
 
 	// Κεντική σελίδα διαχειριστή
@@ -89,8 +92,8 @@ public class AdminController {
 					FileManager fm = new FileManager();
 					fm.writeCredentialsFile(json.getString("email"), unhashedPassword);
 					
-//					MailServiceProvider msp = new MailServiceProvider();
-//					msp.sendEmail(json.getString("email"), "Housing managment system credentials", json.getString("email"), unhashedPassword);
+					
+					mailService.sendMail("support@hms.com",json.getString("email"), "Housing managment system credentials", unhashedPassword);
 					
 					result.put("status", "200");
 					result.put("result", "The user has been successfully created");

@@ -231,8 +231,6 @@ public class EmployeeController {
 		else
 			json.put("status", "failure");
 		return json.toString();
-		
-		//
 	}
 	
 	@RequestMapping(value = "reject/{id}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")

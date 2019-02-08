@@ -53,7 +53,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 			.defaultSuccessUrl("/")
 		.and()
 		.logout().permitAll();
-
 	}
 	
 	/**

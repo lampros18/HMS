@@ -47,6 +47,7 @@ public class APIController {
 	@PostMapping("authenticate")
 	@ResponseBody
 	public String Authenticate(HttpServletRequest request) {
+		System.out.println(request.getRemoteAddr());
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		User user = userService.findUserByUsername(username);
