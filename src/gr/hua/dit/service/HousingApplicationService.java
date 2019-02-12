@@ -8,4 +8,5 @@ public interface HousingApplicationService {
 	List<HousingApplication> getAllUnverifiedHousingApplications();
 	HousingApplication getHousingApplicationById(int id);
 	int verifyHousingApplication(int id, int verified);
+	boolean checkRemaining();
 }

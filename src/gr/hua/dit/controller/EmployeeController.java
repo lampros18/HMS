@@ -31,6 +31,7 @@ import gr.hua.dit.entity.User;
 import gr.hua.dit.pdf.PDFMaker;
 import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.security.Crypto;
+import gr.hua.dit.service.GeneralVariablesService;
 import gr.hua.dit.service.HousingApplicationService;
 import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
@@ -47,7 +48,10 @@ public class EmployeeController {
 
 	@Autowired
 	private HousingApplicationService housingApplicationService;
-	
+
+	@Autowired
+	private GeneralVariablesService generalVariablesService;
+
 	@Autowired
 	private Crypto crypto;
 
@@ -105,15 +109,15 @@ public class EmployeeController {
 //			student.setUser(user);
 //			System.out.println(student.getUser().getUsername());
 //			System.out.println(studentService.insertStudent(student));
-			
-			JSONObject response=new JSONObject();
+
+			JSONObject response = new JSONObject();
 			response.put("result", 200);
-			
+
 			response.put("username", crypto.decrypt(student.getUser().getUsername()));
 
 			return response.toString();
 		}
-		
+
 		return "{result:407}";
 
 	}
@@ -153,7 +157,6 @@ public class EmployeeController {
 
 			JSONObject jsonObject = new JSONObject(employeeRequestHandler.getSringifiedHttpResponse(request));
 
-
 			Student student = studentService.findStudentByUsername(jsonObject.getString("email"));
 
 			student.setPhone(crypto.encrypt(jsonObject.getString("phone")));
@@ -161,13 +164,13 @@ public class EmployeeController {
 			student.setAddress(crypto.encrypt(jsonObject.getString("address")));
 
 			studentService.insertStudent(student);
-			
-			JSONObject response=new JSONObject();
-			
+
+			JSONObject response = new JSONObject();
+
 			response.put("result", 200);
-			
+
 			response.put("email", crypto.decrypt(student.getUser().getUsername()));
-			
+
 			return response.toString();
 
 		} catch (Exception exp) {
@@ -176,15 +179,16 @@ public class EmployeeController {
 		}
 
 	}
-	
+
 	@RequestMapping(value = "getHousingApplications", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String getHousingApplications(HttpServletRequest request) {
-		
+
 		JSONObject json = new JSONObject();
 		JSONArray jsonArray = new JSONArray();
-		JSONObject housingApplication = new JSONObject();
-		for(HousingApplication ha : housingApplicationService.getAllUnverifiedHousingApplications()) {
+
+		for (HousingApplication ha : housingApplicationService.getAllUnverifiedHousingApplications()) {
+			JSONObject housingApplication = new JSONObject();
 			housingApplication.put("id", ha.getId());
 			housingApplication.put("username", ha.getStudent().getUser().getUsername());
 			housingApplication.put("createdAt", ha.getCreated_at());
@@ -193,55 +197,81 @@ public class EmployeeController {
 		json.put("housingApplications", jsonArray);
 		return json.toString();
 	}
-	
+
 	@RequestMapping(value = "housingApplications", method = RequestMethod.GET)
-	public String housingApplications (Model model) {
+	public String housingApplications(Model model) {
 		return "employee/housingApplications";
 	}
 
-	@RequestMapping(value="/applications/{id}", method=RequestMethod.GET)
-	public ResponseEntity<byte[]> getPDF(@PathVariable(value="id") int id) {
+	@RequestMapping(value = "/applications/{id}", method = RequestMethod.GET)
+	public ResponseEntity<byte[]> getPDF(@PathVariable(value = "id") int id) {
 
-		
-		//Retrieve the whole housing application from database
+		// Retrieve the whole housing application from database
 		HousingApplication ha = housingApplicationService.getHousingApplicationById(id);
-		
 
-	    // generate PDF
-	    byte[] contents = null;
+		// generate PDF
+		byte[] contents = null;
 		try {
 			contents = new PDFMaker().init(ha);
 		} catch (IOException | URISyntaxException | DocumentException e) {
 			e.printStackTrace();
 		}
 
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.setContentType(MediaType.parseMediaType("application/pdf"));
-	    headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-	    ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-	    return response;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/pdf"));
+		headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+		ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+		return response;
 	}
-	
+
 	@RequestMapping(value = "verify/{id}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String verifyHousingApplication(@PathVariable(value="id") int id) {
+	public String verifyHousingApplication(@PathVariable(value = "id") int id) {
 		JSONObject json = new JSONObject();
-		if(housingApplicationService.verifyHousingApplication(id, 1) == 1)
-			json.put("status","success");
+		if (housingApplicationService.verifyHousingApplication(id, 1) == 1)
+			json.put("status", "success");
 		else
 			json.put("status", "failure");
+
+		Thread check = new Thread() {
+			public void run() {
+				Check();
+			}
+		};
+		check.start();
+
 		return json.toString();
 	}
-	
+
 	@RequestMapping(value = "reject/{id}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String rejectHousingApplication(@PathVariable(value="id") int id) {
+	public String rejectHousingApplication(@PathVariable(value = "id") int id) {
 		JSONObject json = new JSONObject();
-		if(housingApplicationService.verifyHousingApplication(id, -1) == 1)
-			json.put("status","success");
+		if (housingApplicationService.verifyHousingApplication(id, -1) == 1)
+			json.put("status", "success");
 		else
 			json.put("status", "failure");
+
+		Thread check = new Thread() {
+			public void run() {
+				Check();
+			}
+		};
+		check.start();
+
 		return json.toString();
 	}
-	
+
+	private void Check() {
+		if (housingApplicationService.checkRemaining() && generalVariablesService.checkRemaining()) { // True means the
+																										// submission
+																										// period is
+																										// over and
+																										// there
+			// are no other applications left
+			
+			System.out.println("Send Email to students");
+		}
+	}
+
 }

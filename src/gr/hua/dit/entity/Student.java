@@ -286,5 +286,10 @@ public class Student extends SUser implements Serializable{
 			return false;
 		return true;
 	}
+	public List<HousingApplication> getHousingApplications() {
+		return housingApplications;
+	}
+	
+	
 	
 }

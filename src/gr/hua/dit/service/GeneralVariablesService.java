@@ -20,4 +20,7 @@ public interface GeneralVariablesService {
 	int setEndingDate(String endingDate);
 
 	int setStartingDate(String startingDate);
+
+	boolean checkRemaining();
+	
 }

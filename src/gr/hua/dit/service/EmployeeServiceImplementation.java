@@ -12,13 +12,11 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
 	@Autowired
 	private EmployeeDAO employeeDAO;
-	
-	
+
 	@Override
 	@Transactional
 	public int createEmployee(Employee employee) {
 		return employeeDAO.insertEmployee(employee);
 	}
-
 
 }

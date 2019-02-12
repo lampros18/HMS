@@ -64,6 +64,10 @@ public class Aspect {
 		currentSession.evict(result);
 
 		currentSession.evict(result.getStudent());
+		
+		
+		
+		
 
 		if (crypto.isEncrypted(result.getStudent().getUser().getUsername())) {
 
@@ -136,7 +140,13 @@ public class Aspect {
 		for (HousingApplication application : result) {
 
 			currentSession.evict(application);
-
+			
+			currentSession.evict(application.getStudent());
+			
+			currentSession.evict(application.getStudent().getUser());
+			
+			
+			
 			if (crypto.isEncrypted(application.getFileType())) {
 
 				application.setCreated_at(crypto.decrypt(application.getCreated_at()));
@@ -237,6 +247,15 @@ public class Aspect {
 		Session currentSession = sessionFactory.getCurrentSession();
 
 		currentSession.evict(result);
+		
+		currentSession.evict(result.getUser());
+		
+		List<HousingApplication> applications=result.getHousingApplications();
+		
+		for(HousingApplication application:applications) {
+			
+			currentSession.evict(application);
+		}
 
 		if (crypto.isEncrypted(result.getAddress())) {
 

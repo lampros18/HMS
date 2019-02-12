@@ -1,15 +1,28 @@
 package gr.hua.dit.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gr.hua.dit.controller.APIController;
 import gr.hua.dit.entity.GeneralVariables;
+import gr.hua.dit.job.EndingDateJob;
 
 @SuppressWarnings("deprecation")
 @Repository
@@ -41,41 +54,41 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 			switch (department) {
 			case "Home economics and ecology":
 				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
-				if(query == null)
+				if (query == null)
 					return -1;
-				query.setParameter("value", ""+limit);
+				query.setParameter("value", "" + limit);
 				query.setParameter("key", ECOLOGY_DEPARTMENT_DB_KEY);
 				res = query.executeUpdate();
 				break;
 			case "Geography":
 				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
-				if(query == null)
+				if (query == null)
 					return -1;
-				query.setParameter("value", ""+limit);
+				query.setParameter("value", "" + limit);
 				query.setParameter("key", GEOGRAPHY_DEPARTMENT_DB_KEY);
 				res = query.executeUpdate();
 				break;
 			case "International master of sustainable tourism development":
 				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
-				if(query == null)
+				if (query == null)
 					return -1;
-				query.setParameter("value", ""+limit);
+				query.setParameter("value", "" + limit);
 				query.setParameter("key", TOURISM_DEPARTMENT_DB_KEY);
 				res = query.executeUpdate();
 				break;
 			case "Nutrition and dietics":
 				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
-				if(query == null)
+				if (query == null)
 					return -1;
-				query.setParameter("value", ""+limit);
+				query.setParameter("value", "" + limit);
 				query.setParameter("key", NUTRIRION_DEPARTMENT_DB_KEY);
 				res = query.executeUpdate();
 				break;
 			case "Informatics and Telematics":
 				query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
-				if(query == null)
+				if (query == null)
 					return -1;
-				query.setParameter("value", ""+limit);
+				query.setParameter("value", "" + limit);
 				query.setParameter("key", INFORMATICS_DEPARTMENT_DB_KEY);
 				res = query.executeUpdate();
 				break;
@@ -92,21 +105,28 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 		@SuppressWarnings("rawtypes")
 		Query query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
 		query.setParameter("value", startingDate);
-		query.setParameter("key",STARTING_DATE_DB_KEY);
+		query.setParameter("key", STARTING_DATE_DB_KEY);
 		try {
 			return query.executeUpdate();
 		} catch (Exception e) {
 			return -1;
 		}
 	}
-	
+
 	@Override
-	public int setEndingDate( String endingDate) {
+	public int setEndingDate(String endingDate) {
+		Thread job = new Thread() {
+			public void run() {
+				addJob(endingDate);
+			}
+		};
+		job.start();
+
 		Session curSession = session.getCurrentSession();
 		@SuppressWarnings("rawtypes")
 		Query query = curSession.createQuery("update GeneralVariables gv set gv.value =: value where gv.key =: key");
 		query.setParameter("value", endingDate);
-		query.setParameter("key",ENDING_DATE_DB_KEY);
+		query.setParameter("key", ENDING_DATE_DB_KEY);
 		try {
 			return query.executeUpdate();
 		} catch (Exception e) {
@@ -195,4 +215,55 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 		return dateVariables;
 	}
 
+	@Override
+	public boolean checkRemaining() {
+		HashMap<String, String> generalVariables = getGeneralVariables();
+		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+		if (dateFormatGmt.format(new Date()).compareTo(generalVariables.get("ending_date")) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	private void addJob(String endingDate) {
+		
+		SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date2 = new Date();
+		try {
+			Date date = dateFormatLocal.parse(endingDate + " 00:59:59");
+			dateFormatLocal.setTimeZone(TimeZone.getTimeZone("GMT"));
+			
+			SimpleDateFormat dateFormatLocal2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			dateFormatLocal2.setTimeZone(TimeZone.getDefault());
+			date2 = dateFormatLocal.parse(dateFormatLocal2.format(date));
+			//dateFormatLocal.format(date2)
+			//System.out.println(dateFormatLocal.format(date2) + "    database");
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+			return;
+		}
+
+		int year = date2.getYear()+1900;
+		int month = date2.getMonth()+1;
+		int day = date2.getDate();
+		
+		int hour = date2.getHours();
+		JobDetail job1 = JobBuilder.newJob(EndingDateJob.class).withIdentity("job1", "group1").build();
+
+		Trigger trigger1 = TriggerBuilder.newTrigger().withIdentity("cronTrigger1", "group1")
+				// Seconds Minutes Hours Day-of-Month Month Day-of-Week Year
+				// 59 1 19 * 11 ? 2019
+				.withSchedule(CronScheduleBuilder.cronSchedule("59 49 " + hour + " "+ day + " " + month + " ? " + year)).build();
+
+		Scheduler scheduler1;
+		try {
+			scheduler1 = new StdSchedulerFactory().getScheduler();
+			scheduler1.start();
+			scheduler1.scheduleJob(job1, trigger1);
+		} catch (SchedulerException e) {
+//TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

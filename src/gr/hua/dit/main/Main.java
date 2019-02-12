@@ -1,8 +1,35 @@
 package gr.hua.dit.main;
 
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.impl.StdSchedulerFactory;
+
+import gr.hua.dit.job.EndingDateJob;
+
 public class Main {
-	
+
 	public static void main(String[] args) {
+
+//		JobDetail job1 = JobBuilder.newJob(EndingDateJob.class).withIdentity("job1", "group1").build();
+//
+//		Trigger trigger1 = TriggerBuilder.newTrigger().withIdentity("cronTrigger1", "group1")
+//				.withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * 2 ?")).build();
+//
+//		Scheduler scheduler1;
+//		try {
+//			scheduler1 = new StdSchedulerFactory().getScheduler();
+//			scheduler1.start();
+//			scheduler1.scheduleJob(job1, trigger1);
+//		} catch (SchedulerException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
 //		//Now
 //		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 //		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -21,7 +48,6 @@ public class Main {
 //            }catch(java.text.ParseException e) {
 //            	e.printStackTrace();
 //            }
-
 
 //	PDFMaker pdf = new PDFMaker();
 //	try {

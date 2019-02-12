@@ -24,4 +24,6 @@ public interface GeneralVariablesDAO {
 	int setStartingDate(String startingDate);
 
 	int setEndingDate(String endingDate);
+	
+	boolean checkRemaining();
 }

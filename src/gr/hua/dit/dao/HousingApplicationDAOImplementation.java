@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import gr.hua.dit.entity.HousingApplication;
 
 @SuppressWarnings("deprecation")
@@ -95,6 +96,14 @@ public class HousingApplicationDAOImplementation implements HousingApplicationDA
 		} catch (Exception e) {
 			return -1;
 		}
+	}
+	
+	@Override
+	public boolean checkRemaining() {
+		if(getAllUnverifiedHousingApplications().size() == 0){
+			return true;
+		}
+		return false;
 	}
 
 }

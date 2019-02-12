@@ -38,4 +38,10 @@ public class HousingApplicationServiceImplementation implements HousingApplicati
 	 public int verifyHousingApplication(int id, int verified) {
 		return haDAO.verifyHousingApplication(id, verified);
 	}
+	
+	@Override
+	@Transactional
+	 public boolean checkRemaining() {
+		return haDAO.checkRemaining();
+	}
 }

@@ -8,5 +8,6 @@ public interface HousingApplicationDAO {
 	List<HousingApplication> getAllHousingApplicationsOrderedDesc();
 	List<HousingApplication> getAllUnverifiedHousingApplications();
 	HousingApplication getHousingApplicationById(int id);
-	int verifyHousingApplication(int id, int verified); 
+	int verifyHousingApplication(int id, int verified);
+	boolean checkRemaining();
 }

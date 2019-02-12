@@ -51,4 +51,10 @@ public class GeneralVariablesServiceImplementation implements GeneralVariablesSe
 		return gvdao.getDateVariables();
 	}
 
+	@Override
+	@Transactional
+	public boolean checkRemaining() {
+		return gvdao.checkRemaining();
+	}
+
 }

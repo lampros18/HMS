@@ -86,7 +86,7 @@
 			}
 
 			function createActionsRow(id, tableBody) {
-				let tableRow = document.getElementById( id);
+				let tableRow = document.getElementById(id);
 
 				let td = document.createElement("TD");
 
@@ -517,7 +517,10 @@
 
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					console.log("deleted");
+					var json = JSON.parse(xhttp.responseText);
+					if(json.status == 200)
+						document.getElementById(uid).parentNode.removeChild(document.getElementById(uid));
+					setResultMessage(xhttp.responseText);
 				}
 			};
 
