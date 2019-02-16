@@ -22,6 +22,7 @@
 <title>Users table</title>
 
 <style>
+
 .error-checkbox {
 	box-shadow: 0 0 8px red;
 	background-color: red;
@@ -73,12 +74,13 @@
 	margin-left: 70%;
 }
 
-.switch_input_span {
-	margin-left: 15px;
+.custom-switch {
+	float: left;
+	margin-right: 15px;
 }
 
 .favicon_margin {
-	margin-left: 20px;
+	margin-right: 20px;
 }
 
 #addUserModalButton {
@@ -93,6 +95,10 @@
 
 #pagination-element {
 	margin-left: -3%;
+}
+
+.custom-control-label {
+	user-select: none;
 }
 
 body {

@@ -1,7 +1,7 @@
 package gr.hua.dit.aspect;
 
 import java.util.List;
-import java.util.regex.Pattern;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
-import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
@@ -53,6 +52,8 @@ public class Aspect {
 		}
 
 	}
+	
+
 
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getHousingApplicationById(int))", returning = "result")
 	public void decryptHousingApplication(HousingApplication result) {
@@ -388,6 +389,8 @@ public class Aspect {
 		}
 
 	}
+	
+	
 
 	@Around("execution(* gr.hua.dit.entity.SUser.setPhone(String))")
 	public void encryptPhone(ProceedingJoinPoint joinPoint) {
@@ -416,6 +419,8 @@ public class Aspect {
 			}
 		}
 	}
+	
+
 
 	@Around("execution(* gr.hua.dit.entity.SUser.setAddress(String))")
 	public void encryptAddress(ProceedingJoinPoint joinPoint) {
@@ -473,6 +478,27 @@ public class Aspect {
 
 		return null;
 	}
+	
+	@Around("execution(* gr.hua.dit.service.UserServiceImplementation.updateUsername(..))")
+	public Object encryptUpdateUsername(ProceedingJoinPoint joinPoint) {
+
+		System.out.println("PointCut around updateUsername");
+
+		Object[] objects = joinPoint.getArgs();
+
+
+
+		Object[] encryptedUsername = new Object[] { crypto.encrypt((String) objects[1]) };
+		try {
+			Object result = joinPoint.proceed(new Object[] {objects[0], encryptedUsername[0]});
+
+			return result;
+		} catch (Throwable e) {
+			System.out.println(e.getMessage());
+		}
+
+		return null;
+	}
 
 	@Before("execution(* gr.hua.dit.service.UserServiceImplementation.createUser(..))")
 	public void encryptUser(JoinPoint joinPoint) {
@@ -516,6 +542,80 @@ public class Aspect {
 		return null;
 	}
 
+	
+
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getAllHousingApplicationsOrderedDesc())", returning = "result")
+	public void decryptHousingApplicationForEmail(List<HousingApplication> result) {
+
+		System.out.println(
+				"Pointcut @AfterReturning gr.hua.dit.service.HousingApplicationServiceImplementation.getAllHousingApplicationsOrderedDesc()");
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		for (HousingApplication application : result) {
+
+			currentSession.evict(application);
+			
+			currentSession.evict(application.getStudent());
+			
+			currentSession.evict(application.getStudent().getUser());
+			
+			
+			
+			if (crypto.isEncrypted(application.getFileType())) {
+
+				application.setCreated_at(crypto.decrypt(application.getCreated_at()));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getAddress())) {
+
+				application.getStudent().setAddress(crypto.decrypt(application.getStudent().getAddress()));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getBirthdate())) {
+
+				application.getStudent().setBirthdate(crypto.decrypt(application.getStudent().getBirthdate()));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getCreatedBy())) {
+
+				application.getStudent().setCreatedBy((crypto.decrypt(application.getStudent().getCreatedBy())));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getDepartment())) {
+
+				application.getStudent().setDepartment((crypto.decrypt(application.getStudent().getDepartment())));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getName())) {
+
+				application.getStudent().setName((crypto.decrypt(application.getStudent().getName())));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getPhone())) {
+
+				application.getStudent().setPhone((crypto.decrypt(application.getStudent().getPhone())));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getSurname())) {
+
+				currentSession.evict(application.getStudent());
+
+				application.getStudent().setSurname(crypto.decrypt(application.getStudent().getSurname()));
+			}
+
+			if (crypto.isEncrypted(application.getStudent().getUser().getUsername())) {
+
+				currentSession.evict(application.getStudent().getUser());
+				application.getStudent().getUser()
+						.setUsername(crypto.decrypt(application.getStudent().getUser().getUsername()));
+			}
+
+		}
+
+	}
+
+	
+	
 //	
 //	@Before("execution(* org.springframework.stereotype.*.()")
 //	public void sercurityAspect(JoinPoint joinpoint) {

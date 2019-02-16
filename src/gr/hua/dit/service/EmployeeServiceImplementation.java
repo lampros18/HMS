@@ -1,5 +1,7 @@
 package gr.hua.dit.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,12 @@ public class EmployeeServiceImplementation implements EmployeeService {
 	@Transactional
 	public int createEmployee(Employee employee) {
 		return employeeDAO.insertEmployee(employee);
+	}
+	
+	@Override
+	@Transactional
+	public List<Employee> getAllEmployees(){
+		return employeeDAO.getAllEmployees();
 	}
 
 }

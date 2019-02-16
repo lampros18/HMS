@@ -1,6 +1,7 @@
 package gr.hua.dit.dao;
 
 import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -21,7 +22,7 @@ public class UserDAOImplementation implements UserDAO {
 	public void insertUser(User user) {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
-		currentSession.persist(user);
+		currentSession.saveOrUpdate(user);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -56,6 +57,29 @@ public class UserDAOImplementation implements UserDAO {
 			return users.get(0);
 		else
 			return null;
+	}
+	
+	@Override
+	public User findUserById(int id) {
+		Session curSession = sessionFactory.getCurrentSession();
+		return curSession.find(User.class, id);
+	}
+	
+	@Override
+	public int updateUsername(int id, String username) {
+		Session curSession = sessionFactory.getCurrentSession();
+		
+		User user = curSession.find(User.class, id);
+		
+		user.setUsername(username);
+		
+	
+		try {
+			curSession.update(user);
+			return 0;
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 	
 

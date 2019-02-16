@@ -23,6 +23,9 @@ public class HomeController {
 	@GetMapping("/")
 	public String showHomePage(Principal principal) {
 
+		if (principal == null)
+			return "redirect:/login";
+
 		String principalInfo = principal.toString();
 
 		if (principalInfo.contains("ROLE_ADMIN")) {
@@ -56,7 +59,6 @@ public class HomeController {
 		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
 
 		String username = employeeRequestHandler.getSringifiedHttpResponse(request);
-
 
 		JSONObject jsonObject = new JSONObject(username);
 

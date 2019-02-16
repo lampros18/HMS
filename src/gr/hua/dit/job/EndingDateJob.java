@@ -1,6 +1,5 @@
 package gr.hua.dit.job;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -17,7 +16,7 @@ public class EndingDateJob implements Job {
 	
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		
-		String url = "http://127.0.0.1:8080/HMS/api/sendMail";
+		String url = "http://127.0.0.1:8080/HMS/api/sendΕmailEmployee";
 		URL obj = null;
 		try {
 			obj = new URL(url);

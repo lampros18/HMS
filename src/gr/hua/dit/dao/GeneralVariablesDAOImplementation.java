@@ -20,7 +20,6 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import gr.hua.dit.controller.APIController;
 import gr.hua.dit.entity.GeneralVariables;
 import gr.hua.dit.job.EndingDateJob;
 
@@ -231,7 +230,7 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 		SimpleDateFormat dateFormatLocal = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date2 = new Date();
 		try {
-			Date date = dateFormatLocal.parse(endingDate + " 00:59:59");
+			Date date = dateFormatLocal.parse(endingDate + " 23:59:59");
 			dateFormatLocal.setTimeZone(TimeZone.getTimeZone("GMT"));
 			
 			SimpleDateFormat dateFormatLocal2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -254,7 +253,7 @@ public class GeneralVariablesDAOImplementation implements GeneralVariablesDAO {
 		Trigger trigger1 = TriggerBuilder.newTrigger().withIdentity("cronTrigger1", "group1")
 				// Seconds Minutes Hours Day-of-Month Month Day-of-Week Year
 				// 59 1 19 * 11 ? 2019
-				.withSchedule(CronScheduleBuilder.cronSchedule("59 49 " + hour + " "+ day + " " + month + " ? " + year)).build();
+				.withSchedule(CronScheduleBuilder.cronSchedule("59 59 " + hour + " "+ day + " " + month + " ? " + year)).build();
 
 		Scheduler scheduler1;
 		try {

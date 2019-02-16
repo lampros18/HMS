@@ -43,7 +43,7 @@ public class User implements Serializable{
 			fetch = FetchType.EAGER,
 	        mappedBy = "user",
 	        cascade = CascadeType.ALL,
-	        orphanRemoval = true
+	        orphanRemoval = false
 	    )
 	    private List<Authorities> authorities;
 	
@@ -91,6 +91,10 @@ public class User implements Serializable{
 		authorities.add(authority);
 		authority.setUser(this);
 	}
+	
+	public void clearAuthorities() {
+		authorities.clear();
+	}
 
 	public boolean isStudent() {
 		for(Authorities authority : this.authorities) {
@@ -100,7 +104,9 @@ public class User implements Serializable{
 		return false;
 	}
 
-	
+	public void setEnabled(String enabled) {
+		this.enabled = enabled;
+	}
 	
 	
 	@Override
@@ -136,6 +142,10 @@ public class User implements Serializable{
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 		
 	

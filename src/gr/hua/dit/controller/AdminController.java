@@ -2,7 +2,9 @@ package gr.hua.dit.controller;
 
 import java.security.Principal;
 import java.util.HashSet;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,11 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import gr.hua.dit.entity.Authorities;
+import gr.hua.dit.entity.Employee;
+import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
 import gr.hua.dit.fileManager.FileManager;
 import gr.hua.dit.mail.MailService;
 //import gr.hua.dit.mail.MailServiceProvider;
 import gr.hua.dit.request.EmployeeRequestHandler;
+import gr.hua.dit.security.Crypto;
+import gr.hua.dit.service.EmployeeService;
+import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
 
 @Controller
@@ -34,9 +41,18 @@ public class AdminController {
 	@Autowired
 	private MailService mailService;
 	
+	@Autowired
+	private EmployeeService employeeService;
+	
+	@Autowired
+	private StudentService studentService;
+	
+	@Autowired
+	private Crypto crypto;
+	
     @ModelAttribute("username")
     public String getUsername(Principal principal) {
-        return principal.getName(); 
+    	return crypto.decrypt(principal.getName()); 
     }  
 
 	// Κεντική σελίδα διαχειριστή
@@ -89,11 +105,24 @@ public class AdminController {
 				JSONObject result = new JSONObject();
 				try {
 					userService.createUser(user);
+					if( json.getString("authority_foreman").equals("1") || json.getString("authority_employee").equals("1")) {
+						Employee employee = new Employee();
+						employee.setUser(user);
+						employeeService.createEmployee(employee);
+					} else if (json.getString("authority_student").equals("1")) {
+						Student student = new Student();
+						student.setUser(user);
+						studentService.insertStudent(student);
+						
+					}else {
+						throw new Exception();
+					}
+						
 					FileManager fm = new FileManager();
 					fm.writeCredentialsFile(json.getString("email"), unhashedPassword);
 					
-					
-					mailService.sendMail("support@hms.com",json.getString("email"), "Housing managment system credentials", unhashedPassword);
+					if(json.getString("email").contains("@"))
+						mailService.sendMail("support@hms.com",json.getString("email"), "Housing managment system credentials", unhashedPassword);
 					
 					result.put("status", "200");
 					result.put("result", "The user has been successfully created");
@@ -103,13 +132,6 @@ public class AdminController {
 							"We encountered an internal error. Please contact with the system administartor");
 					e.printStackTrace();
 				}
-
-				// Now
-//			SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//			dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
-//			json.put("createdAt", dateFormatGmt.format(new Date()));
-//			Employee employee = new Employee(json);
-//			employeeService.createEmployee(employee);
 
 				return result.toString();
 			} else {
@@ -209,7 +231,54 @@ public class AdminController {
 		return json.toString();
 	}
 	
-	@RequestMapping(value = "deleteUser", method = RequestMethod.POST)
+	@RequestMapping(value = "editUserRow", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editUserRow(HttpServletRequest request) {
+		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
+		String data = employeeRequestHandler.getSringifiedHttpResponse(request);
+		
+		JSONObject result = new JSONObject(data);
+		try {
+			JSONObject json = new JSONObject(data);
+			User user;
+			user = userService.findUserById(json.getInt("id"));
+			user.setUsername(json.getString("username"));
+			user.setEnabled(json.getString("enabled"));
+			
+			if(json.getString("password") != "") {
+				BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+				user.setPassword(bCryptPasswordEncoder.encode(json.getString("password")));
+			}
+			
+			if(!user.isStudent()) {
+				if(json.getInt("adminAuthority") == 0 && json.getInt("foremanAuthority") == 0 && json.getInt("employeeAuthority") == 0) {
+					//Impossible, do not update the authorities
+				}
+				else {
+					user.clearAuthorities();
+					if(json.getInt("adminAuthority") == 1)
+						user.addAuthority(new Authorities("ROLE_ADMIN"));
+					if(json.getInt("foremanAuthority") == 1)
+						user.addAuthority(new Authorities("ROLE_FOREMAN"));
+					if(json.getInt("employeeAuthority") == 1)
+						user.addAuthority(new Authorities("ROLE_EMPLOYEE"));
+				}
+			}
+			userService.createUser(user);
+			result.put("status", "200");
+			result.put("result",
+					"User updated successfully!");
+			return result.toString();
+		} catch (Exception e) {
+			result.put("status", "500");
+			result.put("result",
+					"We encountered an internal error. Please contact with the system administartor");
+			e.printStackTrace();
+			return result.toString();
+		}
+	}
+	
+	@RequestMapping(value = "deleteUser", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String deleteUser(HttpServletRequest request) {
 		
@@ -231,6 +300,27 @@ public class AdminController {
 			return result.toString();
 		}
 		
+	}
+	
+	@RequestMapping(value = "editEmail", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editEmail(HttpServletRequest request) {
+		
+		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
+		String data = employeeRequestHandler.getSringifiedHttpResponse(request);
+		
+			JSONObject result = new JSONObject();
+			JSONObject json = new JSONObject(data);
+			if( userService.updateUsername(json.getInt("id"), json.getString("username")) == 0 ) {
+				result.put("status", "200");
+				result.put("result", "The user's email has been successfully updated");
+				return result.toString();
+			} else {
+				result.put("status", "500");
+				result.put("result",
+						"We encountered an internal error. Please contact with the system administartor");
+				return result.toString();
+			}		
 	}
 	
 }

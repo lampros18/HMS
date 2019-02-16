@@ -9,7 +9,6 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Session;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
-import gr.hua.dit.mail.MailService;
 import gr.hua.dit.service.GeneralVariablesService;
 import gr.hua.dit.service.HousingApplicationService;
 import gr.hua.dit.service.StudentService;
@@ -37,8 +35,7 @@ public class APIController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MailService mailService;
+
 	
 	@Autowired
 	private StudentService studentService;
@@ -257,70 +254,5 @@ public class APIController {
 		return json.toString();
 	}
 	
-	@RequestMapping(value = "sendMail", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String sendMail()
-	{
-		List<HousingApplication> housingApplications = housingApplicationService.getAllHousingApplicationsOrderedDesc();
-		System.out.println("list");
-		int itCounter = 0, geoCounter = 0, ecoCounter = 0, nutritionCounter = 0, tourismCounter = 0;
-		System.out.println("variables");
-		HashMap<String, String> gv = generalVariablesService.getGeneralVariables();
-		System.out.println("hashmap");
-		String noMessage = "Σας ενημερώνουμε πως σύμφωνα με την κατάταξή σας ΔΕ δικαιούστε δωρεάν στέγαση.Για οποιαδήποτε απορία μπορείτε να απαντήστε στο e-mail.";
-		String yesMessage = "Σας ενημερώνουμε πως σύμφωνα με την κατάταξή σας δικαιούστε δωρεάν στέγαση.Για οποιαδήποτε απορία μπορείτε να απαντήστε στο e-mail.";
-		String epidomaMessage = "Σας ενημερώνουμε πως σύμφωνα με την κατάταξή σας δικαιούστε επίδομα στέγασης.Για οποιαδήποτε απορία μπορείτε να απαντήστε στο e-mail.";
-		String message = "";
-		String maxName = "";
-		System.out.println("strings");
-		int counter = 0;
-		System.out.println(housingApplications.size()+"list size");
-		for (HousingApplication hs : housingApplications) {
-			System.out.println("switch hello");
-			switch (hs.getStudent().getDepartment()) {
-			case "Informatics and telematics":
-				maxName = "max_it";
-				counter = itCounter;
-				itCounter++;
-				break;
-			case "Home economics and ecology":
-				maxName = "max_ecology";
-				counter = ecoCounter;
-				ecoCounter++;
-				break;
-			case "Geography":
-				maxName = "max_geo";
-				counter = geoCounter;
-				geoCounter++;
-				break;
-			case "International master of sustainable tourism development":
-				maxName = "max_tourism";
-				counter = tourismCounter;
-				tourismCounter++;
-				break;
-			case "Nutrition and dietics":
-				maxName = "max_nutrition";
-				counter = nutritionCounter;
-				nutritionCounter++;
-				break;
-			}
-			System.out.println(itCounter);
-			System.out.println(geoCounter+"i'm gay");
-			try {
-				if (counter < Integer.parseInt(gv.get(maxName)))
-					message = yesMessage;
-				else if (counter < Integer.parseInt(gv.get(maxName)) + 100)
-					message = epidomaMessage;
-				else
-					message = noMessage;
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
-			mailService.sendMail("alexkalog@alwaysdata.net", hs.getStudent().getUser().getUsername(),
-					"Αποτελέσμα αίτησης στέγασης", message);
-		}
-		return "{}";
-
-	}
-
+	
 }

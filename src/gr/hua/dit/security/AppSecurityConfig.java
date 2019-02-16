@@ -38,22 +38,23 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http.authorizeRequests().antMatchers("/api/**").hasIpAddress("127.0.0.1/16")//hasIpAddress("185.31.40.17/16")
-//		.antMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","FOREMAN","STUDENT")
-//		.antMatchers("/admin/**").hasRole("ADMIN")
-//		.antMatchers("/employee/**").hasRole("EMPLOYEE")
-//		.antMatchers("/foreman/**").hasRole("FOREMAN")
-//		.antMatchers("/student/**").hasRole("STUDENT")
-//			.anyRequest().authenticated()
-//		.and().csrf().ignoringAntMatchers("/api/**").and()
-//		.formLogin()
-//			.loginPage("/login")
-//			.loginProcessingUrl("/authUser")
-//			.permitAll()
-//			.defaultSuccessUrl("/")
-//		.and()
-//		.logout().permitAll();
-		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/mail/**").hasIpAddress("127.0.0.1").antMatchers("/api/**").hasIpAddress("185.31.40.17/16")
+		
+		.antMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","FOREMAN","STUDENT")
+		.antMatchers("/admin/**").hasRole("ADMIN")
+		.antMatchers("/employee/**").hasRole("EMPLOYEE")
+		.antMatchers("/foreman/**").hasRole("FOREMAN")
+		.antMatchers("/student/**").hasRole("STUDENT")
+			.anyRequest().authenticated()
+		.and().csrf().ignoringAntMatchers("/api/**").and()
+		.csrf().ignoringAntMatchers("/mail/**").and()
+		.formLogin()
+			.loginPage("/login")
+			.loginProcessingUrl("/authUser")
+			.permitAll()
+			.defaultSuccessUrl("/")
+		.and()
+		.logout().permitAll();
 	}
 	
 	/**

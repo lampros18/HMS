@@ -73,6 +73,18 @@ public class Employee extends SUser {
 		
 		return null;
 	}
+	
+	
+
+	public User getUser() {
+		return user;
+	}
+	
+	
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public String toString() {
@@ -82,5 +94,7 @@ public class Employee extends SUser {
 				+ getAddress() + ", getCreatedAt()=" + getCreatedAt() + ", getUpdatedAt()=" + getUpdatedAt()
 				+ ", getCreatedBy()=" + getCreatedBy() + "]";
 	}
+
+
 	
 }

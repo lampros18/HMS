@@ -1,9 +1,12 @@
 package gr.hua.dit.dao;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import gr.hua.dit.entity.Employee;
 
 @Repository
@@ -18,6 +21,16 @@ public class EmployeeDAOImplementation implements EmployeeDAO {
 		Session currentSession = sessionFactory.getCurrentSession();
 		currentSession.persist(employee);
 		return 0;
+	}
+	
+	@SuppressWarnings({ "unchecked", "deprecation" })
+	@Override
+	public List<Employee> getAllEmployees(){
+		try {
+		return sessionFactory.getCurrentSession().createCriteria(Employee.class).list();
+		}catch(Exception e) {
+			return null;
+		}
 	}
 
 }

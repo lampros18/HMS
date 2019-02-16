@@ -6,7 +6,7 @@
 					document.getElementById("table_body").innerHTML = "";
 					loadTableAndData(xhttp.responseText);
 					removeLoading();
-
+					$('[data-toggle="popover"]').popover();
 				}
 			};
 
@@ -21,6 +21,7 @@
 
 		}
 		$(document).ready(function() {
+			
 			init();
 			
 			$('#searchField').on('change paste keyup',function(){
@@ -45,18 +46,40 @@
 							match(regex)==null){
 						
 						trs[i].style['display']='none';
-						
-//						console.log(textContent, trs[i].getElementsByTagName('td')[1]
-//								.getElementsByTagName('div')[0].textContent);
-//						
+											
 					}else{
 						
 						trs[i].removeAttribute('style');
 					}
 				}
-			})
+			});
+			
+			$('body').on('click', function (e) {
+			    //did not click a popover toggle or popover
+			    if ($(e.target).data('toggle') !== 'popover'
+			        && $(e.target).parents('.popover.in').length === 0
+			        && $(e.target).data('input') !== 'input') {
+			    		SavePopoverData();
+			    		//console.log(document.getElementById("password"+$('[data-toggle="popover"]')[0].parentNode.parentNode.parentNode.id).value);
+			        	$('[data-toggle="popover"]').popover('hide');
+			    }
+			    if($(e.target).data('toggle') == 'popover'){
+			    	//SavePopoverData();
+			    	$('[data-toggle="popover"]').popover('hide');
+			    	$(e.target).popover('show');
+			    	document.getElementById("password"+$(e.target).parent().parent().parent().attr('id')).value = popoverData[$(e.target).parent().parent().parent().attr('id')];
+			    }
+			});
 		});
-
+		var popoverData = [];
+		function SavePopoverData(){
+			for(let i = 0; i<$('[data-toggle="popover"]').length; i++){
+				if(document.getElementById("password"+$('[data-toggle="popover"]')[i].parentNode.parentNode.parentNode.id) != null){
+					popoverData[$('[data-toggle="popover"]')[i].parentNode.parentNode.parentNode.id] = document.getElementById("password"+$('[data-toggle="popover"]')[i].parentNode.parentNode.parentNode.id).value;
+				}
+			}
+		}
+		
 		function removeLoading() {
 			if(document.getElementById("loading") != null)
 				document.getElementById("loading").outerHTML = "";
@@ -93,17 +116,35 @@
 				let div = document.createElement("DIV");
 				div.setAttribute("class", "container")
 
-				let iDeleteUser = document.createElement("I");
-				iDeleteUser.setAttribute("class", "fas fa-user-minus");
-				iDeleteUser.setAttribute("style",  "cursor:pointer;");
+				let iDeleteUser = document.createElement("I");			
+				iDeleteUser.setAttribute("class", "fas fa-user-minus favicon_margin");
+				iDeleteUser.setAttribute("style",  "cursor:pointer;color:#f12525;");
+				iDeleteUser.setAttribute("title", "Delete user");
 				iDeleteUser.setAttribute("onclick", "deleteUser("+id+");");
 
+				let iPasswordA = document.createElement("A");
+				iPasswordA.setAttribute("href", "#");
+				iPasswordA.setAttribute("data-toggle", "popover");
+				iPasswordA.setAttribute("data-placement", "bottom");
+				iPasswordA.setAttribute("data-html", "true");
+				iPasswordA.setAttribute("data-content", "<input data-input='input' id='password"+id+"' type='text'/>");
+				iPasswordA.setAttribute("title", "Enter password:");
+				
+				
 				let iUpdatePassword = document.createElement("I");
 				iUpdatePassword.setAttribute("class", "fas fa-key favicon_margin");
-				iUpdatePassword.setAttribute("style",  "cursor:pointer;");
+				iUpdatePassword.setAttribute("style",  "color:#efbc04;pointer-events:none;");
 				
+				let save = document.createElement("I");
+				save.setAttribute("class", "fas fa-check-circle");
+				save.setAttribute("style", "cursor:pointer;color:green;");
+				save.setAttribute("title", "Apply changes");
+				save.setAttribute("onclick", "editUser(" + id + ");");
+				
+				iPasswordA.appendChild(iUpdatePassword);
 				div.appendChild(iDeleteUser);
-				div.appendChild(iUpdatePassword);
+				div.appendChild(iPasswordA);
+				div.appendChild(save);
 				td.appendChild(div);
 				tableRow.appendChild(td);
 				tableBody.appendChild(tableRow);
@@ -115,7 +156,6 @@
 				let td = document.createElement("TD");
 				let div = document.createElement("DIV");
 				div.setAttribute("contenteditable", "");
-				div.setAttribute("onblur", "editEmail("+ id + ");"); 
 				let textNode = document.createTextNode(email);
 
 				div.appendChild(textNode);
@@ -132,13 +172,14 @@
 				let td = document.createElement("TD");
 
 				//Creating the custom swtch for the admin authority
-				let admin_div = document.createElement("SPAN");
+				let admin_div = document.createElement("DIV");
 				admin_div.setAttribute("class", "custom-switch");
 				
 				let admin_input = document.createElement("INPUT");
 				admin_input.setAttribute("type", "checkbox");
 				admin_input.setAttribute("class", "custom-control-input");
 				admin_input.setAttribute("id", "admin_switch" + id);
+				admin_input.setAttribute("onclick", "adminSwitch("+id+")");
 				if (admin == 1)
 					admin_input.setAttribute("checked", "");
 
@@ -154,7 +195,7 @@
 				admin_div.appendChild(admin_label);
 
 				//Creating the custom switch for the foreman authority
-				let foreman_div = document.createElement("SPAN");
+				let foreman_div = document.createElement("DIV");
 				foreman_div.setAttribute("class",
 						"custom-switch switch_input_span");
 
@@ -162,6 +203,7 @@
 				foreman_input.setAttribute("type", "checkbox");
 				foreman_input.setAttribute("class", "custom-control-input");
 				foreman_input.setAttribute("id", "foreman_switch" + id);
+				foreman_input.setAttribute("onclick", "foremanSwitch("+id+")");
 				if (foreman == 1)
 					foreman_input.setAttribute("checked", "");
 
@@ -177,7 +219,7 @@
 				foreman_div.appendChild(foreman_label);
 
 				//Creating the custom switch for the employee authority
-				let employee_div = document.createElement("SPAN");
+				let employee_div = document.createElement("DIV");
 				employee_div.setAttribute("class",
 						" custom-switch switch_input_span");
 
@@ -185,6 +227,7 @@
 				employee_input.setAttribute("type", "checkbox");
 				employee_input.setAttribute("class", "custom-control-input");
 				employee_input.setAttribute("id", "employee_switch" + id);
+				employee_input.setAttribute("onclick", "employeeSwitch("+id+")");
 				if (employee == 1)
 					employee_input.setAttribute("checked", "");
 
@@ -220,6 +263,7 @@
 				input.setAttribute("class", "custom-control-input");
 				input.setAttribute("id", "student_switch" + id);
 				input.setAttribute("checked", "");
+				input.setAttribute("disabled", "");
 
 				let label = document.createElement("LABEL");
 				label.setAttribute("class", "custom-control-label");
@@ -542,25 +586,76 @@
 			var results = 0;
 		}
 		
-		function editEmail(uid){
+		function editUser(uid){
+			
+			let isStudent = false;
+			
+			if(document.getElementById("student_switch"+uid) != null)
+				isStudent = true;
+			
 			var xhttp = new XMLHttpRequest();
 
 			xhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					console.log("edited");
+					var json = JSON.parse(xhttp.responseText);
+					setResultMessage(xhttp.responseText);
 				}
 			};
 
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
-
-			xhttp.open('POST', 'deleteUser', true);
+			xhttp.open('POST', 'editUserRow', true);
 			xhttp.setRequestHeader('Content-Type',
 					'application/json;charset=UTF-8');
+			
+	
 			xhttp.setRequestHeader(header, token);
-			xhttp.send(JSON.stringify(
-			{
-				id:uid
-			}		
-			));
+			if(isStudent){
+				xhttp.send(JSON.stringify(
+						{
+							id:uid,
+							username:$("#"+uid).find("td:eq(1)").text(),
+							password:document.getElementById("password"+uid).value,
+							enabled:document.getElementById("enabled_switch"+uid).checked ? "1" : "0"
+						}
+						));
+			}else {
+				xhttp.send(JSON.stringify(
+						{
+							id:uid,
+							username:$("#"+uid).find("td:eq(1)").text(),
+							adminAuthority:document.getElementById("admin_switch"+uid).checked ? 1 : 0,
+							foremanAuthority:document.getElementById("foreman_switch"+uid).checked ? 1 : 0,
+							employeeAuthority:document.getElementById("employee_switch"+uid).checked ? 1 : 0,
+							password:document.getElementById("password"+uid).value,
+							enabled:document.getElementById("enabled_switch"+uid).checked ? "1" : "0"
+						}
+						));
+			}
+	
 		}
+		
+		function adminSwitch(id){
+			if(!document.getElementById("admin_switch"+id).checked){
+				if(!document.getElementById("foreman_switch"+id).checked && !document.getElementById("employee_switch"+id).checked){
+					document.getElementById("admin_switch"+id).checked = true;
+				}
+			}
+		}
+		
+		function foremanSwitch(id){
+			if(!document.getElementById("foreman_switch"+id).checked){
+				if(!document.getElementById("admin_switch"+id).checked && !document.getElementById("employee_switch"+id).checked){
+					document.getElementById("foreman_switch"+id).checked = true;
+				}
+			}
+		}
+		
+		function employeeSwitch(id){
+			if(!document.getElementById("employee_switch"+id).checked){
+				if(!document.getElementById("foreman_switch"+id).checked && !document.getElementById("admin_switch"+id).checked){
+					document.getElementById("employee_switch"+id).checked = true;
+				}
+			}
+		}
+		

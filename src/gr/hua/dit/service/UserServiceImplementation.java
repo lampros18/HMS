@@ -38,6 +38,18 @@ public class UserServiceImplementation implements UserService {
 	public User findUserByUsername(String username) {
 		return userDAO.findUserByUsername(username);
 	}
+	
+	@Override
+	@Transactional
+	public User findUserById(int id) {
+		return userDAO.findUserById(id);
+	}
+
+	@Override
+	@Transactional
+	public int updateUsername(int id, String username) {
+		return userDAO.updateUsername(id, username);
+	}
 
 
 }
