@@ -24,50 +24,80 @@
 	href="${pageContext.request.contextPath}/resources/admin/style.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/admin/menu.css">
-	<link rel="stylesheet"
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/hamburgers.css">
 </head>
 
 <body>
 	<!--<div style="height: 100%;width:100%;background: url(https://pixabay.com/get/e837b90e2dfc003ed1534705fb0938c9bd22ffd41cb4114597f4c47fa3/books-1281581_1920.jpg);background-size: cover;box-sizing: unset;position: fixed;z-index: -100;top: 0;filter: grayscale(50%) blur(6px);"></div>
 	-->
-	<div style="background-color: #3e8ef7;width:130%;height: 56px;position: fixed; top: 0;">
+
+	<div
+		style="background-color: #3e8ef7; width: 130%; height: 56px; position: fixed; top: 0;">
 		<button class="hamburger hamburger--3dy" type="button" id="hamburger">
-		  <span class="hamburger-box">
-		    <span class="hamburger-inner"></span>
-		  </span>
+			<span class="hamburger-box"> <span class="hamburger-inner"></span>
+			</span>
 		</button>
-	    <div style="
-		    color: white;
-		    font-size: 2em;
-		    display: inline;
-		">HMS</div>
-		<input type="text" placeholder="Search..." id="searchField" class="searchTerm">
-		<div id="closeSearch"><i class="fas fa-times" style="
-		    opacity: 0.6;
-		"></i></div>
-		<div id="openSearch"><i class="fas fa-search" style="
-		    opacity: 1;
-		"></i></div>
+		<div style="color: white; font-size: 2em; display: inline; pointer-events:none; user-select: none;">HMS</div>
+		<input type="text" placeholder="Search..." id="searchField"
+			class="searchTerm">
+		<div id="closeSearch">
+			<i class="fas fa-times" style="opacity: 0.6;"></i>
+		</div>
+		<div id="openSearch">
+			<i class="fas fa-search" style="opacity: 1;"></i>
+		</div>
 	</div>
 	<div id='cssmenu'>
-		<ul>
-			<li><a href='#'><span>Home</span></a></li>
-			<li class='active has-sub'><a href='#'><span>Products</span></a>
-				<ul>
-					<li class='has-sub'><a href='#'><span>Product 1</span></a>
+		<ul style="user-select: none;">
+			<li style="pointer-events:none;"><a href='#'><i class="fas fa-user-tie"> <span style="text-transform: none; font-family: 'Roboto Condensed';"><c:out value="${username}" /></span></i></a></li>
+			
+			<c:choose>
+				<c:when test="${authorities.size()>1}">
+					<li class='active has-sub'><a href='#'><span>Home</span></a>
 						<ul>
-							<li><a href='#'><span>Sub Product</span></a></li>
-							<li class='last'><a href='#'><span>Sub Product</span></a></li>
+							<c:forEach var="i" begin="0" end="${authorities.size()-1}">
+									<c:if test="${authorities.get(i).getAuthority().equals(\"ROLE_ADMIN\")}">
+										<li><a href="${pageContext.request.contextPath}/admin/editUsers"><span>Admin</span></a></li>
+									</c:if>
+									<c:if test="${authorities.get(i).getAuthority().equals(\"ROLE_FOREMAN\")}">
+										<li><a href="${pageContext.request.contextPath}/foreman/home"><span>Foreman</span></a></li>
+									</c:if>
+									<c:if test="${authorities.get(i).getAuthority().equals(\"ROLE_EMPLOYEE\")}">
+										<li><a href="${pageContext.request.contextPath}/employee/employeeHome"><span>Employee</span></a></li>
+									</c:if>
+									<c:if test="${authorities.get(i).getAuthority().equals(\"ROLE_STUDENT\")}">
+										<li><a href="${pageContext.request.contextPath}/student/studentHome"><span>Student</span></a></li>
+									</c:if>
+							</c:forEach>
 						</ul></li>
-					<li class='has-sub'><a href='#'><span>Product 2</span></a>
-						<ul>
-							<li><a href='#'><span>Sub Product</span></a></li>
-							<li class='last'><a href='#'><span>Sub Product</span></a></li>
-						</ul></li>
-				</ul></li>
+				</c:when>
+				<c:otherwise>
+					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_ADMIN\")}">
+						<li><a href="${pageContext.request.contextPath}/admin/editUsers"><span>Home</span></a></li>
+					</c:if>
+					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_FOREMAN\")}">
+						<li><a href="${pageContext.request.contextPath}/foreman/home"><span>Home</span></a></li>
+					</c:if>
+					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_EMPLOYEE\")}">
+						<li><a href="${pageContext.request.contextPath}/employee/employeeHome"><span>Home</span></a></li>
+					</c:if>
+					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_STUDENT\")}">
+						<li><a href="${pageContext.request.contextPath}/student/studentHome"><span>Home</span></a></li>
+					</c:if>
+					
+				</c:otherwise>
+			</c:choose>
+
 			<li><a href='#'><span>About</span></a></li>
-			<li class='last'><a href='#'><span>Contact</span></a></li>
+			<li><a href='#'><span>Contact</span></a></li>
+			<li><a href='#' id="logoutBtn"><span>Logout</span></a></li>
+
+			<li
+				style="position: fixed; top: -1000; left: -1000; display: none; visibility: hidden; width: 0px; height: 0px;"><form:form
+					action="${pageContext.request.contextPath}/logout" method="POST">
+					<button type="submit" id="logoutSubmit">Logout</button>
+				</form:form></li>
 		</ul>
 	</div>
 
@@ -153,10 +183,10 @@
 		<table
 			class="table table-hover table-striped shadow-lg p-3 mb-5 bg-white rounded table table-bordered">
 
-			<thead class="thead-dark">
+			<thead class="thead-dark" style="user-select: none;">
 				<tr>
 					<th scope="col">Actions</th>
-					<th scope="col">Email</th>
+					<th scope="col">Username</th>
 					<th scope="col">Authorities</th>
 					<th scope="col">Enabled</th>
 				</tr>
@@ -168,7 +198,8 @@
 		</table>
 
 		<nav aria-label="Page navigation example" id="pagination-element">
-			<ul class="pagination">
+		
+			<ul class="pagination" style="user-select: none;">
 				<li class="page-item"><a class="page-link" href="#">Previous</a></li>
 				<li class="page-item"><a class="page-link" href="#"
 					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>

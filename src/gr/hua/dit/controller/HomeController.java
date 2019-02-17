@@ -31,10 +31,8 @@ public class HomeController {
 		if (principalInfo.contains("ROLE_ADMIN")) {
 			return "redirect:/admin/editUsers";
 		} else if (principalInfo.contains("ROLE_EMPLOYEE")) {
-
 			return "redirect:/employee/employeeHome";
 		} else if (principalInfo.contains("ROLE_STUDENT")) {
-
 			return "redirect:/student/studentHome";
 		} else if (principalInfo.contains("ROLE_FOREMAN")) {
 			return "redirect:/foreman/home";

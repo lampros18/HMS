@@ -105,6 +105,15 @@
 						}
 					});
 			
+			
+			document
+			.getElementById("logoutBtn")
+			.addEventListener(
+					"click",
+					function(){
+						document.getElementById("logoutSubmit").click();
+					});
+			
 			$('#searchField').on('change paste keyup',function(){
 				
 				let trs=document.getElementsByTagName('tr');

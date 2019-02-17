@@ -2,6 +2,7 @@ package gr.hua.dit.controller;
 
 import java.security.Principal;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -56,6 +57,12 @@ public class AdminController {
     		return crypto.decrypt(principal.getName());
     	else
     		return principal.getName();
+    }
+    
+    @ModelAttribute("authorities")
+    public List<Authorities> getAuthorities(Principal principal) {
+    	User user = userService.findUserByUsername(principal.getName());
+    	return user.getAuthorities();
     }  
 
 	// Κεντική σελίδα διαχειριστή
