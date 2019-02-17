@@ -1,0 +1,186 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+
+@media only screen and (max-width: 768px) {
+	#addUserModalButton {
+		float: left !important;
+	}
+	
+	#pagination-element{
+		margin-right:25px;
+	}
+	
+	.searchTerm {
+		left: 0!important;
+	}
+	#closeSearch {
+		display: block!important;	
+	}
+	#openSearch {
+		display: block!important;	
+	}
+}
+@media only screen and (min-width: 768px) {
+	#searchField{
+		top: 0!important;
+	}
+}
+body{
+	font-family: 'Roboto Condensed';
+	background-color: #e4eaec;
+}
+.modal-header .close {
+    margin: -1rem 0rem -1rem auto !important;
+}
+#closeSearch{
+	position: fixed;
+    top: 16px;
+    right: 10px;
+    display: none;
+    opacity: 0;
+    cursor: pointer;
+	transition: all 0.3s linear;
+}
+#openSearch{
+	position: fixed;
+    top: 16px;
+    right: 10px;
+    display: none;
+    color: white;
+    opacity: 1;
+    cursor: pointer;
+    transition: all 0.3s linear;
+}
+.search {
+	width: 100%;
+	position: relative;
+}
+
+.searchTerm {
+	display: inline;
+    position: fixed;
+    left: 250px;
+    height: 56px;
+    padding-left: 10px;
+    font-size: 1.4em;
+	transition: all 0.3s linear;
+	width: 100%;
+	outline: none;
+	color: #007bff;
+}
+
+.searchTerm:focus {
+	color: #007bff;
+}
+
+.searchButton {
+	position: absolute;
+	left: -35px;
+	width: 40px;
+	height: 34px;
+	border: 1px solid #007bff;
+	background: #007bff;
+	text-align: center;
+	color: #fff;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 20px;
+	outline: 0 !important;
+}
+
+/*Resize the wrap to see the search bar change!*/
+.wrap {
+	width: 30%;
+	display: none;
+	box-sizing: unset;
+	left: 50%;
+	position: absolute;
+	transform: translate(-50%, 0);
+	min-width: 275px;
+	margin-top: -50px;
+}
+
+.open {
+	margin-left: 0px;
+	width: 100%;
+}
+
+.close {
+	margin-left: -15px;
+	width: 0%;
+}
+
+.error-checkbox {
+	box-shadow: 0 0 8px red;
+	background-color: red;
+}
+
+.error {
+	box-shadow: 0 0 8px red;
+}
+
+.loading_margin {
+	margin-top: 5%;
+}
+
+.table_margin_while_loading {
+	margin-top: 1%;
+}
+
+.logout_margin_while_loading {
+	margin-left: 9.2%;
+}
+
+#result {
+	visibility: hidden;
+	position: relative;
+}
+
+.result_container {
+	width: 50%;
+	margin-top: 85px;
+	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
+	min-width: 275px;
+}
+
+.logout_margin_after_load {
+	margin-left: 9%;
+	margin-top: 6%;
+	margin-bottom: -7%;
+}
+
+.table_margin_after_load {
+	margin-top: 65px;
+}
+
+.dark-theme {
+	background-color: #212529;
+	color: #fff;
+}
+
+#username_span {
+	margin-left: 70%;
+}
+
+.custom-switch {
+	float: left;
+	margin-right: 15px;
+}
+
+.favicon_margin {
+	margin-right: 20px;
+}
+
+#pagination-element {
+	float: left;
+}
+
+#addUserModalButton {
+	float: right;
+}
+
+.custom-control-label {
+	user-select: none;
+}

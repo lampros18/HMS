@@ -20,111 +20,56 @@
 	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <title>Users table</title>
-
-<style>
-
-.error-checkbox {
-	box-shadow: 0 0 8px red;
-	background-color: red;
-}
-
-.error {
-	box-shadow: 0 0 8px red;
-}
-
-.loading_margin {
-	margin-top: 5%;
-}
-
-.table_margin_while_loading {
-	margin-top: 1%;
-}
-
-.logout_margin_while_loading {
-	margin-left: 9.2%;
-}
-
-#result {
-	visibility: hidden;
-}
-
-.result_container {
-	margin-left: 30%;
-	margin-top: 4%;
-	margin-bottom: -7.5%;
-	width: 50%;
-}
-
-.logout_margin_after_load {
-	margin-left: 9%;
-	margin-top: 6%;
-	margin-bottom: -7%;
-}
-
-.table_margin_after_load {
-	margin-top: 8%;
-}
-
-.dark-theme {
-	background-color: #212529;
-	color: #fff;
-}
-
-#username_span {
-	margin-left: 70%;
-}
-
-.custom-switch {
-	float: left;
-	margin-right: 15px;
-}
-
-.favicon_margin {
-	margin-right: 20px;
-}
-
-#addUserModalButton {
-	float: right;
-}
-
-#bottom-container {
-	margin-top: -3%;
-	margin-bottom: 2%;
-	margin-left: 1.5%;
-}
-
-#pagination-element {
-	margin-left: -3%;
-}
-
-.custom-control-label {
-	user-select: none;
-}
-
-body {
-	background: #8e9eab;
-	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-	background: linear-gradient(to right, #eef2f3, #8e9eab);
-}
-</style>
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/admin/style.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/admin/menu.css">
+	<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/hamburgers.css">
 </head>
 
 <body>
-	<div class="container">
-
-		<nav class="navbar fixed-top dark-theme">
-			<a class="navbar-brand">Admin Homepage</a> <span id="username_span"><i
-				class="fas fa-user-tie"> <c:out value="${username}" /></i></span>
-			<form:form class="form-inline"
-				action="${pageContext.request.contextPath}/logout" method="POST">
-				<button type="submit" class="btn btn-danger btn-sm">
-					<i class="fas fa-sign-out-alt"></i> Logout
-				</button>
-			</form:form>
-		</nav>
+	<!--<div style="height: 100%;width:100%;background: url(https://pixabay.com/get/e837b90e2dfc003ed1534705fb0938c9bd22ffd41cb4114597f4c47fa3/books-1281581_1920.jpg);background-size: cover;box-sizing: unset;position: fixed;z-index: -100;top: 0;filter: grayscale(50%) blur(6px);"></div>
+	-->
+	<div style="background-color: #3e8ef7;width:130%;height: 56px;position: fixed; top: 0;">
+		<button class="hamburger hamburger--3dy" type="button" id="hamburger">
+		  <span class="hamburger-box">
+		    <span class="hamburger-inner"></span>
+		  </span>
+		</button>
+	    <div style="
+		    color: white;
+		    font-size: 2em;
+		    display: inline;
+		">HMS</div>
+		<input type="text" placeholder="Search..." id="searchField" class="searchTerm">
+		<div id="closeSearch"><i class="fas fa-times" style="
+		    opacity: 0.6;
+		"></i></div>
+		<div id="openSearch"><i class="fas fa-search" style="
+		    opacity: 1;
+		"></i></div>
 	</div>
-
+	<div id='cssmenu'>
+		<ul>
+			<li><a href='#'><span>Home</span></a></li>
+			<li class='active has-sub'><a href='#'><span>Products</span></a>
+				<ul>
+					<li class='has-sub'><a href='#'><span>Product 1</span></a>
+						<ul>
+							<li><a href='#'><span>Sub Product</span></a></li>
+							<li class='last'><a href='#'><span>Sub Product</span></a></li>
+						</ul></li>
+					<li class='has-sub'><a href='#'><span>Product 2</span></a>
+						<ul>
+							<li><a href='#'><span>Sub Product</span></a></li>
+							<li class='last'><a href='#'><span>Sub Product</span></a></li>
+						</ul></li>
+				</ul></li>
+			<li><a href='#'><span>About</span></a></li>
+			<li class='last'><a href='#'><span>Contact</span></a></li>
+		</ul>
+	</div>
 
 	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -194,8 +139,6 @@ body {
 			</button>
 		</div>
 	</div>
-
-
 	<div id="result">
 		<button type="button" class="close"
 			onclick="closeResult();hideButton();" aria-label="Close">
@@ -203,6 +146,7 @@ body {
 		</button>
 
 	</div>
+
 
 	<div id="dataTable"
 		class="container table_margin_while_loading panel panel-default">
@@ -222,33 +166,28 @@ body {
 			<tbody id="table_body">
 			</tbody>
 		</table>
-		<div class="container" id="bottom-container">
-			<input id="searchField" class="form-control mr-sm-2"
-				aria-label="Search"
-				style="width: 15%; margin: 9px; border: 1px solid grey;"
-				placeholder="Filter by username" type="search">
-			<button class="btn btn-primary btn-lg my-2 my-sm-0" type="button"
-				data-toggle="modal" data-target="#addUserModal" data-whatever="@mdo"
-				id="addUserModalButton">
-				<i class="fas fa-user-plus"></i><span id="addIcon"></span> Add User
-			</button>
-			<nav aria-label="Page navigation example">
-				<ul class="pagination" id="pagination-element">
-					<li class="page-item"><a class="page-link" href="#">Previous</a></li>
-					<li class="page-item"><a class="page-link" href="#"
-						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-					</a></li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
-					<li class="page-item"><a class="page-link" href="#"
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
-					<li class="page-item"><a class="page-link" href="#">Next</a></li>
-				</ul>
-			</nav>
-		</div>
 
+		<nav aria-label="Page navigation example" id="pagination-element">
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+				<li class="page-item"><a class="page-link" href="#"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				</a></li>
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item"><a class="page-link" href="#"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
+				<li class="page-item"><a class="page-link" href="#">Next</a></li>
+			</ul>
+		</nav>
+
+		<button class="btn btn-primary btn-lg my-2 my-sm-0" type="button"
+			data-toggle="modal" data-target="#addUserModal" data-whatever="@mdo"
+			id="addUserModalButton">
+			<i class="fas fa-user-plus"></i><span id="addIcon"></span> Add User
+		</button>
 
 	</div>
 

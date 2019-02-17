@@ -52,7 +52,10 @@ public class AdminController {
 	
     @ModelAttribute("username")
     public String getUsername(Principal principal) {
-    	return crypto.decrypt(principal.getName()); 
+    	if(crypto.isEncrypted(principal.getName()))
+    		return crypto.decrypt(principal.getName());
+    	else
+    		return principal.getName();
     }  
 
 	// Κεντική σελίδα διαχειριστή

@@ -20,9 +20,90 @@
 			xhttp.send({});
 
 		}
+		var searchOpen = false;
+		var hamburgerOpen = false;
 		$(document).ready(function() {
 			
 			init();
+			
+			
+			$('#cssmenu li.has-sub>a').on('click', function(){
+				$(this).removeAttr('href');
+				var element = $(this).parent('li');
+				if (element.hasClass('open')) {
+					element.removeClass('open');
+					element.find('li').removeClass('open');
+					element.find('ul').slideUp();
+				}
+				else {
+					element.addClass('open');
+					element.children('ul').slideDown();
+					element.siblings('li').children('ul').slideUp();
+					element.siblings('li').removeClass('open');
+					element.siblings('li').find('li').removeClass('open');
+					element.siblings('li').find('ul').slideUp();
+				}
+			});
+			
+			/*document
+			.getElementById("searchBtn")
+			.addEventListener(
+					"click",
+					function(){
+						searchOpen = !searchOpen;
+						/*if(searchOpen){
+							$("#searchField").removeClass("close");
+							$("#searchField").addClass("open");
+						}
+						else{
+							$("#searchField").removeClass("open");
+							$("#searchField").addClass("close");
+						}*/
+					/*});*/
+			
+			document
+			.getElementById("closeSearch")
+			.addEventListener(
+					"click",
+					function(){
+						//searchOpen = !searchOpen;
+						searchOpen = false;
+						document.getElementById("searchField").style.top = "-56px";
+						document.getElementById("closeSearch").style.opacity = "0";
+						document.getElementById("closeSearch").style.pointerEvents = "none";
+						document.getElementById("openSearch").style.pointerEvents = "all";
+						document.getElementById("openSearch").style.opacity = "1";
+					});
+			
+			document
+			.getElementById("openSearch")
+			.addEventListener(
+					"click",
+					function(){
+						//searchOpen = !searchOpen;
+						searchOpen = true;
+						document.getElementById("searchField").style.top = "0px";
+						document.getElementById("closeSearch").style.opacity = "1";
+						document.getElementById("closeSearch").style.pointerEvents = "all";
+						document.getElementById("openSearch").style.pointerEvents = "none";
+						document.getElementById("openSearch").style.opacity = "0";
+					});
+			document.getElementById("closeSearch").click();
+			document
+			.getElementById("hamburger")
+			.addEventListener(
+					"click",
+					function(){
+						hamburgerOpen = !hamburgerOpen;
+						if(hamburgerOpen){
+							$("#hamburger").addClass("is-active");
+							document.getElementById("cssmenu").style.marginLeft = "0px";
+						}
+						else{
+							$("#hamburger").removeClass("is-active");
+							document.getElementById("cssmenu").style.marginLeft = "-250px";
+						}
+					});
 			
 			$('#searchField').on('change paste keyup',function(){
 				
@@ -117,7 +198,7 @@
 				div.setAttribute("class", "container")
 
 				let iDeleteUser = document.createElement("I");			
-				iDeleteUser.setAttribute("class", "fas fa-user-minus favicon_margin");
+				iDeleteUser.setAttribute("class", "fas fa-user-times favicon_margin");
 				iDeleteUser.setAttribute("style",  "cursor:pointer;color:#f12525;");
 				iDeleteUser.setAttribute("title", "Delete user");
 				iDeleteUser.setAttribute("onclick", "deleteUser("+id+");");
@@ -367,6 +448,8 @@
 								document
 										.getElementById("employee_authority_employee").checked = false;
 						});
+		
+		
 
 		$('#addUserModal').on('show.bs.modal', function(event) {
 			var button = $(event.relatedTarget) // Button that triggered the modal
@@ -659,3 +742,4 @@
 			}
 		}
 		
+				
