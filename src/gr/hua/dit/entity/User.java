@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,11 +42,12 @@ public class User implements Serializable{
 	
 	@OneToMany(
 			fetch = FetchType.EAGER,
-	        mappedBy = "user",
-	        cascade = CascadeType.ALL,
-	        orphanRemoval = false
+			cascade = CascadeType.ALL,
+	        mappedBy = "user"
+	       // orphanRemoval = true
 	    )
-	    private List<Authorities> authorities;
+	@org.hibernate.annotations.ForeignKey(name = "none")
+	private List<Authorities> authorities;
 	
 
 	
@@ -86,6 +88,8 @@ public class User implements Serializable{
 	public List<Authorities> getAuthorities() {
 		return authorities;
 	}
+	
+
 	
 	public void addAuthority(Authorities authority) {
 		authorities.add(authority);

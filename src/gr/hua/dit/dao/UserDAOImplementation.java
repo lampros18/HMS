@@ -9,6 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 
 @SuppressWarnings("deprecation")
@@ -23,6 +24,13 @@ public class UserDAOImplementation implements UserDAO {
 		// get current hibernate session
 		Session currentSession = sessionFactory.getCurrentSession();
 		currentSession.saveOrUpdate(user);
+	}
+	
+	@Override
+	public void updateUser(User user) {
+		// get current hibernate session
+		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.merge(user);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -68,6 +76,7 @@ public class UserDAOImplementation implements UserDAO {
 	@Override
 	public int updateUsername(int id, String username) {
 		Session curSession = sessionFactory.getCurrentSession();
+		//curSession.flush();
 		
 		User user = curSession.find(User.class, id);
 		
@@ -75,11 +84,30 @@ public class UserDAOImplementation implements UserDAO {
 		
 	
 		try {
-			curSession.update(user);
+			curSession.merge(user);
 			return 0;
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return -1;
 		}
+	}
+	
+	@Override
+	public void clearAuthorities(User user) {
+		Session session = sessionFactory.getCurrentSession();
+		try {
+		  String hql = "delete from Authorities where username =: username";
+		  Query query = session.createQuery(hql);
+		  query.setParameter("username", user.getUsername());
+		  System.out.println(query.executeUpdate());
+		
+
+		
+		} catch (Throwable t) {
+		
+		  throw t;
+		}
+		
 	}
 	
 

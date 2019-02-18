@@ -19,6 +19,12 @@ public class UserServiceImplementation implements UserService {
 	public void createUser(User user) {
 		userDAO.insertUser(user);
 	}
+	
+	@Override
+	@Transactional
+	public void updateUser(User user) {
+		userDAO.updateUser(user);
+	}
 
 	@Override
 	@Transactional
@@ -51,5 +57,9 @@ public class UserServiceImplementation implements UserService {
 		return userDAO.updateUsername(id, username);
 	}
 
-
+	@Override
+	@Transactional
+	public void clearAuthorities(User user) {
+		userDAO.clearAuthorities(user);
+	}
 }

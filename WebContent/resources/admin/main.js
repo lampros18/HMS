@@ -190,32 +190,47 @@ $(document)
 										Pagination();
 									});
 
+					$(document).click(function(e) {
+						//did not click a popover toggle or popover
+						if ($(e.target).data('toggle') !== 'popover'
+								&& $(e.target).parents(
+										'.popover.in').length === 0
+								&& $(e.target).data('input') !== 'input') {
+							SavePopoverData();
+							//console.log(document.getElementById("password"+$('[data-toggle="popover"]')[0].parentNode.parentNode.parentNode.id).value);
+							$('[data-toggle="popover"]')
+									.popover('hide');
+						}
+						if ($(e.target).data('toggle') == 'popover') {
+							//SavePopoverData();
+							$('[data-toggle="popover"]')
+									.popover('hide');
+							$(e.target).popover('show');
+							document.getElementById("password"
+									+ $(e.target).parent()
+											.parent().parent()
+											.attr('id')).disabled = true;
+							setTimeout(function(){
+							document.getElementById("password"
+									+ $(e.target).parent()
+											.parent().parent()
+											.attr('id')).value = popoverData[$(
+									e.target).parent().parent()
+									.parent().attr('id')]==null?"":popoverData[$(
+											e.target).parent().parent()
+											.parent().attr('id')];
+							document.getElementById("password"
+									+ $(e.target).parent()
+											.parent().parent()
+											.attr('id')).disabled = false;
+							},300);
+						}
+					});
 					$('body')
 							.on(
 									'click',
 									function(e) {
-										//did not click a popover toggle or popover
-										if ($(e.target).data('toggle') !== 'popover'
-												&& $(e.target).parents(
-														'.popover.in').length === 0
-												&& $(e.target).data('input') !== 'input') {
-											SavePopoverData();
-											//console.log(document.getElementById("password"+$('[data-toggle="popover"]')[0].parentNode.parentNode.parentNode.id).value);
-											$('[data-toggle="popover"]')
-													.popover('hide');
-										}
-										if ($(e.target).data('toggle') == 'popover') {
-											//SavePopoverData();
-											$('[data-toggle="popover"]')
-													.popover('hide');
-											$(e.target).popover('show');
-											document.getElementById("password"
-													+ $(e.target).parent()
-															.parent().parent()
-															.attr('id')).value = popoverData[$(
-													e.target).parent().parent()
-													.parent().attr('id')];
-										}
+										
 									});
 				});
 var popoverData = [];
@@ -737,8 +752,7 @@ function editUser(uid) {
 						.stringify({
 							id : uid,
 							username : $("#" + uid).find("td:eq(1)").text(),
-							password : document
-									.getElementById("password" + uid).value,
+							password : popoverData[uid] == null? ""  : popoverData[uid] ,
 							enabled : document.getElementById("enabled_switch"
 									+ uid).checked ? "1" : "0"
 						}));
@@ -757,8 +771,7 @@ function editUser(uid) {
 							employeeAuthority : document
 									.getElementById("employee_switch" + uid).checked ? 1
 									: 0,
-							password : document
-									.getElementById("password" + uid).value,
+							password : popoverData[uid] == null? ""  : popoverData[uid] ,
 							enabled : document.getElementById("enabled_switch"
 									+ uid).checked ? "1" : "0"
 						}));
@@ -793,7 +806,7 @@ function employeeSwitch(id) {
 	}
 }
 
-var maxPageRows = 1;
+var maxPageRows = 3;
 var currentPage = 0;
 var maxPages = 1;
 function NextPage() {
