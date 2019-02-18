@@ -1,7 +1,9 @@
 package gr.hua.dit.controller;
 
 import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import gr.hua.dit.entity.User;
 import gr.hua.dit.request.EmployeeRequestHandler;
 import gr.hua.dit.service.UserService;
@@ -19,6 +22,8 @@ public class HomeController {
 
 	@Autowired
 	private UserService userService;
+	
+	
 
 	@GetMapping("/")
 	public String showHomePage(Principal principal) {
@@ -71,5 +76,9 @@ public class HomeController {
 
 		return response.toString();
 	}
+	
+
+	
+
 
 }

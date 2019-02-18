@@ -29,6 +29,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <style>
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
 .container {
 	margin: 0 auto;
 }
@@ -39,12 +40,17 @@
 	min-width: 280px;
 }
 
+html{
+	height:100%;
+}
+
 body {
-	background: #8e9eab; /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);
-	/* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to right, #eef2f3, #8e9eab);
-	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  font-family:'Roboto Condensed';
+  background-image: url(https://www.pixelstalk.net/wp-content/uploads/2016/10/Free-Wallpapers-Anime-Landscape.jpg);
+  height: 100%; 
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>
 
@@ -58,9 +64,9 @@ body {
 
 		<div id="loginbox">
 
-			<div class="panel panel-info body-style">
+			<div class="panel panel-info body-style" style="box-shadow: 12px 12px 130px #000;">
 
-				<div class="panel-heading">
+				<div class="panel-heading" style="color: #fff;background-color: #0B69E3;border-color: #0B69E3">
 					<div class="panel-title">Sign In</div>
 				</div>
 
@@ -83,7 +89,7 @@ body {
 											Invalid username or password.</div>
 
 									</c:if>
-									<!-- ÎÎ»ÎµÎ³ÏÎ¿Ï Î³Î¹Î± Logout -->
+									
 									<c:if test="${param.logout != null}">
 
 										<i id="info2"
@@ -118,8 +124,8 @@ body {
 
 						<!-- Login/Submit Button -->
 						<div style="margin-top: 10px" class="form-group">
-							<div class="col-sm-6 controls">
-								<button type="submit" class="btn btn-primary " onclick="return false;">Login</button>
+							<div style="text-align:center">
+								<button style="text-align:center;padding: 8px 16px 8px 16px;background-color:#0B69E3" type="submit" class="btn btn-primary " onclick="return false;">Login</button>
 
 
 							</div>

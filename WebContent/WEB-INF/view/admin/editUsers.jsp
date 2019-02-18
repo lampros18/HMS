@@ -23,7 +23,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/admin/style.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/admin/menu.css">
+	href="${pageContext.request.contextPath}/resources/menu.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/hamburgers.css">
 </head>
@@ -31,7 +31,9 @@
 <body>
 	<!--<div style="height: 100%;width:100%;background: url(https://pixabay.com/get/e837b90e2dfc003ed1534705fb0938c9bd22ffd41cb4114597f4c47fa3/books-1281581_1920.jpg);background-size: cover;box-sizing: unset;position: fixed;z-index: -100;top: 0;filter: grayscale(50%) blur(6px);"></div>
 	-->
-
+<div style="position:fixed; left: 10px; top: 65px;">
+		 / Admin / <a href="${pageContext.request.contextPath}/admin/editUsers">Home</a>
+	</div>
 	<div
 		style="background-color: #3e8ef7; width: 130%; height: 56px; position: fixed; top: 0;">
 		<button class="hamburger hamburger--3dy" type="button" id="hamburger">
@@ -54,7 +56,7 @@
 			
 			<c:choose>
 				<c:when test="${authorities.size()>1}">
-					<li class='active has-sub'><a href='#'><span>Home</span></a>
+					<li class='active has-sub'><a href='#' style="font-weight: 900;"><span>Home</span></a>
 						<ul>
 							<c:forEach var="i" begin="0" end="${authorities.size()-1}">
 									<c:if test="${authorities.get(i).getAuthority().equals(\"ROLE_ADMIN\")}">
@@ -74,23 +76,23 @@
 				</c:when>
 				<c:otherwise>
 					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_ADMIN\")}">
-						<li><a href="${pageContext.request.contextPath}/admin/editUsers"><span>Home</span></a></li>
+						<li><a href="${pageContext.request.contextPath}/admin/editUsers" style="font-weight: 900;"><span>Home</span></a></li>
 					</c:if>
 					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_FOREMAN\")}">
-						<li><a href="${pageContext.request.contextPath}/foreman/home"><span>Home</span></a></li>
+						<li><a href="${pageContext.request.contextPath}/foreman/home" style="font-weight: 900;"><span>Home</span></a></li>
 					</c:if>
 					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_EMPLOYEE\")}">
-						<li><a href="${pageContext.request.contextPath}/employee/employeeHome"><span>Home</span></a></li>
+						<li><a href="${pageContext.request.contextPath}/employee/employeeHome" style="font-weight: 900;"><span>Home</span></a></li>
 					</c:if>
 					<c:if test="${authorities.get(0).getAuthority().equals(\"ROLE_STUDENT\")}">
-						<li><a href="${pageContext.request.contextPath}/student/studentHome"><span>Home</span></a></li>
+						<li><a href="${pageContext.request.contextPath}/student/studentHome" style="font-weight: 900;"><span>Home</span></a></li>
 					</c:if>
 					
 				</c:otherwise>
 			</c:choose>
 
-			<li><a href='#'><span>About</span></a></li>
-			<li><a href='#'><span>Contact</span></a></li>
+			<li><a href='${pageContext.request.contextPath}/about'><span>About</span></a></li>
+			<li><a href='${pageContext.request.contextPath}/contact'><span>Contact</span></a></li>
 			<li><a href='#' id="logoutBtn"><span>Logout</span></a></li>
 
 			<li

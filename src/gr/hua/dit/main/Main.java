@@ -1,15 +1,6 @@
 package gr.hua.dit.main;
 
-import org.quartz.CronScheduleBuilder;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
 
-import gr.hua.dit.job.EndingDateJob;
 
 public class Main {
 

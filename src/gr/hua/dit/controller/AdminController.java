@@ -32,7 +32,7 @@ import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
 
 @Controller
-@SessionAttributes("username")
+@SessionAttributes({"username", "authorities"})
 @RequestMapping("admin")
 public class AdminController {
 

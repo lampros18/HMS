@@ -349,7 +349,6 @@ public class Aspect {
 
 		Student student = (Student) objects[0];
 
-		Session currentSession = sessionFactory.getCurrentSession();
 
 		if (!crypto.isEncrypted(student.getSurname())) {
 
@@ -404,7 +403,7 @@ public class Aspect {
 		if (!crypto.isEncrypted(phone)) {
 
 			try {
-				Object result = joinPoint.proceed(new Object[] { crypto.encrypt(phone) });
+				joinPoint.proceed(new Object[] { crypto.encrypt(phone) });
 			} catch (Throwable e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -434,7 +433,7 @@ public class Aspect {
 		if (!crypto.isEncrypted(phone)) {
 
 			try {
-				Object result = joinPoint.proceed(new Object[] { crypto.encrypt(phone) });
+				joinPoint.proceed(new Object[] { crypto.encrypt(phone) });
 			} catch (Throwable e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

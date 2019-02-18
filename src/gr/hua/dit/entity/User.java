@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -40,6 +39,7 @@ public class User implements Serializable{
 	@Column(name="enabled")
 	private String enabled;
 	
+	@SuppressWarnings({ "deprecation" })
 	@OneToMany(
 			fetch = FetchType.EAGER,
 			cascade = CascadeType.ALL,

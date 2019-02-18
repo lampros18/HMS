@@ -44,7 +44,7 @@ public class EndingDateJob implements Job {
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.81 Safari/537.36");
 
 		try {
-			int responseCode = con.getResponseCode();
+			con.getResponseCode();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

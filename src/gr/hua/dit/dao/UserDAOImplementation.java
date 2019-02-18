@@ -6,10 +6,10 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import gr.hua.dit.entity.Authorities;
 import gr.hua.dit.entity.User;
 
 @SuppressWarnings("deprecation")
@@ -97,7 +97,8 @@ public class UserDAOImplementation implements UserDAO {
 		Session session = sessionFactory.getCurrentSession();
 		try {
 		  String hql = "delete from Authorities where username =: username";
-		  Query query = session.createQuery(hql);
+		  @SuppressWarnings("rawtypes")
+		Query query = session.createQuery(hql);
 		  query.setParameter("username", user.getUsername());
 		  System.out.println(query.executeUpdate());
 		
