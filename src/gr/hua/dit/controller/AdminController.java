@@ -280,7 +280,7 @@ public class AdminController {
 			}
 			
 			user.setEnabled(json.getString("enabled"));
-			if (json.getString("password") != "") {
+			if (!json.getString("password").equals("")) {
 				BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 				user.setPassword(bCryptPasswordEncoder.encode(json.getString("password")));
 			}
