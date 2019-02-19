@@ -6,6 +6,7 @@ function init() {
 			document.getElementById("table_body").innerHTML = "";
 			loadTableAndData(xhttp.responseText);
 			removeLoading();
+			saveState();
 			$('[data-toggle="popover"]').popover();
 		}
 	};
@@ -186,7 +187,7 @@ $(document)
 											}
 										}
 										currentPage = 0;
-										maxPages = count / maxPageRows;
+										maxPages = Math.ceil(count / maxPageRows);
 										Pagination();
 									});
 
@@ -272,7 +273,7 @@ function loadTableAndData(response) {
 					json.users[i].id);
 		createEnabledColumn(json.users[i].enabled, json.users[i].id);
 	}
-	maxPages = count / maxPageRows;
+	maxPages = Math.ceil(count / maxPageRows);
 }
 
 function createTableRow(id, tableBody) {
@@ -829,6 +830,8 @@ function PrevPage() {
 }
 function SetPage(page) {
 	currentPage = page;
+	if(currentPage < 0)
+		currentPage = 0;
 	Pagination();
 }
 function Pagination() {

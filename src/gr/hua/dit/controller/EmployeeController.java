@@ -21,10 +21,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.itextpdf.text.DocumentException;
 
@@ -40,6 +42,7 @@ import gr.hua.dit.service.HousingApplicationService;
 import gr.hua.dit.service.StudentService;
 import gr.hua.dit.service.UserService;
 
+@SessionAttributes({"username", "authorities"})
 @Controller
 @RequestMapping("employee")
 public class EmployeeController {
@@ -308,6 +311,20 @@ public class EmployeeController {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@ModelAttribute("authorities")
+	public List<Authorities> getAuthorities(Principal principal) {
+		User user = userService.findUserByUsername(principal.getName());
+		return user.getAuthorities();
+	}
+	
+	@ModelAttribute("username")
+	public String getUsername(Principal principal) {
+		if (crypto.isEncrypted(principal.getName()))
+			return crypto.decrypt(principal.getName());
+		else
+			return principal.getName();
 	}
 
 }

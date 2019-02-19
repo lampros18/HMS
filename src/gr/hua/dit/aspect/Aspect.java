@@ -53,84 +53,70 @@ public class Aspect {
 		}
 
 	}
-	
 
-
-	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getHousingApplicationById(int))", returning = "result")
-	public void decryptHousingApplication(HousingApplication result) {
-
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getHousingApplicationById(int))", returning = "application")
+	public void decryptHousingApplication(HousingApplication application) {
+		Session currentSession = sessionFactory.getCurrentSession();
 		System.out.println(
 				"pointcut @AfterReturning gr.hua.dit.service.HousingApplicationServiceImplementation.getHousingApplicationById(int)");
-		Session currentSession = sessionFactory.getCurrentSession();
+		currentSession.evict(application);
 
-		currentSession.evict(result);
+		currentSession.evict(application.getStudent());
 
-		currentSession.evict(result.getStudent());
-		
-		
-		
-		
+		currentSession.evict(application.getStudent().getUser());
 
-		if (crypto.isEncrypted(result.getStudent().getUser().getUsername())) {
+		if (crypto.isEncrypted(application.getFileType())) {
 
-			result.getStudent().getUser().setUsername(result.getStudent().getUser().getUsername());
+			application.setCreated_at(crypto.decrypt(application.getCreated_at()));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getAddress())) {
+		if (crypto.isEncrypted(application.getStudent().getAddress())) {
 
-			result.getStudent().setAddress(result.getStudent().getAddress());
+			application.getStudent().setAddress(crypto.decrypt(application.getStudent().getAddress()));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getBirthdate())) {
+		if (crypto.isEncrypted(application.getStudent().getBirthdate())) {
 
-			result.getStudent().setBirthdate((result.getStudent().getBirthdate()));
+			application.getStudent().setBirthdate(crypto.decrypt(application.getStudent().getBirthdate()));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getCreatedBy())) {
+		if (crypto.isEncrypted(application.getStudent().getCreatedBy())) {
 
-			result.getStudent().setCreatedBy(result.getStudent().getCreatedBy());
+			application.getStudent().setCreatedBy((crypto.decrypt(application.getStudent().getCreatedBy())));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getDepartment())) {
+		if (crypto.isEncrypted(application.getStudent().getDepartment())) {
 
-			result.getStudent().setDepartment(result.getStudent().getDepartment());
+			application.getStudent().setDepartment((crypto.decrypt(application.getStudent().getDepartment())));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getName())) {
+		if (crypto.isEncrypted(application.getStudent().getName())) {
 
-			result.getStudent().setName(result.getStudent().getName());
+			application.getStudent().setName((crypto.decrypt(application.getStudent().getName())));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getPhone())) {
+		if (crypto.isEncrypted(application.getStudent().getPhone())) {
 
-			result.getStudent().setPhone(result.getStudent().getPhone());
+			application.getStudent().setPhone((crypto.decrypt(application.getStudent().getPhone())));
 		}
 
-		if (crypto.isEncrypted(result.getStudent().getSurname())) {
+		if (crypto.isEncrypted(application.getStudent().getSurname())) {
 
-			result.getStudent().setSurname(result.getStudent().getSurname());
+			currentSession.evict(application.getStudent());
+
+			application.getStudent().setSurname(crypto.decrypt(application.getStudent().getSurname()));
 		}
 
-		currentSession.evict(result.getStudent().getUser());
+		if (crypto.isEncrypted(application.getStudent().getUser().getUsername())) {
 
-	
-		if (crypto.isEncrypted(result.getStudent().getSurname())) {
-
-			result.getStudent().setSurname(crypto.decrypt(result.getStudent().getSurname()));
-		}
-
-		if (crypto.isEncrypted(result.getStudent().getPhone())) {
-
-			result.getStudent().setPhone(crypto.decrypt(result.getStudent().getPhone()));
-		}
-		
-		if(crypto.isEncrypted(result.getStudent().getUser().getUsername())) {
-			
-			result.getStudent().getUser().setUsername(crypto.decrypt(
-					result.getStudent().getUser().getUsername()));
+			currentSession.evict(application.getStudent().getUser());
+			application.getStudent().getUser()
+					.setUsername(crypto.decrypt(application.getStudent().getUser().getUsername()));
 		}
 
 	}
+
+	
 
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getAllUnverifiedHousingApplications())", returning = "result")
 	public void decryptHousingApplication(List<HousingApplication> result) {
@@ -142,13 +128,11 @@ public class Aspect {
 		for (HousingApplication application : result) {
 
 			currentSession.evict(application);
-			
+
 			currentSession.evict(application.getStudent());
-			
+
 			currentSession.evict(application.getStudent().getUser());
-			
-			
-			
+
 			if (crypto.isEncrypted(application.getFileType())) {
 
 				application.setCreated_at(crypto.decrypt(application.getCreated_at()));
@@ -249,13 +233,13 @@ public class Aspect {
 		Session currentSession = sessionFactory.getCurrentSession();
 
 		currentSession.evict(result);
-		
+
 		currentSession.evict(result.getUser());
-		
-		List<HousingApplication> applications=result.getHousingApplications();
-		
-		for(HousingApplication application:applications) {
-			
+
+		List<HousingApplication> applications = result.getHousingApplications();
+
+		for (HousingApplication application : applications) {
+
 			currentSession.evict(application);
 		}
 
@@ -350,7 +334,6 @@ public class Aspect {
 
 		Student student = (Student) objects[0];
 
-
 		if (!crypto.isEncrypted(student.getSurname())) {
 
 			student.setSurname(crypto.encrypt(student.getSurname()));
@@ -389,8 +372,6 @@ public class Aspect {
 		}
 
 	}
-	
-	
 
 	@Around("execution(* gr.hua.dit.entity.SUser.setPhone(String))")
 	public void encryptPhone(ProceedingJoinPoint joinPoint) {
@@ -419,8 +400,6 @@ public class Aspect {
 			}
 		}
 	}
-	
-
 
 	@Around("execution(* gr.hua.dit.entity.SUser.setAddress(String))")
 	public void encryptAddress(ProceedingJoinPoint joinPoint) {
@@ -478,9 +457,7 @@ public class Aspect {
 
 		return null;
 	}
-	
 
-	
 	@Around("execution(* gr.hua.dit.service.UserServiceImplementation.updateUsername(..))")
 	public Object encryptUpdateUsername(ProceedingJoinPoint joinPoint) {
 
@@ -488,11 +465,9 @@ public class Aspect {
 
 		Object[] objects = joinPoint.getArgs();
 
-
-
 		Object[] encryptedUsername = new Object[] { crypto.encrypt((String) objects[1]) };
 		try {
-			Object result = joinPoint.proceed(new Object[] {objects[0], encryptedUsername[0]});
+			Object result = joinPoint.proceed(new Object[] { objects[0], encryptedUsername[0] });
 
 			return result;
 		} catch (Throwable e) {
@@ -544,8 +519,6 @@ public class Aspect {
 		return null;
 	}
 
-	
-
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getAllHousingApplicationsOrderedDesc())", returning = "result")
 	public void decryptHousingApplicationForEmail(List<HousingApplication> result) {
 
@@ -556,13 +529,11 @@ public class Aspect {
 		for (HousingApplication application : result) {
 
 			currentSession.evict(application);
-			
+
 			currentSession.evict(application.getStudent());
-			
+
 			currentSession.evict(application.getStudent().getUser());
-			
-			
-			
+
 			if (crypto.isEncrypted(application.getFileType())) {
 
 				application.setCreated_at(crypto.decrypt(application.getCreated_at()));
@@ -619,17 +590,14 @@ public class Aspect {
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.EmployeeService.getAllEmployees())", returning = "result")
 	public void decryptHousingGetAllEmployees(List<Employee> result) {
 
-
 		Session currentSession = sessionFactory.getCurrentSession();
 
 		for (Employee employee : result) {
 
 			currentSession.evict(employee);
-			
+
 			currentSession.evict(employee.getUser());
-			
-			
-			
+
 			if (crypto.isEncrypted(employee.getUser().getUsername())) {
 
 				employee.getUser().setUsername(crypto.decrypt(employee.getUser().getUsername()));
@@ -638,7 +606,7 @@ public class Aspect {
 		}
 
 	}
-	
+
 //	
 //	@Before("execution(* org.springframework.stereotype.*.()")
 //	public void sercurityAspect(JoinPoint joinpoint) {
