@@ -75,14 +75,13 @@ public class Student extends SUser implements Serializable{
 	public Student(JSONObject jsonObject) {
 		this(
 					jsonObject.getString("name"),
-					jsonObject.getString("surname"),
-					"2005-05-13",
-//					jsonObject.getString("birthDate"),
+					jsonObject.getString("surname"),					
+					jsonObject.getString("birthDate"),
 					jsonObject.getString("department"),
 					jsonObject.getString("phone"),
 					jsonObject.getString("address")
-					,"2005-05-13 07:15:31",
-					"2005-05-13 07:15:31",
+					,jsonObject.getString("createdAt"),
+					jsonObject.getString("updatedAt"),
 					jsonObject.getString("createdBy")
 					,jsonObject.getBoolean("postGraduate"),
 					jsonObject.getInt("yearOfEnrollment")
@@ -148,16 +147,19 @@ public class Student extends SUser implements Serializable{
 			return false;
 		}
 
-		if (!jsonObject.get("birthDate").toString().matches("\\d{2}\\/\\d{2}\\/\\d{4}")) {
+		
+		if (!jsonObject.get("birthDate").toString().matches("^\\d{4}-\\d{2}-\\d{2}$")) {
 
 			return false;
 		}
-
+		
+		
 		if (!jsonObject.get("yearOfEnrollment").toString().matches("^(\\d){4}$")) {
 
 			return false;
 		}
 
+		
 		// Άν έχει βάλει βλακείες ο χρήστης, θα σκάσει
 		try {
 
@@ -165,10 +167,11 @@ public class Student extends SUser implements Serializable{
 
 		} catch (Exception e) {
 
+			e.printStackTrace();;
 			return false;
 		}
-
-		if (!"Geography Home economics and ecology Informatics and telematics International master of sustainable tourism development Nutrition and dietics"
+		
+		if (!"Geography Home economics and ecology Informatics and Telematics International master of sustainable tourism development Nutrition and dietics"
 				.contains(jsonObject.get("department").toString())) {
 
 			return false;
@@ -179,7 +182,7 @@ public class Student extends SUser implements Serializable{
 			return false;
 		}
 
-		if (!jsonObject.get("address").toString().matches("^(\\d|-|.){10,150}$")) {
+		if (!jsonObject.get("address").toString().matches("^(\\d|-|.){3,150}$")) {
 
 			return false;
 		}

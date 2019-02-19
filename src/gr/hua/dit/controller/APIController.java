@@ -35,8 +35,6 @@ public class APIController {
 	@Autowired
 	private UserService userService;
 
-
-	
 	@Autowired
 	private StudentService studentService;
 
@@ -49,11 +47,11 @@ public class APIController {
 	@PostMapping("authenticate")
 	@ResponseBody
 	public String Authenticate(HttpServletRequest request) {
-		System.out.println(request.getRemoteAddr());
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		User user = userService.findUserByUsername(username);
-		if (user == null || (!user.isStudent())) {
+		Student student = studentService.findStudentByUsername(username);
+		if (user == null || (!user.isStudent()) || student.getCreatedAt() == null || student.getCreatedBy() == null) {
 			JSONObject json = new JSONObject();
 			json.put("status", "fail");
 			return json.toString();

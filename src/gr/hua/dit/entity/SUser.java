@@ -110,6 +110,14 @@ public class SUser{
 		this.phone = phone;
 	}
 
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 
 
 

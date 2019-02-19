@@ -7,7 +7,10 @@ import java.net.ProtocolException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -74,58 +76,44 @@ public class EmployeeController {
 		EmployeeRequestHandler employeeRequestHandler = new EmployeeRequestHandler();
 
 		JSONObject jsonObject = new JSONObject(employeeRequestHandler.getSringifiedHttpResponse(request));
-		jsonObject.put("createdBy", principal.getName());
-//		String ecryptedPassword=BCrypt.hashpw("pass", BCrypt.gensalt());
+		
+		SimpleDateFormat dateFormatGmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormatGmt.setTimeZone(TimeZone.getTimeZone("GMT"));
+	
 
 		if (Student.validStudent(jsonObject)) {
-			User user = userService.findUserByUsername(jsonObject.getString("email"));
+			try {
+			Student student = studentService.findStudentByUsername(jsonObject.getString("email"));
+			student.setName(jsonObject.getString("name"));
+			student.setSurname(jsonObject.getString("surname"));
+			student.setBirthdate(jsonObject.getString("birthDate"));
+			student.setYearOfEnrollment(Integer.parseInt(jsonObject.getString("yearOfEnrollment")));
+			student.setPostgraduate(jsonObject.getBoolean("postGraduate"));
+			student.setPhone(jsonObject.getString("phone"));
+			student.setDepartment(jsonObject.getString("department"));
+			student.setAddress(jsonObject.getString("address"));
+			
+			if( student.getCreatedAt() == null )
+				student.setCreatedAt(dateFormatGmt.format(new Date()));
+			student.setUpdatedAt(dateFormatGmt.format(new Date()));
+			student.setCreatedBy(principal.getName());
+			if(studentService.insertStudent(student) == 0 ) {
+				JSONObject json = new JSONObject();
+				json.put("result", 200).toString();
+				json.put("username", student.getUser().getUsername());
+				return json.toString();
+			}
+			else
+				return new JSONObject().put("result", 500).toString();
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				return new JSONObject().put("result", 500).toString();
+			}
+			
 
-//			Student student2 = new Student(jsonObject);
-
-//			if(user!=null) {
-//				
-//				System.out.println("\n\n");
-//				System.out.println(user);
-//				System.out.println("\n\n");
-//			}else {
-			// Δημιουργία User
-
-			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-			user = new User(jsonObject.getString("email"), bCryptPasswordEncoder.encode("pass"), "1");
-
-			Authorities authorities = new Authorities("ROLE_STUDENT");
-
-			user.addAuthority(authorities);
-
-//				
-//				userService.createUser(user);
-//				
-
-			Student student = new Student(jsonObject);
-//				
-//				
-//				
-//				
-			student.setUser(user);
-//				
-			studentService.insertStudent(student);
-//				
-//				
-//			}
-
-//			student.setUser(user);
-//			System.out.println(student.getUser().getUsername());
-//			System.out.println(studentService.insertStudent(student));
-
-			JSONObject response = new JSONObject();
-			response.put("result", 200);
-
-			response.put("username", crypto.decrypt(student.getUser().getUsername()));
-
-			return response.toString();
 		}
 
-		return "{result:407}";
+		return new JSONObject().put("result", 500).toString();
 
 	}
 
@@ -133,25 +121,20 @@ public class EmployeeController {
 	@ResponseBody
 	public String getAllStudents(HttpServletRequest request) {
 
+		JSONArray json = new JSONArray();
+		
 		List<Student> students = studentService.getStudents();
-
-		JSONArray jsonv = new JSONArray();
-
-		for (Student student : students) {
-
-			jsonv.put(student.getJsonFromStudent());
+		
+		if( students != null )
+		{
+			for( Student student : students ) {
+//				if(student.getCreatedAt() == null && student.getCreatedBy() == null)
+					json.put(student.getUser().getUsername());
+			}
+			return json.toString();
 		}
 
-		if (jsonv.length() > 0) {
-			return jsonv.toString();
-		}
-
-//			Student student = new Student(jsonObject);
-//			student.setUser(user);
-//			System.out.println(student.getUser().getUsername());
-//			System.out.println(studentService.insertStudent(student));
-
-		return "{}";
+		return "[]";
 	}
 
 	@RequestMapping(value = "updateStudent", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -186,6 +169,7 @@ public class EmployeeController {
 		}
 
 	}
+	
 
 	@RequestMapping(value = "getHousingApplications", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody

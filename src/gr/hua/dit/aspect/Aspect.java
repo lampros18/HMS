@@ -116,8 +116,6 @@ public class Aspect {
 
 	}
 
-	
-
 	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.HousingApplicationServiceImplementation.getAllUnverifiedHousingApplications())", returning = "result")
 	public void decryptHousingApplication(List<HousingApplication> result) {
 
@@ -219,6 +217,7 @@ public class Aspect {
 
 			result.setPhone(crypto.decrypt(result.getPhone()));
 		}
+	
 
 	}
 
@@ -280,12 +279,13 @@ public class Aspect {
 
 		Session currentSession = sessionFactory.getCurrentSession();
 
+		
 		for (Student student : result) {
 
 			currentSession.evict(student);
 
 			currentSession.evict(student.getUser());
-
+			
 			if (crypto.isEncrypted(student.getUser().getUsername())) {
 
 				student.getUser().setUsername(crypto.decrypt(student.getUser().getUsername()));
@@ -320,6 +320,7 @@ public class Aspect {
 
 				student.setCreatedBy(crypto.decrypt(student.getCreatedBy()));
 			}
+			
 
 		}
 
@@ -334,42 +335,43 @@ public class Aspect {
 
 		Student student = (Student) objects[0];
 
-		if (!crypto.isEncrypted(student.getSurname())) {
 
-			student.setSurname(crypto.encrypt(student.getSurname()));
-		}
+			if (!crypto.isEncrypted(student.getSurname())) {
 
-		if (!crypto.isEncrypted(student.getAddress())) {
+				student.setSurname(crypto.encrypt(student.getSurname()));
+			}
 
-			student.setAddress(crypto.encrypt(student.getAddress()));
-		}
+			if (!crypto.isEncrypted(student.getAddress())) {
 
-		if (!crypto.isEncrypted(student.getName())) {
+				student.setAddress(crypto.encrypt(student.getAddress()));
+			}
 
-			student.setName(crypto.encrypt(student.getName()));
-		}
+			if (!crypto.isEncrypted(student.getName())) {
 
-		if (!crypto.isEncrypted(student.getPhone())) {
+				student.setName(crypto.encrypt(student.getName()));
+			}
 
-			student.setPhone(crypto.encrypt(student.getPhone()));
-		}
+			if (!crypto.isEncrypted(student.getPhone())) {
 
-		if (!crypto.isEncrypted(student.getDepartment())) {
+				student.setPhone(crypto.encrypt(student.getPhone()));
+			}
 
-			student.setDepartment(crypto.encrypt(student.getDepartment()));
-		}
+			if (!crypto.isEncrypted(student.getDepartment())) {
 
-		if (!crypto.isEncrypted(student.getCreatedBy())) {
+				student.setDepartment(crypto.encrypt(student.getDepartment()));
+			}
 
-			student.setCreatedBy(crypto.encrypt(student.getCreatedBy()));
-		}
+			if (!crypto.isEncrypted(student.getCreatedBy())) {
 
-		User user = student.getUser();
+				student.setCreatedBy(crypto.encrypt(student.getCreatedBy()));
+			}
 
-		if (!crypto.isEncrypted(user.getUsername())) {
+			User user = student.getUser();
 
-			user.setUsername(crypto.encrypt(user.getUsername()));
-		}
+			if (!crypto.isEncrypted(user.getUsername())) {
+
+				user.setUsername(crypto.encrypt(user.getUsername()));
+			}
 
 	}
 

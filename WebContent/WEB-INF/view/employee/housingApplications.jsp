@@ -90,8 +90,9 @@
 				</c:otherwise>
 			</c:choose>
 
+			<li><a href='${pageContext.request.contextPath}/employee/housingApplications' style="font-weight: 900;"><span>Applications</span></a></li>
 			<li><a href='${pageContext.request.contextPath}/about'><span>About</span></a></li>
-			<li><a href='${pageContext.request.contextPath}/contact'style="font-weight: 900;"><span>Contact</span></a></li>
+			<li><a href='${pageContext.request.contextPath}/contact'><span>Contact</span></a></li>
 			<li><a href='#' id="logoutBtn"><span>Logout</span></a></li>
 
 			<li

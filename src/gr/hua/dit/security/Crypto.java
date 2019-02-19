@@ -66,6 +66,8 @@ public class Crypto {
 		}
 
 		public String encrypt(String strToEncrypt, String secret) {
+			if(strToEncrypt == null)
+				return null;
 			try {
 				setKey(secret);
 				Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -104,8 +106,10 @@ public class Crypto {
 	 */
 	public boolean isEncrypted(String text) {
 
+		if(text == null)
+			return false;
+		
 		Pattern pattern = Pattern.compile(".+=$");
-
 		return pattern.matcher(text).matches();
 
 	}
