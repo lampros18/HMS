@@ -124,8 +124,8 @@ body {
 
 						<!-- Login/Submit Button -->
 						<div style="margin-top: 10px" class="form-group">
-							<div style="text-align:center">
-								<button style="text-align:center;padding: 8px 16px 8px 16px;background-color:#0B69E3" type="submit" class="btn btn-primary " onclick="return false;">Login</button>
+							<div class="col-sm-6">
+								<button style="padding: 8px 16px 8px 16px;background-color:#0B69E3" type="submit" class="btn btn-primary " onclick="return false;">Login</button>
 
 
 							</div>
