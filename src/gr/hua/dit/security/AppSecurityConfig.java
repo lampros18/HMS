@@ -38,15 +38,20 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/mail/**").hasIpAddress("127.0.0.1").antMatchers("/api/**").hasIpAddress("185.31.40.17/16")		
+		http.authorizeRequests()
+		.antMatchers("/mail/sendMailStudent").hasIpAddress("127.0.0.1")
+		.antMatchers("/mail/sendMailEmployee").hasIpAddress("127.0.0.1")
+		.antMatchers("/api/**").hasIpAddress("185.31.40.17/16")		
 		.antMatchers("/").hasAnyRole("ADMIN","EMPLOYEE","FOREMAN","STUDENT")
 		.antMatchers("/admin/**").hasRole("ADMIN")
 		.antMatchers("/employee/**").hasRole("EMPLOYEE")
 		.antMatchers("/foreman/**").hasRole("FOREMAN")
 		.antMatchers("/student/**").hasRole("STUDENT")
+		.antMatchers("/mail/sendMailContact").hasAnyRole("ADMIN", "EMPLOYEE", "FOREMAN", "STUDENT")
 			.anyRequest().authenticated()
 		.and().csrf().ignoringAntMatchers("/api/**").and()
-		.csrf().ignoringAntMatchers("/mail/**").and()
+		.csrf().ignoringAntMatchers("/mail/sendMailStudent").and()
+		.csrf().ignoringAntMatchers("/mail/sendMailEmployee").and()
 		.formLogin()
 			.loginPage("/login")
 			.loginProcessingUrl("/authUser")

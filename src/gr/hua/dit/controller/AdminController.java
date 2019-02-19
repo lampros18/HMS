@@ -134,7 +134,7 @@ public class AdminController {
 
 					if (json.getString("email").contains("@"))
 						mailService.sendMail("support@hms.com", json.getString("email"),
-								"Housing managment system credentials", unhashedPassword);
+								"Housing managment system credentials", "Your password is: " + unhashedPassword );
 
 					result.put("status", "200");
 					result.put("result", "The user has been successfully created");

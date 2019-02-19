@@ -267,17 +267,14 @@ public class EmployeeController {
 	}
 
 	private void Check() {
-		if (housingApplicationService.checkRemaining() && generalVariablesService.checkRemaining()) { // True means the
-																										// submission
-																										// period is
-																										// over and
-																										// there
-			
-			
-			
-			
+		if (housingApplicationService.checkRemaining() && generalVariablesService.checkRemaining()) { 
+			// True means the
+			// submission
+			// period is
+			// over and
+			// there
 			// are no other applications left
-			String url = "http://127.0.0.1:8080/HMS/api/sendΕmailStudent";
+			String url = "http://127.0.0.1:8080/HMS/mail/sendMailStudent";
 			URL obj = null;
 			try {
 				obj = new URL(url);

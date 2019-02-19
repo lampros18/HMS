@@ -39,6 +39,7 @@ public class MailController {
 	@RequestMapping(value = "sendMailStudent", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String sendMailStudent() {
+		System.out.println("[LOG] sendMailStudent");
 		List<HousingApplication> housingApplications = housingApplicationService.getAllHousingApplicationsOrderedDesc();
 		int itCounter = 0, geoCounter = 0, ecoCounter = 0, nutritionCounter = 0, tourismCounter = 0;
 		HashMap<String, String> gv = generalVariablesService.getGeneralVariables();
@@ -87,9 +88,12 @@ public class MailController {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
-
-			mailService.sendMail("HMS@alwaysdata.net", hs.getStudent().getUser().getUsername(),
-					"Αποτέλεσμα αίτησης στέγασης", message);
+			try {
+				mailService.sendMail("HMS@alwaysdata.net", hs.getStudent().getUser().getUsername(),
+						"Αποτέλεσμα αίτησης στέγασης", message);
+			} catch (Exception e) {
+				System.out.println("wrong email format");
+			}
 		}
 		return "";
 
@@ -98,38 +102,41 @@ public class MailController {
 	@RequestMapping(value = "sendMailEmployee", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String sendMailEmployee() {
-
+		System.out.println("[LOG] sendMailEmployee");
 		int size = housingApplicationService.getAllUnverifiedHousingApplications().size();
 
 		String message = "";
 		if (size == 0) {
-			message = "Η περίοδος υποβολής δηλώσεων έχει λήξει. Δεν υπάρχουν αιτήσεις στέγασης για έλεγχο";
-			sendMailStudent(); // Attention
-		}else if (size == 1)
+			message = "Η περίοδος υποβολής δηλώσεων έχει λήξει. Δεν υπάρχουν περαιτέρω αιτήσεις στέγασης για έλεγχο.";
+			sendMailStudent();
+		} else if (size == 1)
 			message = "Η περίοδος υποβολής δηλώσεων έχει λήξει. Απομένει " + size + " αίτηση στέγασης για έλεγχο.";
 		else
 			message = "Η περίοδος υποβολής δηλώσεων έχει λήξει. Απομένουν " + size + " αιτήσεις στέγασης για έλεγχο.";
 		for (Employee employee : employeeService.getAllEmployees())
-			mailService.sendMail("HMS@alwaysdata.net", employee.getUser().getUsername(), "Ενημέρωση αιτήσεων στέγασης",
-					message);
+			try {
+				mailService.sendMail("HMS@alwaysdata.net", employee.getUser().getUsername(),
+						"Ενημέρωση αιτήσεων στέγασης", message);
+			} catch (Exception e) {
+				System.out.println("wrong email format");
+			}
 		return "";
 	}
-	
+
 	@RequestMapping(value = "sendMailContact", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String sendMailContact(HttpServletRequest request, Principal principal) {
-		String username = principal.getName();
-		String message = request.getParameter("message");
+		String message = "Message from: " + principal.getName() + "\n\n" + request.getParameter("message");
 		JSONObject json = new JSONObject();
 		try {
-		mailService.sendMail(username, "alexkalog@alwaysdata.net", "Contact form internal",
-				message);
-		json.put("status", "success");
-		return json.toString();
+			mailService.sendMail("alexkalog@alwaysdata.net", "alexkalog@alwaysdata.net", "Internal contact form",
+					message);
+			json.put("status", "success");
+			return json.toString();
 		} catch (Exception e) {
 			json.put("status", "error");
 			return json.toString();
 		}
-		
+
 	}
 }

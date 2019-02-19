@@ -139,7 +139,7 @@ body{
 						
 					</div>
 					<!-- Place for messages: error, alert etc ... -->
-					<div class="form-group body-style">
+					<div class="form-group body-style" style="margin-top: 1rem;">
 						<div class="col-xs-15">
 							<div>
 								<div class="alert alert-success" role="alert" id="success" style="display: none;">

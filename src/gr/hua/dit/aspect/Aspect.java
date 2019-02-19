@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
+import gr.hua.dit.entity.Employee;
 import gr.hua.dit.entity.HousingApplication;
 import gr.hua.dit.entity.Student;
 import gr.hua.dit.entity.User;
@@ -478,6 +479,8 @@ public class Aspect {
 		return null;
 	}
 	
+
+	
 	@Around("execution(* gr.hua.dit.service.UserServiceImplementation.updateUsername(..))")
 	public Object encryptUpdateUsername(ProceedingJoinPoint joinPoint) {
 
@@ -613,7 +616,28 @@ public class Aspect {
 
 	}
 
-	
+	@AfterReturning(pointcut = "execution(* gr.hua.dit.service.EmployeeService.getAllEmployees())", returning = "result")
+	public void decryptHousingGetAllEmployees(List<Employee> result) {
+
+
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		for (Employee employee : result) {
+
+			currentSession.evict(employee);
+			
+			currentSession.evict(employee.getUser());
+			
+			
+			
+			if (crypto.isEncrypted(employee.getUser().getUsername())) {
+
+				employee.getUser().setUsername(crypto.decrypt(employee.getUser().getUsername()));
+			}
+
+		}
+
+	}
 	
 //	
 //	@Before("execution(* org.springframework.stereotype.*.()")
