@@ -1,8 +1,12 @@
 package gr.hua.dit.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -110,5 +114,22 @@ public class MailController {
 					message);
 		return "";
 	}
-
+	
+	@RequestMapping(value = "sendMailContact", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String sendMailContact(HttpServletRequest request, Principal principal) {
+		String username = principal.getName();
+		String message = request.getParameter("message");
+		JSONObject json = new JSONObject();
+		try {
+		mailService.sendMail(username, "alexkalog@alwaysdata.net", "Contact form internal",
+				message);
+		json.put("status", "success");
+		return json.toString();
+		} catch (Exception e) {
+			json.put("status", "error");
+			return json.toString();
+		}
+		
+	}
 }

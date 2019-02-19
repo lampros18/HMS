@@ -95,5 +95,113 @@ body{
 				</form:form></li>
 		</ul>
 	</div>
+		
+	<div class="container">
+
+		<div id="loginbox">
+
+			<div class="panel panel-info body-style">
+
+				<div class="panel-heading">
+					<div class="panel-title">Contact Us</div>
+				</div>
+
+				<div style="margin-top: 75px;padding: 30px;background-color: #fff;" class="panel-body body-style">
+
+					<!-- Login Form -->
+					<form id="contact-form" method="post" role="form" onsubmit="Submit(event); return false;">
+
+					<div class="messages"></div>
+
+					<div class="controls">
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label for="form_email">Username</label>
+									<input id="form_email" type="email" name="email" class="form-control"  disabled  value='<c:out value="${username}" />'>
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label for="form_message">Message *</label>
+									<textarea id="form_message" name="message" class="form-control" placeholder="Message *" rows="4" required="required" data-error="Please, leave us a message."></textarea>
+									<div class="help-block with-errors"></div>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<input type="submit" class="btn btn-success btn-send" value="Send message">
+							</div>
+						</div>
+						
+					</div>
+					<!-- Place for messages: error, alert etc ... -->
+					<div class="form-group body-style">
+						<div class="col-xs-15">
+							<div>
+								<div class="alert alert-success" role="alert" id="success" style="display: none;">
+									Your form was submitted successfully!
+								</div>
+								<div class="alert alert-warning" role="alert" id="fail" style="display: none;">
+									Something went wrong.
+								</div>
+								<div class="alert alert-warning" role="alert" id="empty" style="display: none;">
+									Please fill in all the required fields.
+								</div>
+								<div class="alert alert-info" role="alert" id="wait" style="display: none;">
+									Please wait...
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+<script>
+	function Submit(e){
+		e.preventDefault();
+		document.getElementById("fail").style.display = "none";
+		document.getElementById("success").style.display = "none";
+		document.getElementById("wait").style.display = "block";
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", '${pageContext.request.contextPath}'+'/mail/sendMailContact', true);
+		xhttp.onreadystatechange = function() {
+			if(this.readyState == 4)
+				document.getElementById("wait").style.display = "none";
+			if (this.readyState == 4 && this.status == 200) {
+				var response = JSON.parse(xhttp.responseText);
+				if(response.status != "success"){
+				   document.getElementById("fail").style.display = "block";
+			   }
+			   else if(response.status == "error"){
+				   document.getElementById("fail").style.display = "block";
+				   document.getElementById("empty").style.display = "none";
+			   }
+			   else if(response.status == "success"){
+				   document.getElementById("fail").style.display = "none";
+				   document.getElementById("success").style.display = "block";
+			   }
+			}
+			else if (this.readyState == 4){
+				document.getElementById("fail").style.display = "block";
+			}
+		};
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+
+		xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xhttp.setRequestHeader(header, token);
+		
+		xhttp.send("message="+encodeURIComponent(document.forms[1].message.value));
+	}
+</script>
 </body>
 </html>
