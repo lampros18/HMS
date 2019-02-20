@@ -46,18 +46,50 @@ $(document)
 
 init();
 
+var data = [];
+var remaining = 0;
 function init() {
 	var xhttp = new XMLHttpRequest();
 
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
-
+			document.getElementsByClassName('btn btn-primary')[1]
+			.setAttribute('style', 'display:none');
 			uncheckedStudents = JSON.parse(xhttp.responseText);
 
-			document.getElementsByTagName('i')[5].textContent = `There are ${uncheckedStudents.length} students to check`;
-			document.getElementsByClassName('input-group')[0]
-					.getElementsByTagName('input')[0].value = uncheckedStudents[0];
-
+			let selectList = document.getElementById("validationServerUsername");
+			let option;
+			let textNode;
+			let studentUsername;
+			for( student of uncheckedStudents ){
+				 option = document.createElement("OPTION");
+				 studentUsername = student.username;
+				 if(student.hasProfile == 0){
+					 textNode = document.createTextNode("-- "+studentUsername);
+					 remaining++;
+				 }
+				 else
+					 textNode = document.createTextNode(studentUsername);
+				option.setAttribute("value", studentUsername);
+				selectList.addEventListener("change", function(){
+					console.log(this.value);
+					setValues(this.value);
+				});
+				option.appendChild(textNode);
+				selectList.appendChild(option);
+				
+				data[studentUsername] = [];
+				data[studentUsername]["name"] = student.name==undefined?"":student.name;
+				data[studentUsername]["surname"] = student.surname==undefined?"":student.surname;
+				data[studentUsername]["birthdate"] = student.birthdate==undefined?"":student.birthdate;
+				data[studentUsername]["yearOfEnrollment"] = student.yearOfEnrollment==undefined?"":student.yearOfEnrollment;
+				data[studentUsername]["isPostgraduate"] = student.isPostgraduate==undefined?"":student.isPostgraduate;
+				data[studentUsername]["department"] = student.department==undefined?"":student.department;
+				data[studentUsername]["phone"] = student.phone==undefined?"":student.phone;
+				data[studentUsername]["address"] = student.address==undefined?"":student.address;
+			}
+			document.getElementById("remaining").innerText = remaining;
+			setValues(document.getElementById("validationServerUsername").value);
 
 			document.getElementsByClassName('form-group')[5].childNodes[1].style['display'] = null;
 
@@ -86,22 +118,32 @@ function init() {
 	xhttp.setRequestHeader(header, token);
 	xhttp.send({});
 
-	document.getElementsByClassName('btn btn-primary')[1].setAttribute('style',
-			'display:none');
+	
 	setValidationListeners();
 }
 
+function setValues(username){
+	document.getElementById("validationServer02").value = data[username]["name"];
+	document.getElementById("validationServer03").value = data[username]["surname"];
+	document.getElementById("date").value = data[username]["birthdate"];
+	document.getElementById("validationServer04").value = data[username]["yearOfEnrollment"];
+	document.getElementById("customCheck1").checked = data[username]["isPostgraduate"]==1?true:false;
+	document.getElementById("sel1").value = data[username]["department"];
+	document.getElementById("validationServer06").value = data[username]["phone"];
+	document.getElementById("validationServer07").value = data[username]["address"];
+	
+	for(let i = 0; i<document.getElementsByClassName("is-invalid").length; i++){
+		document.getElementsByClassName("is-invalid")[i].setAttribute("class", "form-control");
+	}
+	for(let i = 0; i<document.getElementsByClassName("is-valid").length; i++){
+		document.getElementsByClassName("is-valid")[i].setAttribute("class", "form-control");
+	}
+}
 function setValidationListeners() {
 
 	let inputs = document.getElementsByTagName('input');
 
-	for (let i = 11; i < inputs.length; i++) {
-
-		switch (i) {
-
-		case 11:
-
-			inputs[i].addEventListener('blur', function() {
+			document.getElementById("validationServer02").addEventListener('blur', function() {
 
 				if (this.value.trim().length > 0) {
 
@@ -118,11 +160,8 @@ function setValidationListeners() {
 				}
 			});
 
-			break;
 
-		case 12:
-
-			inputs[i].addEventListener('blur', function() {
+			document.getElementById("validationServer03").addEventListener('blur', function() {
 
 				if (this.value.trim().length > 0) {
 
@@ -139,11 +178,8 @@ function setValidationListeners() {
 				}
 			});
 
-			break;
 
-		case 14:
-
-			inputs[i].addEventListener('blur', function() {
+			document.getElementById("validationServer04").addEventListener('blur', function() {
 
 				if (this.value.trim().length > 0) {
 
@@ -160,11 +196,8 @@ function setValidationListeners() {
 				}
 			});
 
-			break;
 
-		case 16:
-
-			inputs[i].addEventListener('blur', function() {
+			document.getElementById("validationServer06").addEventListener('blur', function() {
 
 				if (this.value.trim().length > 0) {
 
@@ -181,11 +214,8 @@ function setValidationListeners() {
 				}
 			});
 
-			break;
 
-		case 17:
-
-			inputs[i].addEventListener('blur', function() {
+			document.getElementById("validationServer07").addEventListener('blur', function() {
 
 				if (this.value.trim().length > 0) {
 
@@ -202,37 +232,29 @@ function setValidationListeners() {
 				}
 			});
 
-			break;
-		}
-
-	}
-
 }
 
+var savingIndex = -1;
 document.getElementsByClassName('btn btn-primary')[2]
 		.addEventListener(
 				'click',
 				function() {
-
+					savingIndex = document.getElementById("validationServerUsername").selectedIndex;
+					
 					let curStudent = document
 							.getElementById('validationServerUsername').value
 							.trim();
-					let studentName = document.getElementsByTagName('input')[11].value
+					let studentName = document.getElementById("validationServer02").value
 							.trim();
-					let studentLastName = document
-							.getElementsByTagName('input')[12].value.trim();
-					let studentBirthDate = document
-							.getElementsByTagName('input')[13].value.trim();
-					let studentYearOfEnrollment = document
-							.getElementsByTagName('input')[14].value.trim();
-					let studentIsPostGradute = document
-							.getElementById('customCheck1').checked;
-					let studentPhone = document.getElementsByTagName('input')[16].value
+					let studentLastName = document.getElementById("validationServer03").value.trim();
+					let studentBirthDate = document.getElementById("date").value.trim();
+					let studentYearOfEnrollment = document.getElementById("validationServer04").value.trim();
+					let studentIsPostGradute = document.getElementById("customCheck1").checked;
+					let studentPhone = document.getElementById("validationServer06").value
 							.trim();
-					let studentAddress = document.getElementsByTagName('input')[17].value
+					let studentAddress = document.getElementById("validationServer07").value
 							.trim();
-					let studentDepartment = document
-							.getElementsByTagName('select')[0].value;
+					let studentDepartment = document.getElementById("sel1").value;
 
 					let packet = {};
 
@@ -257,6 +279,27 @@ document.getElementsByClassName('btn btn-primary')[2]
 							
 							
 							if(response.result==200){
+								if(document.getElementById("validationServerUsername").children[savingIndex].innerText.includes("--"))
+									remaining--;
+								if(remaining < 0)
+									remaining = 0;
+								if(document.getElementById("validationServerUsername").children[savingIndex].innerText.includes("--"))
+									document.getElementById("validationServerUsername").children[savingIndex].innerText = document.getElementById("validationServerUsername").children[savingIndex].innerText.substring(3,document.getElementById("validationServerUsername").children[savingIndex].innerText.length);
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["name"] = document.getElementById("validationServer02").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["surname"] = document.getElementById("validationServer03").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["birthdate"] = document.getElementById("date").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["yearOfEnrollment"] = document.getElementById("validationServer04").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["isPostgraduate"] = document.getElementById("customCheck1").checked?1:0;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["department"] = document.getElementById("sel1").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["phone"] = document.getElementById("validationServer06").value;
+								data[document.getElementById("validationServerUsername").children[savingIndex].innerText]["address"] = document.getElementById("validationServer07").value;
+
+								setTimeout(function(){
+									document.getElementById("validationServerUsername").value = document.getElementById("validationServerUsername").children[savingIndex].innerText;
+									savingIndex = -1;
+								},100);
+								
+								document.getElementById("remaining").innerText = remaining;
 								document.getElementsByClassName('alert')[0].textContent=`Successful entry of user ${result.username}`;
 								document.getElementsByClassName('alert')[0].
 								style['display']="inherit";
@@ -302,7 +345,7 @@ document.getElementsByClassName('btn btn-primary')[2]
 								
 								count++;
 								
-								if(count==3){
+								if(count==5){
 									
 									clearInterval(interv);
 									
@@ -326,28 +369,27 @@ document.getElementsByClassName('btn btn-primary')[2]
 					xhttp.setRequestHeader(header, token);
 					xhttp.send(JSON.stringify(packet));
 
-					document.getElementsByClassName('btn btn-primary')[1]
-							.setAttribute('style', 'display:none');
+					
 					setValidationListeners();
 
 				});
 
-document.getElementsByClassName('btn btn-primary')[3]
-		.addEventListener(
-				'click',
-				function() {
-
-					if (uncheckedStudents.length > 1) {
-
-						let curStudent = document.getElementsByTagName('input')[10].value
-								.trim();
-
-						document.getElementsByTagName('input')[10].value = uncheckedStudents[(uncheckedStudents
-								.indexOf(curStudent) + 1)
-								% uncheckedStudents.length];
-					}
-
-				});
+//document.getElementsByClassName('btn btn-primary')[3]
+//		.addEventListener(
+//				'click',
+//				function() {
+//
+//					if (uncheckedStudents.length > 1) {
+//
+//						let curStudent = document.getElementsByTagName('input')[10].value
+//								.trim();
+//
+//						document.getElementsByTagName('input')[10].value = uncheckedStudents[(uncheckedStudents
+//								.indexOf(curStudent) + 1)
+//								% uncheckedStudents.length];
+//					}
+//
+//				});
 
 $('#searchField').on(
 		'change paste keyup',

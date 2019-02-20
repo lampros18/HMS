@@ -107,13 +107,13 @@ public class EmployeeController {
 				return new JSONObject().put("result", 500).toString();
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-				return new JSONObject().put("result", 500).toString();
+				return new JSONObject().put("result", 501).toString();
 			}
 			
 
 		}
 
-		return new JSONObject().put("result", 500).toString();
+		return new JSONObject().put("result", 502).toString();
 
 	}
 
@@ -122,15 +122,27 @@ public class EmployeeController {
 	public String getAllStudents(HttpServletRequest request) {
 
 		JSONArray json = new JSONArray();
-		
+		JSONObject studentJSON;
 		List<Student> students = studentService.getStudents();
 		
 		if( students != null )
 		{
 			for( Student student : students ) {
 //				if(student.getCreatedAt() == null && student.getCreatedBy() == null)
-					json.put(student.getUser().getUsername());
+				studentJSON = new JSONObject();
+				studentJSON.put("username", student.getUser().getUsername());
+				studentJSON.put("name", student.getName());
+				studentJSON.put("surname", student.getSurname());
+				studentJSON.put("birthdate", student.getBirthdate());
+				studentJSON.put("yearOfEnrollment", student.getYearOfEnrollment());
+				studentJSON.put("isPostgraduate", student.isPostgraduate()?1:0);
+				studentJSON.put("department", student.getDepartment());
+				studentJSON.put("phone", student.getPhone());
+				studentJSON.put("address", student.getAddress());
+				studentJSON.put("hasProfile", (student.getCreatedAt() == null && student.getCreatedBy() == null) ? 0 : 1);
+				json.put(studentJSON);
 			}
+			
 			return json.toString();
 		}
 

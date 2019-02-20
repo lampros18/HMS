@@ -189,7 +189,7 @@
 		</div>
 	</div>
 
-	<div id="loading" class="loading_margin container">
+	<div id="loading" class="loading_margin container" >
 		<div class="text-center">
 			<button class="btn btn-primary" type="button" disabled>
 				<span class="spinner-border spinner-border-sm" role="status"
@@ -220,7 +220,7 @@
 						<div class="input-group-prepend">
 							<span class="input-group-text" id="inputGroupPrepend3">@</span>
 						</div>
-						<select id="validationServerUsername"
+						<select id="validationServerUsername" style="pointer-events:all;user-select: all;"
 							aria-describedby="inputGroupPrepend3" class="form-control"
 							></select>
 						<div class="invalid-feedback">Please choose a username.</div>
@@ -292,12 +292,13 @@
 				<div class="col-md-4 mb-3" style="padding-left: 0px;">
 					<label for="sel1">Choose department</label> <select
 						class="form-control" id="sel1">
-						<option>Informatics and Telematics</option>
-						<option>Home economics and ecology</option>
-						<option>Geography</option>
-						<option>International master of sustainable tourism
+						<option value="Informatics and telematics">Informatics and telematics</option>
+						<option value="Home economics and ecology">Home economics and ecology</option>
+						<option value="Geography">Geography</option>
+						<option value="International master of sustainable tourism
+							development">International master of sustainable tourism
 							development</option>
-						<option>Nutrition and dietics</option>
+						<option value="Nutrition and dietics">Nutrition and dietics</option>
 					</select>
 				</div>
 
@@ -328,8 +329,8 @@
 
 
 				<div style="float: right; display: none;">
-					<i style="color: green; display: inline-table; float: none;">There
-						are -1 students to check</i>
+					<i style="color: green; display: inline-table; float: none;"><span id="remaining"></span> 
+					student(s) to check remaining</i>
 				</div>
 			</div>
 
@@ -338,9 +339,6 @@
 				<button class="btn btn-primary" type="submit"
 					style="margin-top: 10px; widh: 121px;" onclick="return false;">Save
 					student</button>
-				<button class="btn btn-primary" type="submit"
-					style="margin-top: 10px; widh: 121px; float: right; margin-right: 21px;"
-					onclick="return false;">Show next student</button>
 			</div>
 
 

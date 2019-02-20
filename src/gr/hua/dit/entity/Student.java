@@ -167,11 +167,11 @@ public class Student extends SUser implements Serializable{
 
 		} catch (Exception e) {
 
-			e.printStackTrace();;
+			e.printStackTrace();
 			return false;
 		}
 		
-		if (!"Geography Home economics and ecology Informatics and Telematics International master of sustainable tourism development Nutrition and dietics"
+		if (!"Geography Home economics and ecology Informatics and telematics International master of sustainable tourism development Nutrition and dietics"
 				.contains(jsonObject.get("department").toString())) {
 
 			return false;
